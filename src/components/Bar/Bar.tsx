@@ -1,11 +1,8 @@
+import useStore from '../../store/store';
 import ColorPicker from '../ColorPicker/ColorPicker';
 import GridSizeSelector from '../GridSizeSelector/GridSizeSelector';
 
-interface BarProps {
-  setGridSize: (gridSize: { width: number; height: number }) => void;
-}
-
-function Bar({ setGridSize }: BarProps) {
+function Bar() {
   const barStyle = {
     display: 'flex',
     justifyContent: 'space-around',
@@ -16,8 +13,8 @@ function Bar({ setGridSize }: BarProps) {
     height: '6rem',
   };
   return (
-    <div style={barStyle}>
-      <GridSizeSelector setGridSize={setGridSize} />
+    <div id="bar" style={barStyle}>
+      <GridSizeSelector />
       <ColorPicker />
     </div>
   );

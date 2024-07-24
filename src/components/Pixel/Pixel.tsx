@@ -1,11 +1,13 @@
 import { useState } from 'react';
+import useStore from '../../store/store';
 
 function Pixel() {
+  const pixelSize = useStore((state) => state.gridSize.pixelSize);
   const [isClicked, setIsClicked] = useState(false);
 
   const pixelStyle = (backgroundColor: string, borderColor: string) => ({
-    width: '20px',
-    height: '20px',
+    width: pixelSize,
+    height: pixelSize,
     backgroundColor: isClicked ? '#FFC107' : backgroundColor,
     border: `1px solid ${borderColor}`,
   });

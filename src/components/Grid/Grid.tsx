@@ -1,21 +1,20 @@
+import useStore from '../../store/store';
 import Pixel from '../Pixel/Pixel';
 
-interface GridProps {
-  gridSize: { width: number; height: number };
-}
-
-function Grid({ gridSize }: GridProps) {
+function Grid() {
+  const gridSize = useStore((state) => state.gridSize);
   const gridContainerStyle = {
-    width: '100%',
     padding: '1rem',
+    overflow: 'hidden',
   };
   const gridStyle = {
     display: 'grid',
-    gridTemplateColumns: `repeat(${gridSize.width}, 20px)`,
+    gridTemplateColumns: `repeat(${gridSize.width}, ${gridSize.pixelSize}px)`,
+    overflow: 'hidden',
   };
   return (
-    <div style={gridContainerStyle}>
-      <div style={gridStyle}>
+    <div id="grid-container" style={gridContainerStyle}>
+      <div id="grid" style={gridStyle}>
         {Array.from({ length: gridSize.width * gridSize.height }).map(
           (_, index) => (
             // eslint-disable-next-line react/no-array-index-key
