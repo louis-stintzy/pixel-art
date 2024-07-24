@@ -1,30 +1,27 @@
 import Pixel from '../Pixel/Pixel';
 
-function Grid() {
+interface GridProps {
+  gridSize: { width: number; height: number };
+}
+
+function Grid({ gridSize }: GridProps) {
   const gridContainerStyle = {
     width: '100%',
-    paddingTop: '1rem',
-    paddingLeft: '1rem',
+    padding: '1rem',
   };
   const gridStyle = {
     display: 'grid',
-    gridTemplateColumns: 'repeat(10, 20px)',
+    gridTemplateColumns: `repeat(${gridSize.width}, 20px)`,
   };
   return (
     <div style={gridContainerStyle}>
       <div style={gridStyle}>
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
-        <Pixel />
+        {Array.from({ length: gridSize.width * gridSize.height }).map(
+          (_, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Pixel key={index} />
+          )
+        )}
       </div>
     </div>
   );
