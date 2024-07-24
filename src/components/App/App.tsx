@@ -1,5 +1,6 @@
 import Bar from '../Bar/Bar';
-import Grid from '../Grid/Grid';
+import GridContainer from '../GridContainer/GridContainer';
+
 import './App.scss';
 
 function App() {
@@ -7,7 +8,7 @@ function App() {
     <div id="app">
       <div id="container">
         <Bar />
-        <Grid />
+        <GridContainer />
       </div>
     </div>
   );

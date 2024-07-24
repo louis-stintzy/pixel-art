@@ -3,7 +3,14 @@ import useStore from '../../store/store';
 
 function Pixel() {
   const pixelSize = useStore((state) => state.gridSize.pixelSize);
+  const userDragsGrid = useStore((state) => state.userDragsGrid);
   const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = () => {
+    console.log(`userDragsGrid ${userDragsGrid}`);
+    if (userDragsGrid) return;
+    setIsClicked((prev) => !prev);
+  };
 
   const pixelStyle = (backgroundColor: string, borderColor: string) => ({
     width: pixelSize,
@@ -15,7 +22,7 @@ function Pixel() {
     <button
       type="button"
       style={pixelStyle('#00796B', '#689F38')}
-      onClick={() => setIsClicked((prev) => !prev)}
+      onClick={handleClick}
       aria-label="Pixel Button"
     />
   );
