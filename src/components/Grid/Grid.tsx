@@ -13,10 +13,12 @@ function Grid() {
   return (
     <div id="grid" style={gridStyle}>
       {Array.from({ length: gridSize.width * gridSize.height }).map(
-        (_, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Pixel key={index} />
-        )
+        (_, index) => {
+          const row = Math.floor(index / gridSize.width);
+          const column = index % gridSize.width;
+          const id = `${row}-${column}`;
+          return <Pixel key={id} id={id} />;
+        }
       )}
     </div>
   );
