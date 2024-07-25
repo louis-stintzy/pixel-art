@@ -121,4 +121,5 @@ const colorPalettes = {
   ],
 };
 
+export type PaletteName = keyof typeof colorPalettes;
 export default colorPalettes;

@@ -1,4 +1,4 @@
-import colorPalettes from '../../constants/colors';
+import colorPalettes, { PaletteName } from '../../constants/colors';
 import useStore from '../../store/store';
 
 function ColorPaletteSelector() {
@@ -6,7 +6,7 @@ function ColorPaletteSelector() {
   const setSelectedPalette = useStore((state) => state.setSelectedPalette);
   const setSelectedColor = useStore((state) => state.setSelectedColor);
 
-  const handleChange = (paletteName: string) => {
+  const handleChange = (paletteName: PaletteName) => {
     setSelectedPalette(paletteName);
   };
 
@@ -19,8 +19,8 @@ function ColorPaletteSelector() {
         Color Palette:
         <select
           name="colorPalette"
-          // value={selectedPalette}
-          onChange={(e) => handleChange(e.target.value)}
+          value={selectedPalette.name}
+          onChange={(e) => handleChange(e.target.value as PaletteName)}
         >
           {Object.keys(colorPalettes).map((paletteName) => (
             <option key={paletteName} value={paletteName}>
