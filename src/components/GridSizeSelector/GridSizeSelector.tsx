@@ -9,7 +9,7 @@ function GridSizeSelector() {
   const [gridSizeSelection, setGridSizeSelection] = useState({
     width: 8,
     height: 8,
-    pixelSize: 30,
+    pixelSize: 70,
   });
 
   const handleChange =
@@ -31,11 +31,6 @@ function GridSizeSelector() {
           {dimension}:
           <select
             name={dimension}
-            value={
-              dimension === 'width'
-                ? gridSizeSelection.width
-                : gridSizeSelection.height
-            }
             onChange={(e) =>
               handleChange(dimension as 'width' | 'height')(
                 parseInt(e.target.value, 10)

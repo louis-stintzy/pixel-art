@@ -1,11 +1,11 @@
-import colors from '../../constants/colors';
 import useStore from '../../store/store';
 
 function ColorPicker() {
+  const selectedPalette = useStore((state) => state.selectedPalette);
   const setSelectedColor = useStore((state) => state.setSelectedColor);
   return (
     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-      {colors.map((color) => (
+      {selectedPalette.colors.map((color) => (
         <button
           key={color}
           type="button"

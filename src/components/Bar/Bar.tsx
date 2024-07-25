@@ -1,4 +1,5 @@
 import useStore from '../../store/store';
+import ColorPaletteSelector from '../ColorPaletteSelector/ColorPaletteSelector';
 import ColorPicker from '../ColorPicker/ColorPicker';
 import GridSizeSelector from '../GridSizeSelector/GridSizeSelector';
 
@@ -14,8 +15,12 @@ function Bar() {
   };
   return (
     <div id="bar" style={barStyle}>
+      <h2>Pixel Art Maker</h2>
       <GridSizeSelector />
-      <ColorPicker />
+      <div>
+        <ColorPaletteSelector />
+        <ColorPicker />
+      </div>
     </div>
   );
 }
