@@ -3,45 +3,55 @@ import Grid from '../Grid/Grid';
 import useStore from '../../store/store';
 
 function GridContainer() {
-  const gridRef = useRef(null);
-  const isDragging = useRef(false);
-  const setUserDragsGrid = useStore((state) => state.setUserDragsGrid);
-  const lastMousePosition = useRef({ x: 0, y: 0 });
-  const mouseDownRef = useRef(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
+  // useRef renvoie un objet avec une propriété current qui est mutable.
+  // useRef est idéal pour conserver des références à des éléments DOM ou des valeurs qui ne nécessitent pas de re-render de composant lorsqu'elles sont modifiées.
+  // C'est particulièrement utile pour suivre l'état d'interactions utilisateur comme le drag-and-drop.
+  const gridRef = useRef<HTMLDivElement | null>(null); // Référence pour le conteneur de la grille
+  const isDragging = useRef(false); // Référence pour savoir si l'utilisateur fait glisser la grille
+  const lastMousePosition = useRef({ x: 0, y: 0 }); // Référence pour stocker la dernière position de la souris
+  const mouseDownRef = useRef(false); // Référence pour savoir si le bouton de la souris est enfoncé
 
+  const [position, setPosition] = useState({ x: 0, y: 0 }); // Position de la grille
+  const setUserDragsGrid = useStore((state) => state.setUserDragsGrid); // Fonction pour définir si l'utilisateur fait glisser la grille (etat global)
+  const MIN_DRAG_DISTANCE = 7; // Distance minimale de glissement pour commencer à faire glisser la grille
+
+  // L'utilisateur clique : met à jour l'état de mouseDownRef et enregistre la position de la souris
   const handleMouseDown = (e: React.MouseEvent) => {
     mouseDownRef.current = true;
     lastMousePosition.current = { x: e.clientX, y: e.clientY };
-    setTimeout(() => {
-      if (mouseDownRef.current) {
+  };
+
+  // L'utilisateur déplace la souris :
+  // - si pas encore de drag : vérifie si la distance de glissement est suffisante pour commencer à faire glisser la grille
+  // - si drag en cours : met à jour la position de la grille en fonction du mouvement de la souris
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!mouseDownRef.current) return;
+
+    const deltaX = e.clientX - lastMousePosition.current.x;
+    const deltaY = e.clientY - lastMousePosition.current.y;
+
+    if (!isDragging.current) {
+      if (
+        Math.abs(deltaX) > MIN_DRAG_DISTANCE ||
+        Math.abs(deltaY) > MIN_DRAG_DISTANCE
+      ) {
         isDragging.current = true;
         setUserDragsGrid(true);
       }
-    }, 100); // délai avant de commencer à drag
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current) {
-      return;
+    } else {
+      setPosition((prev) => ({
+        x: prev.x + deltaX,
+        y: prev.y + deltaY,
+      }));
+      lastMousePosition.current = { x: e.clientX, y: e.clientY };
     }
-    const deltaX = e.clientX - lastMousePosition.current.x;
-    const deltaY = e.clientY - lastMousePosition.current.y;
-    setPosition((prev) => ({
-      x: prev.x + deltaX,
-      y: prev.y + deltaY,
-    }));
-
-    // if (gridRef.current) {
-    //   const deltaX = e.clientX - lastMousePosition.current.x;
-    //   const deltaY = e.clientY - lastMousePosition.current.y;
-    //   (gridRef.current as HTMLDivElement).scrollLeft -= deltaX; // Add type assertion to fix the issue
-    //   (gridRef.current as HTMLDivElement).scrollTop -= deltaY; // Add type assertion to fix the issue
-    // }
-
-    lastMousePosition.current = { x: e.clientX, y: e.clientY };
   };
 
+  // L'utilisateur relâche le bouton de la souris ou quitte la zone de la grille :
+  // met à jour l'état de isDragging et de userDragsGrid après un court délai
+  // pour qu'au relachement du clic (si glissement) le pixel ne change pas de couleur (voir le composant Pixel)
+  // sinon le pixel change de couleur à la fin du glissement
   const handleMouseUpOrLeave = () => {
     if (isDragging.current) {
       setTimeout(() => {
@@ -57,7 +67,6 @@ function GridContainer() {
     overflow: 'hidden',
     width: '100%',
     height: '100%',
-    // cursor: isDragging.current ? 'grabbing' : 'grab',
   };
 
   const gridWrapperStyle = {

@@ -7,7 +7,6 @@ function Pixel() {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = () => {
-    console.log(`userDragsGrid ${userDragsGrid}`);
     if (userDragsGrid) return;
     setIsClicked((prev) => !prev);
   };
