@@ -1,4 +1,4 @@
-import useStore from '../../store/store';
+import useStore from '../../../store/store';
 
 function ColorPicker() {
   const selectedPalette = useStore((state) => state.selectedPalette);

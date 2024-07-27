@@ -1,10 +1,9 @@
-import colorPalettes, { PaletteName } from '../../constants/colors';
-import useStore from '../../store/store';
+import colorPalettes, { PaletteName } from '../../../constants/colors';
+import useStore from '../../../store/store';
 
 function ColorPaletteSelector() {
   const selectedPalette = useStore((state) => state.selectedPalette);
   const setSelectedPalette = useStore((state) => state.setSelectedPalette);
-  const setSelectedColor = useStore((state) => state.setSelectedColor);
 
   const handleChange = (paletteName: PaletteName) => {
     setSelectedPalette(paletteName);

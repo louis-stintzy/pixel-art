@@ -1,7 +1,6 @@
-import useStore from '../../store/store';
-import ColorPaletteSelector from '../ColorPaletteSelector/ColorPaletteSelector';
-import ColorPicker from '../ColorPicker/ColorPicker';
-import GridSizeSelector from '../GridSizeSelector/GridSizeSelector';
+import ColorPaletteSelector from './ColorPaletteSelector/ColorPaletteSelector';
+import ColorPicker from './ColorPicker/ColorPicker';
+import GridSizeSelector from './GridSizeSelector/GridSizeSelector';
 
 function Bar() {
   const barStyle = {

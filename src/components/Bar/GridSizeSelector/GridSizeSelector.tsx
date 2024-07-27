@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import useStore from '../../store/store';
+import useStore from '../../../store/store';
 
 function GridSizeSelector() {
   const sizeAvailable = [8, 16, 24, 32, 40, 48];
