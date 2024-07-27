@@ -24,38 +24,46 @@ function GridSizeSelector() {
     event.preventDefault();
     setGridSize(gridSizeSelection);
   };
+
+  const pixelSizeInputStyle = {
+    width: '50px',
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      {dimensions.map((dimension) => (
-        <label key={dimension}>
-          {dimension}:
-          <select
-            name={dimension}
+    <form id="grid-size-selector-form" onSubmit={handleSubmit}>
+      <div id="grid-size-selector-inputs">
+        {dimensions.map((dimension) => (
+          <label key={dimension}>
+            {dimension}:
+            <select
+              name={dimension}
+              onChange={(e) =>
+                handleChange(dimension as 'width' | 'height')(
+                  parseInt(e.target.value, 10)
+                )
+              }
+            >
+              {sizeAvailable.map((size: number) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </label>
+        ))}
+        <label>
+          Pixel Size:
+          <input
+            type="number"
+            name="pixelSize"
+            value={gridSizeSelection.pixelSize}
+            style={pixelSizeInputStyle}
             onChange={(e) =>
-              handleChange(dimension as 'width' | 'height')(
-                parseInt(e.target.value, 10)
-              )
+              handleChange('pixelSize')(parseInt(e.target.value, 10))
             }
-          >
-            {sizeAvailable.map((size: number) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
+          />
         </label>
-      ))}
-      <label>
-        Pixel Size:
-        <input
-          type="number"
-          name="pixelSize"
-          value={gridSizeSelection.pixelSize}
-          onChange={(e) =>
-            handleChange('pixelSize')(parseInt(e.target.value, 10))
-          }
-        />
-      </label>
+      </div>
       <button type="submit">Set Grid Size</button>
     </form>
   );
