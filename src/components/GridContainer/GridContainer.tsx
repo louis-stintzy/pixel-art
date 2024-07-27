@@ -22,6 +22,12 @@ function GridContainer() {
     lastMousePosition.current = { x: e.clientX, y: e.clientY };
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    mouseDownRef.current = true;
+    const touch = e.touches[0];
+    lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
+  };
+
   // L'utilisateur déplace la souris :
   // - si pas encore de drag : vérifie si la distance de glissement est suffisante pour commencer à faire glisser la grille
   // - si drag en cours : met à jour la position de la grille en fonction du mouvement de la souris
@@ -48,11 +54,45 @@ function GridContainer() {
     }
   };
 
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!mouseDownRef.current) return;
+
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - lastMousePosition.current.x;
+    const deltaY = touch.clientY - lastMousePosition.current.y;
+
+    if (!isDragging.current) {
+      if (
+        Math.abs(deltaX) > MIN_DRAG_DISTANCE ||
+        Math.abs(deltaY) > MIN_DRAG_DISTANCE
+      ) {
+        isDragging.current = true;
+        setUserDragsGrid(true);
+      }
+    } else {
+      setPosition((prev) => ({
+        x: prev.x + deltaX,
+        y: prev.y + deltaY,
+      }));
+      lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
+    }
+  };
+
   // L'utilisateur relâche le bouton de la souris ou quitte la zone de la grille :
   // met à jour l'état de isDragging et de userDragsGrid après un court délai
   // pour qu'au relachement du clic (si glissement) le pixel ne change pas de couleur (voir le composant Pixel)
   // sinon le pixel change de couleur à la fin du glissement
   const handleMouseUpOrLeave = () => {
+    if (isDragging.current) {
+      setTimeout(() => {
+        isDragging.current = false;
+        setUserDragsGrid(false);
+      }, 50);
+    }
+    mouseDownRef.current = false;
+  };
+
+  const handleTouchEnd = () => {
     if (isDragging.current) {
       setTimeout(() => {
         isDragging.current = false;
@@ -81,9 +121,12 @@ function GridContainer() {
       style={gridContainerStyle}
       tabIndex={0} // Add tabIndex attribute to make the grid container focusable
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
       onMouseUp={handleMouseUpOrLeave}
       onMouseLeave={handleMouseUpOrLeave}
+      onTouchEnd={handleTouchEnd}
       ref={gridRef}
     >
       <div id="grid-wrapper" style={gridWrapperStyle}>
