@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import Grid from './Grid/Grid';
 import useStore from '../../store/store';
 
+import './GridContainer.scss';
+
 function GridContainer() {
   // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
   // useRef renvoie un objet avec une propriété current qui est mutable.
@@ -102,13 +104,6 @@ function GridContainer() {
     mouseDownRef.current = false;
   };
 
-  const gridContainerStyle = {
-    padding: '1rem',
-    overflow: 'hidden',
-    width: '100%',
-    height: '100%',
-  };
-
   const gridWrapperStyle = {
     transform: `translate(${position.x}px, ${position.y}px)`,
     transition: isDragging.current ? 'none' : 'transform 0.1s ease-out',
@@ -118,7 +113,6 @@ function GridContainer() {
     <div
       id="grid-container"
       role="grid"
-      style={gridContainerStyle}
       tabIndex={0} // Add tabIndex attribute to make the grid container focusable
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
