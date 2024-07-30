@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import ImageModal from './ImageModal';
 import useStore from '../../store/store';
