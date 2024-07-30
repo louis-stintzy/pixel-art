@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import ImageModal from './ImageModal';
+import useStore from '../../store/store';
 
 interface ImageInputProps {
   aspectRatio: number;
 }
 
 function ImageInput({ aspectRatio }: ImageInputProps) {
-  const [croppingModalIsOpen, setCroppingModalIsOpen] = useState(false);
+  const setFileUrl = useStore((state) => state.setFileUrl);
+  const setCroppingModalIsOpen = useStore(
+    (state) => state.setCroppingModalIsOpen
+  );
 
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (!file) return;
+    const imageUrl = URL.createObjectURL(file);
+    setFileUrl(imageUrl);
     setCroppingModalIsOpen(true);
-
-    // const reader = new FileReader();
-    // reader.onload = () => {
-    //   const imageUrl = reader.result as string;
-    //   console.log(imageUrl);
-    // };
-    // reader.readAsDataURL(file);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -26,15 +26,33 @@ function ImageInput({ aspectRatio }: ImageInputProps) {
     accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.gif'] },
     maxSize: 1000000,
   });
+
+  const ImageInputDragStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    border: '1px dashed #ccc',
+    cursor: 'pointer',
+    padding: '0 2rem',
+    height: '1.8rem',
+    width: '12.5rem',
+    boxSizing: 'content-box',
+  };
   return (
-    <div {...getRootProps()} style={{ border: '1px solid black' }}>
-      <input {...getInputProps()} />
-      {isDragActive ? (
-        <p>Drop the image here ...</p>
-      ) : (
-        <p>Drag 'n' drop an image here, or click to select an image</p>
-      )}
-    </div>
+    <>
+      <div
+        id="image-input__drag"
+        {...getRootProps()}
+        style={ImageInputDragStyle}
+      >
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p>Drop the image here ...</p>
+        ) : (
+          <p>Drag an image to pixelate !</p>
+        )}
+      </div>
+      <ImageModal aspectRatio={aspectRatio} />
+    </>
   );
 }
 

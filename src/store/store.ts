@@ -2,37 +2,55 @@ import { create } from 'zustand';
 import colorPalettes, { PaletteName } from '../constants/colors';
 
 type State = {
+  // ----- Grid -----
   userDragsGrid: boolean;
   gridSize: { width: number; height: number; pixelSize: number };
-  imageUrl: string | null;
-  selectedPalette: { name: PaletteName; colors: string[] };
-  selectedColor: string;
-  pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
   setUserDragsGrid: (userDragsGrid: boolean) => void;
   setGridSize: (gridSize: {
     width: number;
     height: number;
     pixelSize: number;
   }) => void;
+
+  // ----- Image -----
+  croppingModalIsOpen: boolean;
+  fileUrl: string | undefined;
+  imageUrl: string | undefined;
+  setCroppingModalIsOpen: (croppingModalIsOpen: boolean) => void;
+  setFileUrl: (fileUrl: string) => void;
   setImageUrl: (imageUrl: string) => void;
+
+  // ----- Palette & Color-----
+  selectedPalette: { name: PaletteName; colors: string[] };
+  selectedColor: string;
+  pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
   setSelectedPalette: (paletteName: PaletteName) => void;
   setSelectedColor: (selectedColor: string) => void;
   setPixelColors: (id: string, color: string) => void;
 };
 
 const useStore = create<State>()((set) => ({
+  // ----- Grid -----
   userDragsGrid: false,
   gridSize: { width: 8, height: 8, pixelSize: 70 },
-  imageUrl: null,
+  setUserDragsGrid: (userDragsGrid) => set({ userDragsGrid }),
+  setGridSize: (gridSize) => set({ gridSize }),
+
+  // ----- Image -----
+  croppingModalIsOpen: false,
+  fileUrl: undefined,
+  imageUrl: undefined,
+  setCroppingModalIsOpen: (croppingModalIsOpen) => set({ croppingModalIsOpen }),
+  setFileUrl: (fileUrl) => set({ fileUrl }),
+  setImageUrl: (imageUrl) => set({ imageUrl }),
+
+  // ----- Palette & Color-----
   selectedPalette: {
     name: 'materialDesign' as PaletteName,
     colors: colorPalettes.materialDesign,
   },
   selectedColor: colorPalettes.materialDesign[0],
   pixelColors: {},
-  setUserDragsGrid: (userDragsGrid) => set({ userDragsGrid }),
-  setGridSize: (gridSize) => set({ gridSize }),
-  setImageUrl: (imageUrl) => set({ imageUrl }),
   setSelectedPalette: (paletteName) =>
     set({
       selectedPalette: {
