@@ -17,8 +17,8 @@ type State = {
   fileUrl: string | undefined;
   imageUrl: string | undefined;
   setCroppingModalIsOpen: (croppingModalIsOpen: boolean) => void;
-  setFileUrl: (fileUrl: string) => void;
-  setImageUrl: (imageUrl: string) => void;
+  setFileUrl: (fileUrl: string | undefined) => void;
+  setImageUrl: (imageUrl: string | undefined) => void;
 
   // ----- Palette & Color-----
   selectedPalette: { name: PaletteName; colors: string[] };

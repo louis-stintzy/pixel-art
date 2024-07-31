@@ -12,6 +12,7 @@ function ImageModal({ aspectRatio }: ImageModalProps) {
   const setCroppingModalIsOpen = useStore(
     (state) => state.setCroppingModalIsOpen
   );
+  const setFileUrl = useStore((state) => state.setFileUrl);
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ function ImageModal({ aspectRatio }: ImageModalProps) {
     if (fileUrl) {
       URL.revokeObjectURL(fileUrl);
     }
+    setFileUrl(undefined);
   };
 
   const imageModalStyle: React.CSSProperties = {

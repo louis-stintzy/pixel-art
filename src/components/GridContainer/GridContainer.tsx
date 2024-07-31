@@ -5,6 +5,8 @@ import useStore from '../../store/store';
 import './GridContainer.scss';
 
 function GridContainer() {
+  const imageUrl = useStore((state) => state.imageUrl);
+
   // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
   // useRef renvoie un objet avec une propriété current qui est mutable.
   // useRef est idéal pour conserver des références à des éléments DOM ou des valeurs qui ne nécessitent pas de re-render de composant lorsqu'elles sont modifiées.
@@ -125,6 +127,7 @@ function GridContainer() {
     >
       <div id="grid-wrapper" style={gridWrapperStyle}>
         <Grid />
+        {imageUrl && <img src={imageUrl} alt="uploaded" />}
       </div>
     </div>
   );
