@@ -106,7 +106,7 @@ function GridContainer() {
     mouseDownRef.current = false;
   };
 
-  const gridWrapperStyle = {
+  const gridWrapperStyle: React.CSSProperties = {
     transform: `translate(${position.x}px, ${position.y}px)`,
     transition: isDragging.current ? 'none' : 'transform 0.1s ease-out',
   };

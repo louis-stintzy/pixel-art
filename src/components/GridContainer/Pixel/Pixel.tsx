@@ -22,11 +22,11 @@ function Pixel({ id }: PixelProps) {
   const pixelBorderColor = gridColor.line;
   let pixelOpacity;
   if (isHovered) {
-    pixelOpacity = 0.7;
+    pixelOpacity = 0.3;
   } else if (pixelColor !== gridColor.background) {
     pixelOpacity = 1;
   } else {
-    pixelOpacity = 0.8;
+    pixelOpacity = 0.5;
   }
 
   const pixelStyle = {

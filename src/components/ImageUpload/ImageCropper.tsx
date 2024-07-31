@@ -23,6 +23,13 @@ function ImageCropper({ aspectRatio, onCancel }: ImageModalProps) {
     []
   );
 
+  const handleZoomChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setZoom(parseFloat(e.target.value));
+    },
+    []
+  );
+
   const handleCropImage = useCallback(async () => {
     try {
       if (!fileUrl || !croppedAreaPixels) {
@@ -50,7 +57,7 @@ function ImageCropper({ aspectRatio, onCancel }: ImageModalProps) {
           image={fileUrl}
           crop={crop}
           zoom={zoom}
-          aspect={4 / 3}
+          aspect={9 / 16}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
@@ -59,6 +66,14 @@ function ImageCropper({ aspectRatio, onCancel }: ImageModalProps) {
       <button type="button" onClick={onCancel}>
         Cancel
       </button>
+      <input
+        type="range"
+        value={zoom}
+        min={1}
+        max={3}
+        step={0.1}
+        onChange={handleZoomChange}
+      />
       <button type="button" onClick={handleCropImage}>
         Crop Image
       </button>

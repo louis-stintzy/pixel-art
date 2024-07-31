@@ -4,8 +4,10 @@ import Pixel from '../Pixel/Pixel';
 function Grid() {
   const gridSize = useStore((state) => state.gridSize);
 
-  const gridStyle = {
+  const gridStyle: React.CSSProperties = {
     display: 'grid',
+    position: 'absolute',
+    zIndex: 1,
     gridTemplateColumns: `repeat(${gridSize.width}, ${gridSize.pixelSize}px)`,
     gridTemplateRows: `repeat(${gridSize.height}, ${gridSize.pixelSize}px)`,
   };
