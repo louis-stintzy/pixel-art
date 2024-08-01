@@ -2,15 +2,17 @@ import Cropper, { Area } from 'react-easy-crop';
 import { useCallback, useState } from 'react';
 import useStore from '../../store/store';
 import getCroppedImg from '../../utils/cropImage';
+import ImageFormatSetting from './ImageFormatSetting';
 
 interface ImageModalProps {
-  aspectRatio: number;
   onCancel: () => void;
 }
 
-function ImageCropper({ aspectRatio, onCancel }: ImageModalProps) {
+function ImageCropper({ onCancel }: ImageModalProps) {
+  const aspectRatio = useStore((state) => state.aspectRatio);
   const fileUrl = useStore((state) => state.fileUrl);
   const setImageUrl = useStore((state) => state.setImageUrl);
+
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
@@ -52,12 +54,13 @@ function ImageCropper({ aspectRatio, onCancel }: ImageModalProps) {
   return (
     <div>
       <h1>ImageCropper</h1>
+      <ImageFormatSetting />
       <div id="cropper-container" style={cropperContainerStyle}>
         <Cropper
           image={fileUrl}
           crop={crop}
           zoom={zoom}
-          aspect={9 / 16}
+          aspect={aspectRatio}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}

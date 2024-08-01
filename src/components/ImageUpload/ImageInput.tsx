@@ -2,11 +2,7 @@ import { useDropzone } from 'react-dropzone';
 import ImageModal from './ImageModal';
 import useStore from '../../store/store';
 
-interface ImageInputProps {
-  aspectRatio: number;
-}
-
-function ImageInput({ aspectRatio }: ImageInputProps) {
+function ImageInput() {
   const setFileUrl = useStore((state) => state.setFileUrl);
   const setCroppingModalIsOpen = useStore(
     (state) => state.setCroppingModalIsOpen
@@ -23,7 +19,7 @@ function ImageInput({ aspectRatio }: ImageInputProps) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.gif'] },
-    maxSize: 1000000,
+    // maxSize: 1000000,
   });
 
   const ImageInputDragStyle: React.CSSProperties = {
@@ -50,7 +46,7 @@ function ImageInput({ aspectRatio }: ImageInputProps) {
           <p>Drag an image to pixelate !</p>
         )}
       </div>
-      <ImageModal aspectRatio={aspectRatio} />
+      <ImageModal />
     </>
   );
 }

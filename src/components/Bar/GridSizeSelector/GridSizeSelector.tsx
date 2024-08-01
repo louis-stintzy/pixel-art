@@ -72,7 +72,7 @@ function GridSizeSelector() {
       </div>
       <div id="grid-size-selector-actions" style={gridSizeSelectorActionsStyle}>
         <button type="submit">Set Grid Size</button>
-        <ImageInput aspectRatio={4 / 3} />
+        <ImageInput />
       </div>
     </form>
   );

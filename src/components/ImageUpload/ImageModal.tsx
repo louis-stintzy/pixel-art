@@ -2,11 +2,7 @@ import { useEffect, useRef } from 'react';
 import ImageCropper from './ImageCropper';
 import useStore from '../../store/store';
 
-interface ImageModalProps {
-  aspectRatio: number;
-}
-
-function ImageModal({ aspectRatio }: ImageModalProps) {
+function ImageModal() {
   const croppingModalIsOpen = useStore((state) => state.croppingModalIsOpen);
   const fileUrl = useStore((state) => state.fileUrl);
   const setCroppingModalIsOpen = useStore(
@@ -41,7 +37,7 @@ function ImageModal({ aspectRatio }: ImageModalProps) {
 
   return (
     <dialog ref={modalRef} style={imageModalStyle} onCancel={handleCancel}>
-      <ImageCropper onCancel={handleCancel} aspectRatio={aspectRatio} />
+      <ImageCropper onCancel={handleCancel} />
     </dialog>
   );
 }

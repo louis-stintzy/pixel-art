@@ -4,8 +4,10 @@ import colorPalettes, { PaletteName } from '../constants/colors';
 type State = {
   // ----- Grid -----
   userDragsGrid: boolean;
+  aspectRatio: number;
   gridSize: { width: number; height: number; pixelSize: number };
   setUserDragsGrid: (userDragsGrid: boolean) => void;
+  setAspectRation: (aspectRatio: number) => void;
   setGridSize: (gridSize: {
     width: number;
     height: number;
@@ -32,8 +34,10 @@ type State = {
 const useStore = create<State>()((set) => ({
   // ----- Grid -----
   userDragsGrid: false,
+  aspectRatio: 4 / 3,
   gridSize: { width: 8, height: 8, pixelSize: 70 },
   setUserDragsGrid: (userDragsGrid) => set({ userDragsGrid }),
+  setAspectRation: (aspectRatio) => set({ aspectRatio }),
   setGridSize: (gridSize) => set({ gridSize }),
 
   // ----- Image -----
