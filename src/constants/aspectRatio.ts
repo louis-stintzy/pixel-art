@@ -4,8 +4,18 @@ const avaibleAspectRatios = {
       display: '1:1',
       value: 1,
       formats: [
-        { display: '500x500', width: 500, height: 500, pixelSize: [] },
-        { display: '1000x1000', width: 1000, height: 1000, pixelSize: [] },
+        {
+          display: '500x500',
+          width: 500,
+          height: 500,
+          pixelSize: [5, 10, 20, 25, 50, 100, 125],
+        },
+        {
+          display: '1000x1000',
+          width: 1000,
+          height: 1000,
+          pixelSize: [10, 20, 25, 40, 50, 100, 125, 200],
+        },
       ],
     },
   ],
@@ -225,10 +235,11 @@ export type Format = {
   width: number;
   height: number;
   pixelSize: number[];
-}[];
+};
+export type Formats = Format[];
 export type AspectRatio = {
   display: string;
   value: number;
-  formats: Format;
+  formats: Formats;
 };
 export default avaibleAspectRatios;

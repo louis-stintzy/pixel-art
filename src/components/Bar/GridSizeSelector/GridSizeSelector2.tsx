@@ -9,22 +9,37 @@ import ImageInput from '../../ImageUpload/ImageInput';
 
 function GridSizeSelector2() {
   const aspectRatio = useStore((state) => state.aspectRatio);
+  const setGridSize = useStore((state) => state.setGridSize);
+
   const [selectedFormat, setSelectedFormat] = useState<Format>(
-    avaibleAspectRatio[aspectRatio].formats[0]
+    aspectRatio.formats[0]
   );
-  const [pixelSize, setPixelSize] = useState(70);
+  const [pixelSize, setPixelSize] = useState<number>(
+    selectedFormat.pixelSize[2]
+  );
 
-  const handleChangeFormat = (value) => {
-    console.log('handleChangeFormat', value);
-  };
-
-  const handleChangePixelSize = (value) => {
-    console.log('handleChangePixelSize', value);
-  };
-
-  const pixelSizeInputStyle = {
-    width: '50px',
-  };
+  const handleChangeGridSize =
+    (type: 'format' | 'pixel-size') => (value: string | number) => {
+      if (type === 'format') {
+        const format = aspectRatio.formats.find((f) => f.display === value);
+        if (format) {
+          setSelectedFormat(format);
+          setPixelSize(format.pixelSize[2]);
+          setGridSize({
+            width: format.width,
+            height: format.height,
+            pixelSize: format.pixelSize[2],
+          });
+        }
+      } else {
+        setPixelSize(value as number);
+        setGridSize({
+          width: selectedFormat.width,
+          height: selectedFormat.height,
+          pixelSize: value as number,
+        });
+      }
+    };
 
   const gridSizeSelectorActionsStyle = {
     display: 'flex',
@@ -39,7 +54,7 @@ function GridSizeSelector2() {
           <select
             name="format"
             value={selectedFormat.display}
-            onChange={(e) => handleChangeFormat(e.target.value)}
+            onChange={(e) => handleChangeGridSize('format')(e.target.value)}
           >
             {aspectRatio.formats.map((format) => (
               <option key={format.display} value={format.display}>
@@ -54,7 +69,7 @@ function GridSizeSelector2() {
             name="pixel size"
             value={pixelSize}
             onChange={(e) =>
-              handleChangePixelSize(parseInt(e.target.value, 10))
+              handleChangeGridSize('pixel-size')(parseInt(e.target.value, 10))
             }
           >
             {selectedFormat.pixelSize.map((size) => (
