@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import avaibleAspectRatio, {
   Orientation,
   AspectRatio,
@@ -11,7 +11,8 @@ function ImageFormatSetting() {
   const setAspectRatio = useStore((state) => state.setAspectRation);
 
   const handleChangeAspect =
-    (aspect: 'orientation' | 'ratio') => (value: Orientation | number) => {
+    (aspect: 'orientation' | 'aspectRatio') =>
+    (value: Orientation | AspectRatio) => {
       if (aspect === 'orientation') {
         const newOrientation = value as Orientation;
         setOrientation(newOrientation);
@@ -30,11 +31,15 @@ function ImageFormatSetting() {
           newRatio = 2 / 3;
         if (newOrientation === 'panoramic') newRatio = 65 / 24;
         setRatio(newRatio);
-        setAspectRatio(newRatio);
+        const newAspectRatio = avaibleAspectRatio[newOrientation].find(
+          (ar: AspectRatio) => newRatio === ar.value
+        ) as AspectRatio;
+        setAspectRatio(newAspectRatio);
       }
-      if (aspect === 'ratio') {
-        setRatio(value as number);
-        setAspectRatio(value as number);
+      if (aspect === 'aspectRatio') {
+        const newAspectRatio = value as AspectRatio;
+        setRatio(newAspectRatio.value);
+        setAspectRatio(newAspectRatio);
       }
     };
 
@@ -62,11 +67,15 @@ function ImageFormatSetting() {
           name="ratio"
           value={ratio}
           onChange={(e) =>
-            handleChangeAspect('ratio')(parseFloat(e.target.value))
+            handleChangeAspect('aspectRatio')(
+              avaibleAspectRatio[orientation].find(
+                (aspect: AspectRatio) => aspect.display === e.target.value
+              ) as AspectRatio
+            )
           }
         >
           {avaibleAspectRatio[orientation].map((aspect: AspectRatio) => (
-            <option key={aspect.display} value={aspect.value}>
+            <option key={aspect.display} value={aspect.display}>
               {aspect.display}
             </option>
           ))}

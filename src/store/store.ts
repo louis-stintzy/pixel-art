@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 import colorPalettes, { PaletteName } from '../constants/colors';
+import { AspectRatio } from '../constants/aspectRatio';
 
 type State = {
   // ----- Grid -----
   userDragsGrid: boolean;
-  aspectRatio: number;
+  aspectRatio: AspectRatio;
   gridSize: { width: number; height: number; pixelSize: number };
   setUserDragsGrid: (userDragsGrid: boolean) => void;
-  setAspectRation: (aspectRatio: number) => void;
+  setAspectRation: (aspectRatio: AspectRatio) => void;
   setGridSize: (gridSize: {
     width: number;
     height: number;
@@ -34,7 +35,24 @@ type State = {
 const useStore = create<State>()((set) => ({
   // ----- Grid -----
   userDragsGrid: false,
-  aspectRatio: 4 / 3,
+  aspectRatio: {
+    display: '4:3',
+    value: 4 / 3,
+    formats: [
+      {
+        display: '800x600',
+        width: 800,
+        height: 600,
+        pixelSize: [8, 10, 20, 25, 40, 50, 100],
+      },
+      {
+        display: '1024x768',
+        width: 1024,
+        height: 768,
+        pixelSize: [8, 16, 32, 64, 128],
+      },
+    ],
+  },
   gridSize: { width: 8, height: 8, pixelSize: 70 },
   setUserDragsGrid: (userDragsGrid) => set({ userDragsGrid }),
   setAspectRation: (aspectRatio) => set({ aspectRatio }),

@@ -60,7 +60,7 @@ function ImageCropper({ onCancel }: ImageModalProps) {
           image={fileUrl}
           crop={crop}
           zoom={zoom}
-          aspect={aspectRatio}
+          aspect={aspectRatio.value}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
