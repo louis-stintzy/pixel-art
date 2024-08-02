@@ -3,12 +3,48 @@ import ImageModal from './ImageModal';
 import useStore from '../../store/store';
 
 function ImageInput() {
+  const fileUrl = useStore((state) => state.fileUrl);
   const setFileUrl = useStore((state) => state.setFileUrl);
   const setCroppingModalIsOpen = useStore(
     (state) => state.setCroppingModalIsOpen
   );
+  const setAspectRatio = useStore((state) => state.setAspectRation);
+
+  // -----
+  const handleCropOrCancel = () => {
+    setCroppingModalIsOpen(false);
+    if (fileUrl) {
+      URL.revokeObjectURL(fileUrl);
+    }
+    setFileUrl(undefined);
+  };
+
+  const handleCancel = () => {
+    handleCropOrCancel();
+    setAspectRatio({
+      // reset aspectRatio to default value
+      display: '4:3',
+      value: 4 / 3,
+      formats: [
+        {
+          display: '800x600',
+          width: 800,
+          height: 600,
+          pixelSize: [8, 10, 20, 25, 40, 50, 100],
+        },
+        {
+          display: '1024x768',
+          width: 1024,
+          height: 768,
+          pixelSize: [8, 16, 32, 64, 128],
+        },
+      ],
+    });
+  };
+  //-----
 
   const onDrop = (acceptedFiles: File[]) => {
+    handleCancel();
     const file = acceptedFiles[0];
     if (!file) return;
     const imageUrl = URL.createObjectURL(file);

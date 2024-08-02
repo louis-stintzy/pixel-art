@@ -5,10 +5,11 @@ import getCroppedImg from '../../utils/cropImage';
 import ImageFormatSetting from './ImageFormatSetting';
 
 interface ImageModalProps {
+  onCrop: () => void;
   onCancel: () => void;
 }
 
-function ImageCropper({ onCancel }: ImageModalProps) {
+function ImageCropper({ onCrop, onCancel }: ImageModalProps) {
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fileUrl = useStore((state) => state.fileUrl);
   const setImageUrl = useStore((state) => state.setImageUrl);
@@ -39,11 +40,11 @@ function ImageCropper({ onCancel }: ImageModalProps) {
       }
       const croppedImage = await getCroppedImg(fileUrl, croppedAreaPixels);
       setImageUrl(croppedImage);
-      onCancel();
+      onCrop();
     } catch (error) {
       console.error('Error cropping image : ', error);
     }
-  }, [croppedAreaPixels, fileUrl, setImageUrl, onCancel]);
+  }, [croppedAreaPixels, fileUrl, setImageUrl, onCrop]);
 
   const cropperContainerStyle: React.CSSProperties = {
     width: '350px',
