@@ -1,4 +1,6 @@
-const avaibleAspectRatios = {
+import { AspectRatio } from '../@types/aspectRatio';
+
+export const avaibleAspectRatios = {
   square: [
     {
       display: '1:1',
@@ -229,17 +231,21 @@ const avaibleAspectRatios = {
   ],
 };
 
-export type Orientation = keyof typeof avaibleAspectRatios;
-export type Format = {
-  display: string;
-  width: number;
-  height: number;
-  pixelSize: number[];
+export const resetAspectRatio: AspectRatio = {
+  display: '4:3',
+  value: 4 / 3,
+  formats: [
+    {
+      display: '800x600',
+      width: 800,
+      height: 600,
+      pixelSize: [8, 10, 20, 25, 40, 50, 100],
+    },
+    {
+      display: '1024x768',
+      width: 1024,
+      height: 768,
+      pixelSize: [8, 16, 32, 64, 128],
+    },
+  ],
 };
-export type Formats = Format[];
-export type AspectRatio = {
-  display: string;
-  value: number;
-  formats: Formats;
-};
-export default avaibleAspectRatios;

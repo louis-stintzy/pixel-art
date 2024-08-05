@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import colorPalettes, { PaletteName } from '../constants/colors';
-import { AspectRatio } from '../constants/aspectRatio';
+import { resetAspectRatio } from '../constants/aspectRatio';
+import { AspectRatio } from '../@types/aspectRatio';
 
 type State = {
   // ----- Grid -----
@@ -8,7 +9,7 @@ type State = {
   aspectRatio: AspectRatio;
   gridSize: { width: number; height: number; pixelSize: number };
   setUserDragsGrid: (userDragsGrid: boolean) => void;
-  setAspectRation: (aspectRatio: AspectRatio) => void;
+  setAspectRatio: (aspectRatio: AspectRatio) => void;
   setGridSize: (gridSize: {
     width: number;
     height: number;
@@ -35,27 +36,10 @@ type State = {
 const useStore = create<State>()((set) => ({
   // ----- Grid -----
   userDragsGrid: false,
-  aspectRatio: {
-    display: '4:3',
-    value: 4 / 3,
-    formats: [
-      {
-        display: '800x600',
-        width: 800,
-        height: 600,
-        pixelSize: [8, 10, 20, 25, 40, 50, 100],
-      },
-      {
-        display: '1024x768',
-        width: 1024,
-        height: 768,
-        pixelSize: [8, 16, 32, 64, 128],
-      },
-    ],
-  },
+  aspectRatio: resetAspectRatio,
   gridSize: { width: 8, height: 8, pixelSize: 70 },
   setUserDragsGrid: (userDragsGrid) => set({ userDragsGrid }),
-  setAspectRation: (aspectRatio) => set({ aspectRatio }),
+  setAspectRatio: (aspectRatio) => set({ aspectRatio }),
   setGridSize: (gridSize) => set({ gridSize }),
 
   // ----- Image -----

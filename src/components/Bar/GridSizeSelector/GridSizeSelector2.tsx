@@ -1,11 +1,7 @@
 import { useState } from 'react';
-import avaibleAspectRatio, {
-  Orientation,
-  Format,
-  AspectRatio,
-} from '../../../constants/aspectRatio';
 import useStore from '../../../store/store';
 import ImageInput from '../../ImageUpload/ImageInput';
+import { Format } from '../../../@types/aspectRatio';
 
 function GridSizeSelector2() {
   const aspectRatio = useStore((state) => state.aspectRatio);

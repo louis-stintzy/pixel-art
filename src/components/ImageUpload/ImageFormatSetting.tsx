@@ -1,26 +1,30 @@
 import { useState } from 'react';
-import avaibleAspectRatio, {
-  Orientation,
-  AspectRatio,
-} from '../../constants/aspectRatio';
+import { avaibleAspectRatios } from '../../constants/aspectRatio';
 import useStore from '../../store/store';
+import { AspectRatio, Orientation } from '../../@types/aspectRatio';
 
 function ImageFormatSetting() {
+  // Récupère aspectRatio  (état global) et setAspectRatio du store
   const aspectRatio = useStore((state) => state.aspectRatio);
-  const setAspectRatio = useStore((state) => state.setAspectRation);
-  const [orientation, setOrientation] = useState<Orientation>('landscape'); // inialisé à 'landscape' car aspectRatio est initialisé à '4:3' dans le store
-  // const [ratio, setRatio] = useState<number>(4 / 3);
+  const setAspectRatio = useStore((state) => state.setAspectRatio);
+  // Stocke l'orientation (inialisé à 'landscape' car aspectRatio est initialisé à '4:3' dans le store) et l'aspect ratio actuel (état local)
+  const [orientation, setOrientation] = useState<Orientation>('landscape');
   const [aspect, setAspect] = useState<AspectRatio>(aspectRatio);
 
+  // Fonction pour changer l'orientation et/ou l'aspect ratio
   const handleChangeAspect =
     (aspectType: 'orientation' | 'aspectRatio') =>
     (value: Orientation | AspectRatio) => {
-      console.log('aspect', aspect);
-      console.log('value', value);
+      // console.log('aspect', aspect);
+      // console.log('value', value);
       if (aspectType === 'orientation') {
         const newOrientation = value as Orientation;
         setOrientation(newOrientation);
+
+        // Calcul du nouveau ratio en fonction de l'orientation actuelle et de la nouvelle orientation
         let newRatio = 1;
+
+        // Inverse le ratio si l'orientation passe de paysage à portrait ou vice versa
         if (
           (newOrientation === 'landscape' && orientation === 'portrait') ||
           (newOrientation === 'portrait' && orientation === 'landscape')
@@ -28,16 +32,18 @@ function ImageFormatSetting() {
           newRatio = 1 / aspect.value;
         }
 
+        // Définit le ratio par défaut en fonction de la nouvelle orientation
         if (newOrientation === 'square') newRatio = 1;
         if (newOrientation === 'landscape' && orientation !== 'portrait')
           newRatio = 4 / 3; // 4:3 pour rester cohérent avec l'initialisation de aspectRatio dans le store
         if (newOrientation === 'portrait' && orientation !== 'landscape')
-          newRatio = 3 / 4;
+          newRatio = 3 / 4; // 3:4 pour rester cohérent avec le commentaire précédent (cas inverse)
         if (newOrientation === 'panoramic') newRatio = 65 / 24;
-        console.log('ratio', aspect.value);
-        console.log('newRatio', newRatio);
-        // setRatio(newRatio);
-        const newAspectRatio = avaibleAspectRatio[newOrientation].find(
+        // console.log('ratio', aspect.value);
+        // console.log('newRatio', newRatio);
+
+        // Recherche du nouvel aspect ratio en fonction de la nouvelle orientation (et du nouveau ratio calculé)
+        const newAspectRatio = avaibleAspectRatios[newOrientation].find(
           (ar: AspectRatio) => newRatio === ar.value
         ) as AspectRatio;
         setAspect(newAspectRatio);
@@ -45,9 +51,8 @@ function ImageFormatSetting() {
       }
       if (aspectType === 'aspectRatio') {
         const newAspectRatio = value as AspectRatio;
-        console.log('ratio', aspect.value);
-        console.log('newAspectRatio.value', newAspectRatio.value);
-        // setRatio(newAspectRatio.value);
+        // console.log('ratio', aspect.value);
+        // console.log('newAspectRatio.value', newAspectRatio.value);
         setAspect(newAspectRatio);
         setAspectRatio(newAspectRatio);
       }
@@ -64,7 +69,7 @@ function ImageFormatSetting() {
             handleChangeAspect('orientation')(e.target.value as Orientation)
           }
         >
-          {Object.keys(avaibleAspectRatio).map((avaibleOrientation) => (
+          {Object.keys(avaibleAspectRatios).map((avaibleOrientation) => (
             <option key={avaibleOrientation} value={avaibleOrientation}>
               {avaibleOrientation}
             </option>
@@ -78,15 +83,15 @@ function ImageFormatSetting() {
           value={aspect.display}
           onChange={(e) =>
             handleChangeAspect('aspectRatio')(
-              avaibleAspectRatio[orientation].find(
-                (a: AspectRatio) => a.display === e.target.value
+              avaibleAspectRatios[orientation].find(
+                (ar: AspectRatio) => ar.display === e.target.value
               ) as AspectRatio
             )
           }
         >
-          {avaibleAspectRatio[orientation].map((a: AspectRatio) => (
-            <option key={a.display} value={a.display}>
-              {a.display}
+          {avaibleAspectRatios[orientation].map((ar: AspectRatio) => (
+            <option key={ar.display} value={ar.display}>
+              {ar.display}
             </option>
           ))}
         </select>

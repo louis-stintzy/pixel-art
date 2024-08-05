@@ -3,13 +3,9 @@ import { useCallback, useState } from 'react';
 import useStore from '../../store/store';
 import getCroppedImg from '../../utils/cropImage';
 import ImageFormatSetting from './ImageFormatSetting';
+import { handleCancel, handleCropOrCancel } from '../../utils/imageHandlers';
 
-interface ImageModalProps {
-  onCrop: () => void;
-  onCancel: () => void;
-}
-
-function ImageCropper({ onCrop, onCancel }: ImageModalProps) {
+function ImageCropper() {
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fileUrl = useStore((state) => state.fileUrl);
   const setImageUrl = useStore((state) => state.setImageUrl);
@@ -40,11 +36,11 @@ function ImageCropper({ onCrop, onCancel }: ImageModalProps) {
       }
       const croppedImage = await getCroppedImg(fileUrl, croppedAreaPixels);
       setImageUrl(croppedImage);
-      onCrop();
+      handleCropOrCancel();
     } catch (error) {
       console.error('Error cropping image : ', error);
     }
-  }, [croppedAreaPixels, fileUrl, setImageUrl, onCrop]);
+  }, [croppedAreaPixels, fileUrl, setImageUrl]);
 
   const cropperContainerStyle: React.CSSProperties = {
     width: '350px',
@@ -67,7 +63,7 @@ function ImageCropper({ onCrop, onCancel }: ImageModalProps) {
           onZoomChange={setZoom}
         />
       </div>
-      <button type="button" onClick={onCancel}>
+      <button type="button" onClick={handleCancel}>
         Cancel
       </button>
       <input
