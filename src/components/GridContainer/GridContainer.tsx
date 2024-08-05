@@ -5,6 +5,7 @@ import useStore from '../../store/store';
 import './GridContainer.scss';
 
 function GridContainer() {
+  const format = useStore((state) => state.format);
   const imageUrl = useStore((state) => state.imageUrl);
 
   // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
@@ -111,6 +112,11 @@ function GridContainer() {
     transition: isDragging.current ? 'none' : 'transform 0.1s ease-out',
   };
 
+  const uploadedImageContainerStyle: React.CSSProperties = {
+    width: format.width,
+    height: format.height,
+  };
+
   return (
     <div
       id="grid-container"
@@ -127,7 +133,14 @@ function GridContainer() {
     >
       <div id="grid-wrapper" style={gridWrapperStyle}>
         <Grid />
-        {imageUrl && <img src={imageUrl} alt="uploaded" />}
+        {imageUrl && (
+          <div
+            id="uploaded-image-container"
+            style={uploadedImageContainerStyle}
+          >
+            <img src={imageUrl} alt="uploaded" />
+          </div>
+        )}
       </div>
     </div>
   );

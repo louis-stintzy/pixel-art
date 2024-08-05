@@ -1,16 +1,7 @@
 import { Area } from 'react-easy-crop';
+import createImage from './createImage';
 
 // note : https://developer.mozilla.org/fr/docs/Web/API/Canvas_API/Tutorial/Using_images
-
-const createImage = (url: string): Promise<HTMLImageElement> => {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.addEventListener('load', () => resolve(image)); // Lorsque l'image est chargée, la promesse est résolue avec l'élément image
-    image.addEventListener('error', (error) => reject(error));
-    image.setAttribute('crossOrigin', 'anonymous');
-    image.src = url;
-  });
-};
 
 const getCroppedImg = async (
   imageSrc: string,

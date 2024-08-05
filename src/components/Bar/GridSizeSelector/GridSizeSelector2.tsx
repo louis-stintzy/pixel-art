@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useStore from '../../../store/store';
 import ImageInput from '../../ImageUpload/ImageInput';
 import { Format } from '../../../@types/aspectRatio';
+import resizeImage from '../../../utils/resizeImage';
 
 function GridSizeSelector2() {
   const aspectRatio = useStore((state) => state.aspectRatio);
+  const imageUrl = useStore((state) => state.imageUrl);
+  const setFormat = useStore((state) => state.setFormat);
   const setGridSize = useStore((state) => state.setGridSize);
+  const setImageUrl = useStore((state) => state.setImageUrl);
 
   const [selectedFormat, setSelectedFormat] = useState<Format>(
     aspectRatio.formats[0]
@@ -24,12 +28,30 @@ function GridSizeSelector2() {
     };
   };
 
+  const updateImageUrl = useCallback(
+    async (format: Format) => {
+      try {
+        if (!imageUrl || !format) {
+          throw new Error('File Url or format is null');
+        }
+        const resizedImageUrl = await resizeImage(imageUrl, format);
+        URL.revokeObjectURL(imageUrl);
+        setImageUrl(resizedImageUrl);
+      } catch (error) {
+        console.error('Error resizing image : ', error);
+      }
+    },
+    [imageUrl, setImageUrl]
+  );
+
   useEffect(() => {
     const defaultFormat = aspectRatio.formats[0];
     setSelectedFormat(defaultFormat);
+    setFormat(defaultFormat);
     setSelectedPixelSize(defaultFormat.pixelSize[2]);
     setGridSize(configureGridSize(defaultFormat, defaultFormat.pixelSize[2]));
-  }, [aspectRatio, setGridSize]);
+    // if (imageUrl) updateImageUrl(defaultFormat);
+  }, [aspectRatio, setFormat, setGridSize, updateImageUrl]);
 
   const handleChangeGridSize =
     (type: 'format' | 'pixel-size') => (value: string | number) => {
@@ -37,8 +59,10 @@ function GridSizeSelector2() {
         const format = aspectRatio.formats.find((f) => f.display === value);
         if (format) {
           setSelectedFormat(format);
+          setFormat(format);
           setSelectedPixelSize(format.pixelSize[2]);
           setGridSize(configureGridSize(format, format.pixelSize[2]));
+          if (imageUrl) updateImageUrl(format);
         } else {
           console.error('Format not found');
         }
