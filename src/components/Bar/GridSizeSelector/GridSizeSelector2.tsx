@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useStore from '../../../store/store';
 import ImageInput from '../../ImageUpload/ImageInput';
 import { Format } from '../../../@types/aspectRatio';
@@ -10,9 +10,26 @@ function GridSizeSelector2() {
   const [selectedFormat, setSelectedFormat] = useState<Format>(
     aspectRatio.formats[0]
   );
-  const [pixelSize, setPixelSize] = useState<number>(
+  const [selectedPixelSize, setSelectedPixelSize] = useState<number>(
     selectedFormat.pixelSize[2]
   );
+
+  const configureGridSize = (format: Format, pixelSize: number) => {
+    const widthNumberOfPixels = format.width / pixelSize;
+    const heightNumberOfPixels = format.height / pixelSize;
+    return {
+      width: widthNumberOfPixels,
+      height: heightNumberOfPixels,
+      pixelSize,
+    };
+  };
+
+  useEffect(() => {
+    const defaultFormat = aspectRatio.formats[0];
+    setSelectedFormat(defaultFormat);
+    setSelectedPixelSize(defaultFormat.pixelSize[2]);
+    setGridSize(configureGridSize(defaultFormat, defaultFormat.pixelSize[2]));
+  }, [aspectRatio, setGridSize]);
 
   const handleChangeGridSize =
     (type: 'format' | 'pixel-size') => (value: string | number) => {
@@ -20,20 +37,15 @@ function GridSizeSelector2() {
         const format = aspectRatio.formats.find((f) => f.display === value);
         if (format) {
           setSelectedFormat(format);
-          setPixelSize(format.pixelSize[2]);
-          setGridSize({
-            width: format.width,
-            height: format.height,
-            pixelSize: format.pixelSize[2],
-          });
+          setSelectedPixelSize(format.pixelSize[2]);
+          setGridSize(configureGridSize(format, format.pixelSize[2]));
+        } else {
+          console.error('Format not found');
         }
-      } else {
-        setPixelSize(value as number);
-        setGridSize({
-          width: selectedFormat.width,
-          height: selectedFormat.height,
-          pixelSize: value as number,
-        });
+      }
+      if (type === 'pixel-size') {
+        setSelectedPixelSize(value as number);
+        setGridSize(configureGridSize(selectedFormat, value as number));
       }
     };
 
@@ -63,7 +75,7 @@ function GridSizeSelector2() {
           Pixel Size:
           <select
             name="pixel size"
-            value={pixelSize}
+            value={selectedPixelSize}
             onChange={(e) =>
               handleChangeGridSize('pixel-size')(parseInt(e.target.value, 10))
             }
