@@ -4,12 +4,14 @@ import useStore from '../../store/store';
 import { handleCancel } from '../../utils/imageHandlers';
 
 function ImageInput() {
+  const previousImageUrl = useStore((state) => state.imageUrl);
   const setFileUrl = useStore((state) => state.setFileUrl);
   const setCroppingModalIsOpen = useStore(
     (state) => state.setCroppingModalIsOpen
   );
 
   const onDrop = (acceptedFiles: File[]) => {
+    if (previousImageUrl) URL.revokeObjectURL(previousImageUrl);
     handleCancel();
     const file = acceptedFiles[0];
     if (!file) return;

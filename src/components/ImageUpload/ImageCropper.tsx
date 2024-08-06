@@ -4,15 +4,29 @@ import useStore from '../../store/store';
 import getCroppedImg from '../../utils/cropImage';
 import ImageFormatSetting from './ImageFormatSetting';
 import { handleCancel, handleCropOrCancel } from '../../utils/imageHandlers';
+import resizeImage from '../../utils/resizeImage';
+import { Format } from '../../@types/aspectRatio';
 
 function ImageCropper() {
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fileUrl = useStore((state) => state.fileUrl);
   const setImageUrl = useStore((state) => state.setImageUrl);
+  const setFormat = useStore((state) => state.setFormat);
+  const setGridSize = useStore((state) => state.setGridSize);
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+
+  const configureGridSize = (format: Format, pixelSize: number) => {
+    const widthNumberOfPixels = format.width / pixelSize;
+    const heightNumberOfPixels = format.height / pixelSize;
+    return {
+      width: widthNumberOfPixels,
+      height: heightNumberOfPixels,
+      pixelSize,
+    };
+  };
 
   // onCropComplete est appelée à chaque fois que l'utilisateur modifie la zone de sélection (zomm ou déplacement du cadre)
   const onCropComplete = useCallback(
@@ -32,15 +46,34 @@ function ImageCropper() {
   const handleCropImage = useCallback(async () => {
     try {
       if (!fileUrl || !croppedAreaPixels) {
-        throw new Error('File Url or Cropped Area Pixels is null');
+        throw new Error('File Url is undefined or Cropped Area Pixels is null');
       }
       const croppedImage = await getCroppedImg(fileUrl, croppedAreaPixels);
-      setImageUrl(croppedImage);
+      if (!croppedImage) {
+        throw new Error('Cropped image is undefined');
+      }
+      const resizedImageUrl = await resizeImage(
+        croppedImage,
+        aspectRatio.formats[0]
+      );
+      setImageUrl(resizedImageUrl);
       handleCropOrCancel();
+
+      const defaultFormat = aspectRatio.formats[0];
+
+      setFormat(defaultFormat);
+      setGridSize(configureGridSize(defaultFormat, defaultFormat.pixelSize[2]));
     } catch (error) {
       console.error('Error cropping image : ', error);
     }
-  }, [croppedAreaPixels, fileUrl, setImageUrl]);
+  }, [
+    aspectRatio.formats,
+    croppedAreaPixels,
+    fileUrl,
+    setFormat,
+    setGridSize,
+    setImageUrl,
+  ]);
 
   const cropperContainerStyle: React.CSSProperties = {
     width: '350px',

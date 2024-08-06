@@ -1,13 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Grid from './Grid/Grid';
 import useStore from '../../store/store';
 
 import './GridContainer.scss';
+import ImageUnderTheGrid from './ImageUnderTheGrid/ImageUnderTheGrid';
 
 function GridContainer() {
-  const format = useStore((state) => state.format);
-  const imageUrl = useStore((state) => state.imageUrl);
-
   // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
   // useRef renvoie un objet avec une propriété current qui est mutable.
   // useRef est idéal pour conserver des références à des éléments DOM ou des valeurs qui ne nécessitent pas de re-render de composant lorsqu'elles sont modifiées.
@@ -112,11 +110,6 @@ function GridContainer() {
     transition: isDragging.current ? 'none' : 'transform 0.1s ease-out',
   };
 
-  const uploadedImageContainerStyle: React.CSSProperties = {
-    width: format.width,
-    height: format.height,
-  };
-
   return (
     <div
       id="grid-container"
@@ -133,14 +126,7 @@ function GridContainer() {
     >
       <div id="grid-wrapper" style={gridWrapperStyle}>
         <Grid />
-        {imageUrl && (
-          <div
-            id="uploaded-image-container"
-            style={uploadedImageContainerStyle}
-          >
-            <img src={imageUrl} alt="uploaded" />
-          </div>
-        )}
+        <ImageUnderTheGrid />
       </div>
     </div>
   );
