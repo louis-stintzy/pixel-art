@@ -18,6 +18,7 @@ function ImageCropper() {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
+  //-----
   const configureGridSize = (format: Format, pixelSize: number) => {
     const widthNumberOfPixels = format.width / pixelSize;
     const heightNumberOfPixels = format.height / pixelSize;
@@ -27,6 +28,7 @@ function ImageCropper() {
       pixelSize,
     };
   };
+  //-----
 
   // onCropComplete est appelée à chaque fois que l'utilisateur modifie la zone de sélection (zomm ou déplacement du cadre)
   const onCropComplete = useCallback(

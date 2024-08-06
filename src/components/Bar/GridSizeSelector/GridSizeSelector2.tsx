@@ -6,21 +6,22 @@ import resizeImage from '../../../utils/resizeImage';
 
 function GridSizeSelector2() {
   const aspectRatio = useStore((state) => state.aspectRatio);
+  const format = useStore((state) => state.format);
   const imageUrl = useStore((state) => state.imageUrl);
   const setFormat = useStore((state) => state.setFormat);
   const setGridSize = useStore((state) => state.setGridSize);
   const setImageUrl = useStore((state) => state.setImageUrl);
 
-  const [selectedFormat, setSelectedFormat] = useState<Format>(
-    aspectRatio.formats[0]
-  );
+  // const [selectedFormat, setSelectedFormat] = useState<Format>(
+  //   aspectRatio.formats[0]
+  // );
   const [selectedPixelSize, setSelectedPixelSize] = useState<number>(
     aspectRatio.formats[0].pixelSize[2]
   );
 
-  const configureGridSize = (format: Format, pixelSize: number) => {
-    const widthNumberOfPixels = format.width / pixelSize;
-    const heightNumberOfPixels = format.height / pixelSize;
+  const configureGridSize = (newFormat: Format, pixelSize: number) => {
+    const widthNumberOfPixels = newFormat.width / pixelSize;
+    const heightNumberOfPixels = newFormat.height / pixelSize;
     return {
       width: widthNumberOfPixels,
       height: heightNumberOfPixels,
@@ -29,12 +30,12 @@ function GridSizeSelector2() {
   };
 
   const updateImageUrl = useCallback(
-    async (format: Format) => {
+    async (newFormat: Format) => {
       try {
-        if (!imageUrl || !format) {
+        if (!imageUrl || !newFormat) {
           throw new Error('File Url or format is null');
         }
-        const resizedImageUrl = await resizeImage(imageUrl, format);
+        const resizedImageUrl = await resizeImage(imageUrl, newFormat);
 
         URL.revokeObjectURL(imageUrl);
         setImageUrl(resizedImageUrl);
@@ -47,40 +48,33 @@ function GridSizeSelector2() {
 
   useEffect(() => {
     const defaultFormat = aspectRatio.formats[0];
-    if (defaultFormat.display === selectedFormat.display) {
-      setSelectedFormat(defaultFormat);
+    if (defaultFormat.display === format.display) {
+      // setSelectedFormat(defaultFormat);
       setFormat(defaultFormat);
       setSelectedPixelSize(defaultFormat.pixelSize[2]);
       setGridSize(configureGridSize(defaultFormat, defaultFormat.pixelSize[2]));
       // test et penser à enlever updateImageUrl et imageUrl si on enlève
       // if (imageUrl) updateImageUrl(defaultFormat);
     }
-  }, [
-    aspectRatio,
-    // imageUrl,
-    selectedFormat,
-    setFormat,
-    setGridSize,
-    // updateImageUrl,
-  ]);
+  }, [aspectRatio, format.display, setFormat, setGridSize]);
 
   const handleChangeGridSize =
     (type: 'format' | 'pixel-size') => async (value: string | number) => {
       if (type === 'format') {
-        const format = aspectRatio.formats.find((f) => f.display === value);
-        if (format) {
-          if (imageUrl) await updateImageUrl(format);
-          setSelectedFormat(format);
-          setFormat(format);
-          setSelectedPixelSize(format.pixelSize[2]);
-          setGridSize(configureGridSize(format, format.pixelSize[2]));
+        const newFormat = aspectRatio.formats.find((f) => f.display === value);
+        if (newFormat) {
+          if (imageUrl) await updateImageUrl(newFormat);
+          setFormat(newFormat);
+          setFormat(newFormat);
+          setSelectedPixelSize(newFormat.pixelSize[2]);
+          setGridSize(configureGridSize(newFormat, newFormat.pixelSize[2]));
         } else {
           console.error('Format not found');
         }
       }
       if (type === 'pixel-size') {
         setSelectedPixelSize(value as number);
-        setGridSize(configureGridSize(selectedFormat, value as number));
+        setGridSize(configureGridSize(format, value as number));
       }
     };
 
@@ -96,12 +90,12 @@ function GridSizeSelector2() {
           Format:
           <select
             name="format"
-            value={selectedFormat.display}
+            value={format.display}
             onChange={(e) => handleChangeGridSize('format')(e.target.value)}
           >
-            {aspectRatio.formats.map((format) => (
-              <option key={format.display} value={format.display}>
-                {format.display}
+            {aspectRatio.formats.map((f) => (
+              <option key={f.display} value={f.display}>
+                {f.display}
               </option>
             ))}
           </select>
@@ -115,7 +109,7 @@ function GridSizeSelector2() {
               handleChangeGridSize('pixel-size')(parseInt(e.target.value, 10))
             }
           >
-            {selectedFormat.pixelSize.map((size) => (
+            {format.pixelSize.map((size) => (
               <option key={size} value={size}>
                 {size}
               </option>
