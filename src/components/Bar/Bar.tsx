@@ -1,4 +1,5 @@
 import ColorPaletteSelector from './ColorPaletteSelector/ColorPaletteSelector';
+import ColoringModeOption from './ColoringModeOption/ColoringModeOption';
 import ColorPicker from './ColorPicker/ColorPicker';
 import GridSizeSelector2 from './GridSizeSelector/GridSizeSelector2';
 
@@ -10,7 +11,10 @@ function Bar() {
       <h2>Pixel Art Maker</h2>
       <GridSizeSelector2 />
       <div>
-        <ColorPaletteSelector />
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+          <ColorPaletteSelector />
+          <ColoringModeOption />
+        </div>
         <ColorPicker />
       </div>
     </div>

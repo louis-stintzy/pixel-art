@@ -29,9 +29,11 @@ type State = {
   // ----- Palette & Color-----
   selectedPalette: { name: PaletteName; colors: string[] };
   selectedColor: string;
+  isColoring: boolean;
   pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
   setSelectedPalette: (paletteName: PaletteName) => void;
   setSelectedColor: (selectedColor: string) => void;
+  setIsColoring: (isColoring: boolean) => void;
   setPixelColors: (id: string, color: string) => void;
 };
 
@@ -60,6 +62,7 @@ const useStore = create<State>()((set) => ({
     colors: colorPalettes.materialDesign,
   },
   selectedColor: colorPalettes.materialDesign[0],
+  isColoring: false,
   pixelColors: {},
   setSelectedPalette: (paletteName) =>
     set({
@@ -70,6 +73,7 @@ const useStore = create<State>()((set) => ({
       selectedColor: colorPalettes[paletteName][0],
     }),
   setSelectedColor: (selectedColor) => set({ selectedColor }),
+  setIsColoring: (isColoring) => set({ isColoring }),
   setPixelColors: (id, color) =>
     set((state) => ({
       pixelColors: { ...state.pixelColors, [id]: color },
