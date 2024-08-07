@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import useStore from '../../../store/store';
 
 function ImageUnderTheGrid() {
-  const aspectRatio = useStore((state) => state.aspectRatio);
   const format = useStore((state) => state.format);
   const imageUrl = useStore((state) => state.imageUrl);
 

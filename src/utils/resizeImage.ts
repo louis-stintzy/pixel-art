@@ -1,28 +1,6 @@
 import { Format } from '../@types/aspectRatio';
 import createImage from './createImage';
 
-// const resizeImage2 = (file: File, maxWidth: number, maxHeight: number) => {
-//   return new Promise((resolve) => {
-//     const reader = new FileReader();
-//     reader.readAsDataURL(file);
-//     reader.onload = (event) => {
-//       const img = new Image();
-//       img.src = event.target?.result as string;
-//       img.onload = () => {
-//         const canvas = document.createElement('canvas');
-//         const ctx = canvas.getContext('2d');
-//         const scale = Math.min(maxWidth / img.width, maxHeight / img.height);
-//         canvas.width = img.width * scale;
-//         canvas.height = img.height * scale;
-//         ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
-//         canvas.toBlob((blob) => {
-//           resolve(new File([blob as Blob], file.name, { type: file.type }));
-//         }, file.type);
-//       };
-//     };
-//   });
-// };
-
 const resizeImage = async (
   imageSrc: string,
   format: Format

@@ -1,6 +1,5 @@
 import ColorPaletteSelector from './ColorPaletteSelector/ColorPaletteSelector';
 import ColorPicker from './ColorPicker/ColorPicker';
-import GridSizeSelector from './GridSizeSelector/GridSizeSelector';
 import GridSizeSelector2 from './GridSizeSelector/GridSizeSelector2';
 
 import './Bar.scss';
