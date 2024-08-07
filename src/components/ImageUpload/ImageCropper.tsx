@@ -5,7 +5,15 @@ import getCroppedImg from '../../utils/cropImage';
 import ImageFormatSetting from './ImageFormatSetting';
 import { handleCancel, handleCropOrCancel } from '../../utils/imageHandlers';
 import resizeImage from '../../utils/resizeImage';
-import { Format } from '../../@types/aspectRatio';
+import configureGridSize from '../../utils/configureGridSize';
+
+/**
+ * The ImageCropper component manages image cropping.
+ * It allows users to crop images.
+ * It is the parent of the ImageFormatSetting component (which manages aspect ratio settings).
+ * It makes available, via the store, a cropped image with the correct dimensions (first available format for the chosen aspect ratio).
+ * The component also updates the format and size of the grid according to the cropped image (first available format of the chosen aspect ratio).
+ */
 
 function ImageCropper() {
   const aspectRatio = useStore((state) => state.aspectRatio);
@@ -17,18 +25,6 @@ function ImageCropper() {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-
-  //-----
-  const configureGridSize = (format: Format, pixelSize: number) => {
-    const widthNumberOfPixels = format.width / pixelSize;
-    const heightNumberOfPixels = format.height / pixelSize;
-    return {
-      width: widthNumberOfPixels,
-      height: heightNumberOfPixels,
-      pixelSize,
-    };
-  };
-  //-----
 
   // onCropComplete est appelée à chaque fois que l'utilisateur modifie la zone de sélection (zomm ou déplacement du cadre)
   const onCropComplete = useCallback(

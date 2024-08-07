@@ -3,6 +3,13 @@ import useStore from '../../../store/store';
 import ImageInput from '../../ImageUpload/ImageInput';
 import { Format } from '../../../@types/aspectRatio';
 import resizeImage from '../../../utils/resizeImage';
+import configureGridSize from '../../../utils/configureGridSize';
+
+/**
+ * GridSizeSelector2 component manages the grid format and pixel size.
+ * It allows users to select the format and pixel size from dropdowns.
+ * It updates the grid size and resizes the image accordingly.
+ */
 
 function GridSizeSelector2() {
   const aspectRatio = useStore((state) => state.aspectRatio);
@@ -12,22 +19,9 @@ function GridSizeSelector2() {
   const setGridSize = useStore((state) => state.setGridSize);
   const setImageUrl = useStore((state) => state.setImageUrl);
 
-  // const [selectedFormat, setSelectedFormat] = useState<Format>(
-  //   aspectRatio.formats[0]
-  // );
   const [selectedPixelSize, setSelectedPixelSize] = useState<number>(
     aspectRatio.formats[0].pixelSize[2]
   );
-
-  const configureGridSize = (newFormat: Format, pixelSize: number) => {
-    const widthNumberOfPixels = newFormat.width / pixelSize;
-    const heightNumberOfPixels = newFormat.height / pixelSize;
-    return {
-      width: widthNumberOfPixels,
-      height: heightNumberOfPixels,
-      pixelSize,
-    };
-  };
 
   const updateImageUrl = useCallback(
     async (newFormat: Format) => {
@@ -45,18 +39,6 @@ function GridSizeSelector2() {
     },
     [imageUrl, setImageUrl]
   );
-
-  useEffect(() => {
-    const defaultFormat = aspectRatio.formats[0];
-    if (defaultFormat.display === format.display) {
-      // setSelectedFormat(defaultFormat);
-      setFormat(defaultFormat);
-      setSelectedPixelSize(defaultFormat.pixelSize[2]);
-      setGridSize(configureGridSize(defaultFormat, defaultFormat.pixelSize[2]));
-      // test et penser à enlever updateImageUrl et imageUrl si on enlève
-      // if (imageUrl) updateImageUrl(defaultFormat);
-    }
-  }, [aspectRatio, format.display, setFormat, setGridSize]);
 
   const handleChangeGridSize =
     (type: 'format' | 'pixel-size') => async (value: string | number) => {
