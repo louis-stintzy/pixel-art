@@ -6,12 +6,13 @@ import ImageUnderTheGrid from './ImageUnderTheGrid/ImageUnderTheGrid';
 import './GridContainer.scss';
 
 function GridContainer() {
+  const isColoring = useStore((state) => state.isColoring); // État pour savoir si l'utilisateur est en train de colorier (etat global)
   // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
   // useRef renvoie un objet avec une propriété current qui est mutable.
   // useRef est idéal pour conserver des références à des éléments DOM ou des valeurs qui ne nécessitent pas de re-render de composant lorsqu'elles sont modifiées.
   // C'est particulièrement utile pour suivre l'état d'interactions utilisateur comme le drag-and-drop.
   const gridRef = useRef<HTMLDivElement | null>(null); // Référence pour le conteneur de la grille
-  const { position, isDragging } = useDragAndDrop(gridRef); // Position de la grille et état de glissement (custom hook)
+  const { position, isDragging } = useDragAndDrop(gridRef, !isColoring); // Position de la grille et état de glissement (custom hook)
   const setUserDragsGrid = useStore((state) => state.setUserDragsGrid); // Fonction pour définir si l'utilisateur fait glisser la grille (etat global)
 
   useEffect(() => {

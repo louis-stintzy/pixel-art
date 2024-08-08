@@ -5,7 +5,7 @@ interface Position {
   y: number;
 }
 
-function useDragAndDrop(ref: React.RefObject<HTMLElement>) {
+function useDragAndDrop(ref: React.RefObject<HTMLElement>, isActivated = true) {
   const [isDragging, setIsDragging] = useState(false); // État pour savoir si l'utilisateur fait glisser la grille
   const lastMousePosition = useRef({ x: 0, y: 0 }); // Référence pour stocker la dernière position de la souris
   const mouseDownRef = useRef(false); // Référence pour savoir si le bouton de la souris est enfoncé
@@ -14,16 +14,24 @@ function useDragAndDrop(ref: React.RefObject<HTMLElement>) {
   const MIN_DRAG_DISTANCE = 7; // Distance minimale de glissement pour commencer à faire glisser la grille
 
   // L'utilisateur clique : met à jour l'état de mouseDownRef et enregistre la position de la souris
-  const handleMouseDown = useCallback((e: MouseEvent) => {
-    mouseDownRef.current = true;
-    lastMousePosition.current = { x: e.clientX, y: e.clientY };
-  }, []);
+  const handleMouseDown = useCallback(
+    (e: MouseEvent) => {
+      if (!isActivated) return;
+      mouseDownRef.current = true;
+      lastMousePosition.current = { x: e.clientX, y: e.clientY };
+    },
+    [isActivated]
+  );
 
-  const handleTouchStart = useCallback((e: TouchEvent) => {
-    mouseDownRef.current = true;
-    const touch = e.touches[0];
-    lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
-  }, []);
+  const handleTouchStart = useCallback(
+    (e: TouchEvent) => {
+      if (!isActivated) return;
+      mouseDownRef.current = true;
+      const touch = e.touches[0];
+      lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
+    },
+    [isActivated]
+  );
 
   // L'utilisateur déplace la souris :
   // - si pas encore de drag : vérifie si la distance de glissement est suffisante pour commencer à faire glisser la grille
