@@ -8,7 +8,7 @@ interface Position {
 function useDragAndDrop(
   ref: React.RefObject<HTMLElement>,
   isActivated = true,
-  throttleLimit = 4
+  throttleLimit = 32
 ) {
   const [isDragging, setIsDragging] = useState(false); // État pour savoir si l'utilisateur fait glisser la grille
   const lastMousePosition = useRef({ x: 0, y: 0 }); // Référence pour stocker la dernière position de la souris
@@ -22,7 +22,6 @@ function useDragAndDrop(
   const lastFuncTouchRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
-  // const countRef = useRef(0);
 
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 }); // Position de la grille
   const MIN_DRAG_DISTANCE = 7; // Distance minimale de glissement pour commencer à faire glisser la grille
@@ -31,8 +30,6 @@ function useDragAndDrop(
   const handleMouseDown = useCallback(
     (e: MouseEvent) => {
       if (!isActivated) return;
-      // console.log('throwleLimit : ', throttleLimit);
-      // countRef.current = 0;
       mouseDownRef.current = true;
       lastMousePosition.current = { x: e.clientX, y: e.clientY };
     },
@@ -58,8 +55,6 @@ function useDragAndDrop(
 
   const executeMouseLogic = useCallback(
     (e: MouseEvent) => {
-      // countRef.current += 1;
-      //-----
       const deltaX = e.clientX - lastMousePosition.current.x;
       const deltaY = e.clientY - lastMousePosition.current.y;
 
@@ -74,7 +69,27 @@ function useDragAndDrop(
         updatePosition(deltaX, deltaY);
         lastMousePosition.current = { x: e.clientX, y: e.clientY };
       }
-      //-----
+    },
+    [isDragging]
+  );
+
+  const executeTouchLogic = useCallback(
+    (e: TouchEvent) => {
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - lastMousePosition.current.x;
+      const deltaY = touch.clientY - lastMousePosition.current.y;
+
+      if (!isDragging) {
+        if (
+          Math.abs(deltaX) > MIN_DRAG_DISTANCE ||
+          Math.abs(deltaY) > MIN_DRAG_DISTANCE
+        ) {
+          setIsDragging(true);
+        }
+      } else {
+        updatePosition(deltaX, deltaY);
+        lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
+      }
     },
     [isDragging]
   );
@@ -87,8 +102,7 @@ function useDragAndDrop(
       // Si le bouton de la souris n'est pas enfoncé, ne rien faire
       if (!mouseDownRef.current) return;
 
-      // console.log('countRef.current : ', countRef.current);
-
+      // requestAnimationFrame: permet de synchroniser l'exécution d'une fonction avec le rafraîchissement de l'écran
       requestAnimationFrame(() => {
         // Logique de throttling : voir src/utils/throttle.ts
         // Si la fonction n'a jamais été exécutée ou si le délai entre deux exécutions est supérieur au délai limite,
@@ -96,23 +110,16 @@ function useDragAndDrop(
           !lastRanMouseRef.current ||
           Date.now() - lastRanMouseRef.current >= throttleLimit
         ) {
-          // console.log(`Premier passage ou délai dépassé => executeMouseLogic `);
           lastRanMouseRef.current = Date.now();
           executeMouseLogic(e);
         } else {
           // Sinon (si le délai entre deux exécutions est inférieur au délai limite),
-          // console.log(
-          //   `Délai non respecté => nouveau timer, temps restant : ${
-          //     throttleLimit - (Date.now() - lastRanMouseRef.current)
-          //   }`
-          // );
           // Efface le dernier setTimeout
           if (lastFuncMouseRef.current !== undefined)
             clearTimeout(lastFuncMouseRef.current);
           // Définit un nouveau timer pour exécuter la fonction après un certain délai
           lastFuncMouseRef.current = setTimeout(() => {
             lastRanMouseRef.current = Date.now();
-            // console.log(`Délai respecté => executeMouseLogic dans le timer`);
             executeMouseLogic(e);
           }, throttleLimit - (Date.now() - lastRanMouseRef.current));
           // Fin de la logique de throttling
@@ -126,23 +133,24 @@ function useDragAndDrop(
     (e: TouchEvent) => {
       if (!mouseDownRef.current) return;
 
-      const touch = e.touches[0];
-      const deltaX = touch.clientX - lastMousePosition.current.x;
-      const deltaY = touch.clientY - lastMousePosition.current.y;
-
-      if (!isDragging) {
+      requestAnimationFrame(() => {
         if (
-          Math.abs(deltaX) > MIN_DRAG_DISTANCE ||
-          Math.abs(deltaY) > MIN_DRAG_DISTANCE
+          !lastRanTouchRef.current ||
+          Date.now() - lastRanTouchRef.current >= throttleLimit
         ) {
-          setIsDragging(true);
+          lastRanTouchRef.current = Date.now();
+          executeTouchLogic(e);
+        } else {
+          if (lastFuncTouchRef.current !== undefined)
+            clearTimeout(lastFuncTouchRef.current);
+          lastFuncTouchRef.current = setTimeout(() => {
+            lastRanTouchRef.current = Date.now();
+            executeTouchLogic(e);
+          }, throttleLimit - (Date.now() - lastRanTouchRef.current));
         }
-      } else {
-        requestAnimationFrame(() => updatePosition(deltaX, deltaY));
-        lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
-      }
+      });
     },
-    [isDragging]
+    [executeTouchLogic, throttleLimit]
   );
 
   // L'utilisateur relâche le bouton de la souris ou quitte la zone de la grille :
