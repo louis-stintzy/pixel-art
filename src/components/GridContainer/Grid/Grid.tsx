@@ -1,32 +1,85 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDrop';
 import Pixel from '../Pixel/Pixel';
 
 function Grid() {
+  const lastRanMouseRef = useRef<number | undefined>(undefined);
+  const lastFuncMouseRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+  const lastRanTouchRef = useRef<number | undefined>(undefined);
+  const lastFuncTouchRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+
   const gridRef = useRef<HTMLDivElement | null>(null);
   const gridSize = useStore((state) => state.gridSize);
   const isReadyToColor = useStore((state) => state.isReadyToColor);
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToColor);
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!isColoring) return;
-    const pixel = event.target as HTMLDivElement;
-    const { id } = pixel;
+  const PIXEL_COLOR_THROTTLE = 32;
+
+  const colorPixelWithSelectedColor = (id: string) => {
     const color = useStore.getState().selectedColor;
     useStore.getState().setPixelColors(id, color);
   };
 
-  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
-    if (!isColoring) return;
-    const pixel = document.elementFromPoint(
-      event.touches[0].clientX,
-      event.touches[0].clientY
-    ) as HTMLDivElement;
-    const { id } = pixel;
-    const color = useStore.getState().selectedColor;
-    useStore.getState().setPixelColors(id, color);
-  };
+  const handleMouseMove = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      if (!isColoring) return;
+      requestAnimationFrame(() => {
+        if (
+          !lastRanMouseRef.current ||
+          Date.now() - lastRanMouseRef.current >= PIXEL_COLOR_THROTTLE
+        ) {
+          lastRanMouseRef.current = Date.now();
+          const pixel = event.target as HTMLDivElement;
+          if (pixel) colorPixelWithSelectedColor(pixel.id);
+        } else {
+          if (lastFuncMouseRef.current !== undefined)
+            clearTimeout(lastFuncMouseRef.current);
+          lastFuncMouseRef.current = setTimeout(() => {
+            lastRanMouseRef.current = Date.now();
+            const pixel = event.target as HTMLDivElement;
+            if (pixel) colorPixelWithSelectedColor(pixel.id);
+          }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanMouseRef.current));
+        }
+      });
+    },
+    [isColoring]
+  );
+
+  const handleTouchMove = useCallback(
+    (event: React.TouchEvent<HTMLDivElement>) => {
+      if (!isColoring) return;
+      requestAnimationFrame(() => {
+        if (
+          !lastRanTouchRef.current ||
+          Date.now() - lastRanTouchRef.current >= PIXEL_COLOR_THROTTLE
+        ) {
+          lastRanTouchRef.current = Date.now();
+          const pixel = document.elementFromPoint(
+            event.touches[0].clientX,
+            event.touches[0].clientY
+          ) as HTMLDivElement;
+          if (pixel) colorPixelWithSelectedColor(pixel.id);
+        } else {
+          if (lastFuncTouchRef.current !== undefined)
+            clearTimeout(lastFuncTouchRef.current);
+          lastFuncTouchRef.current = setTimeout(() => {
+            lastRanTouchRef.current = Date.now();
+            const pixel = document.elementFromPoint(
+              event.touches[0].clientX,
+              event.touches[0].clientY
+            ) as HTMLDivElement;
+            if (pixel) colorPixelWithSelectedColor(pixel.id);
+          }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanTouchRef.current));
+        }
+      });
+    },
+    [isColoring]
+  );
 
   const gridStyle: React.CSSProperties = {
     display: 'grid',
