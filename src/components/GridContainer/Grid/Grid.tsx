@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDrop';
 import Pixel from '../Pixel/Pixel';

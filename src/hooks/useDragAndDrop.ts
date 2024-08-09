@@ -33,6 +33,13 @@ function useDragAndDrop(ref: React.RefObject<HTMLElement>, isActivated = true) {
     [isActivated]
   );
 
+  const updatePosition = (deltaX: number, deltaY: number) => {
+    setPosition((prev) => ({
+      x: prev.x + deltaX,
+      y: prev.y + deltaY,
+    }));
+  };
+
   // L'utilisateur déplace la souris :
   // - si pas encore de drag : vérifie si la distance de glissement est suffisante pour commencer à faire glisser la grille
   // - si drag en cours : met à jour la position de la grille en fonction du mouvement de la souris
@@ -40,22 +47,54 @@ function useDragAndDrop(ref: React.RefObject<HTMLElement>, isActivated = true) {
     (e: MouseEvent) => {
       if (!mouseDownRef.current) return;
 
-      const deltaX = e.clientX - lastMousePosition.current.x;
-      const deltaY = e.clientY - lastMousePosition.current.y;
+      // Logique de throttling : voir src/utils/throttle.ts
+      let lastFunc: ReturnType<typeof setTimeout> | undefined;
+      let lastRan: number | undefined;
 
-      if (!isDragging) {
-        if (
-          Math.abs(deltaX) > MIN_DRAG_DISTANCE ||
-          Math.abs(deltaY) > MIN_DRAG_DISTANCE
-        ) {
-          setIsDragging(true);
+      if (!lastRan) {
+        console.log(`lastRan${lastRan}`);
+        lastRan = Date.now();
+        //-----
+        const deltaX = e.clientX - lastMousePosition.current.x;
+        const deltaY = e.clientY - lastMousePosition.current.y;
+
+        if (!isDragging) {
+          if (
+            Math.abs(deltaX) > MIN_DRAG_DISTANCE ||
+            Math.abs(deltaY) > MIN_DRAG_DISTANCE
+          ) {
+            setIsDragging(true);
+          }
+        } else {
+          requestAnimationFrame(() => updatePosition(deltaX, deltaY));
+          lastMousePosition.current = { x: e.clientX, y: e.clientY };
         }
+        //-----
       } else {
-        setPosition((prev) => ({
-          x: prev.x + deltaX,
-          y: prev.y + deltaY,
-        }));
-        lastMousePosition.current = { x: e.clientX, y: e.clientY };
+        if (lastFunc !== undefined) clearTimeout(lastFunc);
+        lastFunc = setTimeout(() => {
+          if (lastRan) console.log(`throttle${Date.now() - lastRan}`);
+          if (lastRan && Date.now() - lastRan >= 10000) {
+            lastRan = Date.now();
+            //-----
+            const deltaX = e.clientX - lastMousePosition.current.x;
+            const deltaY = e.clientY - lastMousePosition.current.y;
+
+            if (!isDragging) {
+              if (
+                Math.abs(deltaX) > MIN_DRAG_DISTANCE ||
+                Math.abs(deltaY) > MIN_DRAG_DISTANCE
+              ) {
+                setIsDragging(true);
+              }
+            } else {
+              requestAnimationFrame(() => updatePosition(deltaX, deltaY));
+              lastMousePosition.current = { x: e.clientX, y: e.clientY };
+            }
+            //-----
+          }
+        }, 10000 - (Date.now() - lastRan));
+        // Fin de la logique de throttling
       }
     },
     [isDragging]
@@ -77,10 +116,7 @@ function useDragAndDrop(ref: React.RefObject<HTMLElement>, isActivated = true) {
           setIsDragging(true);
         }
       } else {
-        setPosition((prev) => ({
-          x: prev.x + deltaX,
-          y: prev.y + deltaY,
-        }));
+        requestAnimationFrame(() => updatePosition(deltaX, deltaY));
         lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
       }
     },
