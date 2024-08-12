@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import useStore from '../../../store/store';
 
 interface PixelProps {
   id: string;
 }
 
-function Pixel({ id }: PixelProps) {
+const Pixel = React.memo(({ id }: PixelProps) => {
+  // function Pixel({ id }: PixelProps) {
   const pixelSize = useStore((state) => state.gridSize.pixelSize);
   const userDragsGrid = useStore((state) => state.userDragsGrid);
   const selectedColor = useStore((state) => state.selectedColor);
-  const pixelColors = useStore((state) => state.pixelColors);
+  const pixelColor = useStore((state) => state.pixelColors[id]);
   const setPixelColors = useStore((state) => state.setPixelColors);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -18,12 +19,11 @@ function Pixel({ id }: PixelProps) {
     line: '#ccc',
   };
 
-  const pixelColor = pixelColors[id] || gridColor.background; // If pixelColors[id] is undefined, use '#00796B' as the default value
   const pixelBorderColor = gridColor.line;
   let pixelOpacity;
   if (isHovered) {
     pixelOpacity = 0.3;
-  } else if (pixelColor !== gridColor.background) {
+  } else if (pixelColor && pixelColor !== gridColor.background) {
     pixelOpacity = 1;
   } else {
     pixelOpacity = 0.5;
@@ -32,7 +32,7 @@ function Pixel({ id }: PixelProps) {
   const pixelStyle = {
     width: pixelSize,
     height: pixelSize,
-    backgroundColor: pixelColor,
+    backgroundColor: pixelColor || gridColor.background,
     opacity: pixelOpacity,
     transition: 'opacity 0.1s ease-out, background-color 0.1s ease-out',
     border: `1px solid ${pixelBorderColor}`,
@@ -40,7 +40,7 @@ function Pixel({ id }: PixelProps) {
 
   const handleClick = () => {
     if (userDragsGrid) return; // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel.
-    if (pixelColors[id] === selectedColor) {
+    if (pixelColor === selectedColor) {
       setPixelColors(id, gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
       return;
     }
@@ -58,6 +58,9 @@ function Pixel({ id }: PixelProps) {
       aria-label="Pixel Button"
     />
   );
-}
+});
+
+// Pixel.displayName est utilisé par React DevTools pour afficher un nom plus lisible pour le composant.
+Pixel.displayName = 'Pixel';
 
 export default Pixel;
