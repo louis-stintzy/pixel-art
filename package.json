@@ -11,10 +11,12 @@
 		"lint:fix": "eslint src/**/*.{js,jsx,ts,tsx} --fix"
 	},
 	"dependencies": {
+		"@types/react-window": "^1.8.8",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-dropzone": "^14.2.3",
 		"react-easy-crop": "^5.0.8",
+		"react-window": "^1.8.10",
 		"zustand": "^4.5.4"
 	},
 	"devDependencies": {
