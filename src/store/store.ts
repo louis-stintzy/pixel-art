@@ -29,12 +29,14 @@ type State = {
   // ----- Palette & Color-----
   selectedPalette: { name: PaletteName; colors: string[] };
   selectedColor: string;
-  isReadyToColor: boolean;
   pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
   setSelectedPalette: (paletteName: PaletteName) => void;
   setSelectedColor: (selectedColor: string) => void;
-  setIsReadyToColor: (isReadyToColor: boolean) => void;
   setPixelColors: (id: string, color: string) => void;
+
+  // ----- Action Buttons -----
+  isReadyToColor: boolean;
+  setIsReadyToColor: (isReadyToColor: boolean) => void;
 };
 
 const useStore = create<State>()((set) => ({
@@ -62,7 +64,6 @@ const useStore = create<State>()((set) => ({
     colors: colorPalettes.materialDesign,
   },
   selectedColor: colorPalettes.materialDesign[0],
-  isReadyToColor: false,
   pixelColors: {},
   setSelectedPalette: (paletteName) =>
     set({
@@ -73,11 +74,14 @@ const useStore = create<State>()((set) => ({
       selectedColor: colorPalettes[paletteName][0],
     }),
   setSelectedColor: (selectedColor) => set({ selectedColor }),
-  setIsReadyToColor: (isReadyToColor) => set({ isReadyToColor }),
   setPixelColors: (id, color) =>
     set((state) => ({
       pixelColors: { ...state.pixelColors, [id]: color },
     })),
+
+  // ----- Action Buttons -----
+  isReadyToColor: false,
+  setIsReadyToColor: (isReadyToColor) => set({ isReadyToColor }),
 }));
 
 export default useStore;

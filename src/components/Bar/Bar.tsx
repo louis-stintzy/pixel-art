@@ -1,9 +1,9 @@
 import ColorPaletteSelector from './ColorPaletteSelector/ColorPaletteSelector';
 import ColorPicker from './ColorPicker/ColorPicker';
-import ToggleColoringDragMode from './ControlPanel/ToggleColoringDragMode';
 import GridSizeSelector2 from './GridSizeSelector/GridSizeSelector2';
 
 import './Bar.scss';
+import ControlPanel from './ControlPanel/ControlPanel';
 
 function Bar() {
   return (
@@ -13,7 +13,7 @@ function Bar() {
       <div>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
           <ColorPaletteSelector />
-          <ToggleColoringDragMode />
+          <ControlPanel />
         </div>
         <ColorPicker />
       </div>
