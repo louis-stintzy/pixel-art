@@ -9,16 +9,19 @@ function ControlPanel() {
           key={actionButton.id}
           id={actionButton.id}
           buttonStyle={actionButton.buttonStyle}
-          isDisabled={actionButton.isDisabled}
-          iconSrcAction1={actionButton.iconSrcAction1}
-          iconSrcAction2={actionButton.iconSrcAction2}
-          tooltipAction1={actionButton.tooltipAction1}
-          tooltipAction2={actionButton.tooltipAction2}
-          labelAction1={actionButton.labelAction1}
-          labelAction2={actionButton.labelAction2}
-          conditionForAction2={actionButton.conditionForAction2}
-          onAction1={actionButton.onAction1}
-          onAction2={actionButton.onAction2}
+          deactivate={{
+            subscribeToState: actionButton.deactivate.subscribeToState,
+            shouldDeactivate: actionButton.deactivate.shouldDeactivate,
+          }}
+          iconSrcMode1={actionButton.iconSrcMode1}
+          iconSrcMode2={actionButton.iconSrcMode2}
+          tooltipMode1={actionButton.tooltipMode1}
+          tooltipMode2={actionButton.tooltipMode2}
+          labelMode1={actionButton.labelMode1}
+          labelMode2={actionButton.labelMode2}
+          isInMode2={actionButton.isInMode2}
+          switchToMode1={actionButton.switchToMode1}
+          switchToMode2={actionButton.switchToMode2}
         />
       ))}
     </div>

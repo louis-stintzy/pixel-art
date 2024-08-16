@@ -7,6 +7,7 @@ import './GridContainer.scss';
 
 function GridContainer() {
   const isReadyToColor = useStore((state) => state.isReadyToColor); // État pour savoir si l'utilisateur est en train de colorier (etat global)
+  const isImageHidden = useStore((state) => state.isImageHidden); // État pour savoir si l'image est visible (etat global)
   // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
   // useRef renvoie un objet avec une propriété current qui est mutable.
   // useRef est idéal pour conserver des références à des éléments DOM ou des valeurs qui ne nécessitent pas de re-render de composant lorsqu'elles sont modifiées.
@@ -33,7 +34,7 @@ function GridContainer() {
     >
       <div id="grid-wrapper" style={gridWrapperStyle}>
         <Grid />
-        <ImageUnderTheGrid />
+        {!isImageHidden && <ImageUnderTheGrid />}
       </div>
     </div>
   );

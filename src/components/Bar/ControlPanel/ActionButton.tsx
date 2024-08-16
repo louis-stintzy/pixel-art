@@ -1,34 +1,43 @@
 import { useEffect, useRef, useState } from 'react';
+import useStore from '../../../store/store';
 
 interface ActionButtonProps {
   id: string;
   buttonStyle?: React.CSSProperties;
-  isDisabled?: boolean;
-  iconSrcAction1: string;
-  iconSrcAction2: string;
-  tooltipAction1?: string;
-  tooltipAction2?: string;
-  labelAction1: string;
-  labelAction2: string;
-  conditionForAction2: () => boolean; // une fonction car permet de réévaluer la condition pour l'action 2
-  onAction1: () => void;
-  onAction2: () => void;
+  deactivate?: {
+    subscribeToState?: string; // le nom de l'état du store à s'abonner (si nécessaire) - ici, il faut que le changement d'état du state génère une nouvelle évaluation de shouldDeactivate
+    shouldDeactivate: () => boolean; // la fonction pour évaluer si le bouton doit être désactivé
+  };
+  iconSrcMode1: string;
+  iconSrcMode2: string;
+  tooltipMode1?: string;
+  tooltipMode2?: string;
+  labelMode1: string;
+  labelMode2: string;
+  isInMode2: () => boolean; // une fonction car permet de réévaluer la condition
+  switchToMode1: () => void;
+  switchToMode2: () => void;
 }
 
 function ActionButton({
   id,
   buttonStyle = {},
-  isDisabled = false,
-  iconSrcAction1,
-  iconSrcAction2,
-  tooltipAction1,
-  tooltipAction2,
-  labelAction1,
-  labelAction2,
-  conditionForAction2,
-  onAction1,
-  onAction2,
+  deactivate = {
+    shouldDeactivate: () => false,
+  },
+  iconSrcMode1,
+  iconSrcMode2,
+  tooltipMode1,
+  tooltipMode2,
+  labelMode1,
+  labelMode2,
+  isInMode2,
+  switchToMode1,
+  switchToMode2,
 }: ActionButtonProps) {
+  const [isDisabled, setIsDisabled] = useState(
+    deactivate ? deactivate.shouldDeactivate() : false
+  );
   const [isFadingOut, setIsFadingOut] = useState(false);
   const timeoutId = useRef<number | null>(null);
 
@@ -37,10 +46,10 @@ function ActionButton({
     setIsFadingOut(true);
     timeoutId.current = window.setTimeout(() => {
       // window.setTimeout() vs setTimeout() : en typescript, setTimeout() peut être du type NodeJS.Timeout ou number, window.setTimeout() est toujours du type number
-      if (conditionForAction2()) {
-        onAction1();
+      if (isInMode2()) {
+        switchToMode1();
       } else {
-        onAction2();
+        switchToMode2();
       }
       setIsFadingOut(false);
     }, 100);
@@ -52,21 +61,38 @@ function ActionButton({
     };
   }, []);
 
-  const iconSrcCurrentAction = conditionForAction2()
-    ? iconSrcAction2
-    : iconSrcAction1;
+  useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+
+    if (deactivate?.subscribeToState) {
+      const { subscribeToState, shouldDeactivate } = deactivate;
+
+      unsubscribe = useStore.subscribe((state) => {
+        const value = state[subscribeToState as keyof typeof state];
+        if (shouldDeactivate()) {
+          setIsDisabled(true);
+        } else {
+          setIsDisabled(false);
+        }
+        return value;
+      });
+    }
+    return () => {
+      if (unsubscribe) unsubscribe(); // useStore.subscribe retourne une fonction (unsubscribe)
+    };
+  }, [deactivate]);
+
+  const iconSrcCurrentAction = isInMode2() ? iconSrcMode2 : iconSrcMode1;
   const iconSrcArrow =
     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tcmlnaHQiPjxwYXRoIGQ9Im05IDE4IDYtNi02LTYiLz48L3N2Zz4=';
-  const iconSrcNextAction = conditionForAction2()
-    ? iconSrcAction1
-    : iconSrcAction2;
+  const iconSrcNextAction = isInMode2() ? iconSrcMode1 : iconSrcMode2;
 
   let tooltip: string | undefined;
-  if (tooltipAction1 && tooltipAction2) {
-    tooltip = conditionForAction2() ? tooltipAction2 : tooltipAction1;
+  if (tooltipMode1 && tooltipMode2) {
+    tooltip = isInMode2() ? tooltipMode2 : tooltipMode1;
   }
 
-  const label = conditionForAction2() ? labelAction2 : labelAction1;
+  const label = isInMode2() ? labelMode2 : labelMode1;
 
   const IconStyle = {
     display: 'flex',
@@ -96,10 +122,12 @@ function ActionButton({
 }
 
 ActionButton.defaultProps = {
-  isDisabled: false,
+  deactivate: {
+    shouldDeactivate: () => false,
+  },
   buttonStyle: {},
-  tooltipAction1: undefined,
-  tooltipAction2: undefined,
+  tooltipMode1: undefined,
+  tooltipMode2: undefined,
 };
 
 export default ActionButton;

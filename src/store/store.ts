@@ -36,7 +36,9 @@ type State = {
 
   // ----- Action Buttons -----
   isReadyToColor: boolean;
+  isImageHidden: boolean;
   setIsReadyToColor: (isReadyToColor: boolean) => void;
+  setIsImageHidden: (isImageHidden: boolean) => void;
 };
 
 const useStore = create<State>()((set) => ({
@@ -81,7 +83,9 @@ const useStore = create<State>()((set) => ({
 
   // ----- Action Buttons -----
   isReadyToColor: false,
+  isImageHidden: false,
   setIsReadyToColor: (isReadyToColor) => set({ isReadyToColor }),
+  setIsImageHidden: (isImageHidden) => set({ isImageHidden }),
 }));
 
 export default useStore;
