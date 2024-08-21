@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDrop';
+import coloring from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
 
 function Grid() {
@@ -20,11 +21,6 @@ function Grid() {
 
   const PIXEL_COLOR_THROTTLE = 32;
 
-  const colorPixelWithSelectedColor = (id: string) => {
-    const color = useStore.getState().selectedColor;
-    useStore.getState().setPixelColors(id, color);
-  };
-
   const handleMouseMove = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       if (!isColoring) return;
@@ -35,14 +31,14 @@ function Grid() {
         ) {
           lastRanMouseRef.current = Date.now();
           const pixel = event.target as HTMLDivElement;
-          if (pixel) colorPixelWithSelectedColor(pixel.id);
+          if (pixel) coloring([pixel.id]);
         } else {
           if (lastFuncMouseRef.current !== undefined)
             clearTimeout(lastFuncMouseRef.current);
           lastFuncMouseRef.current = setTimeout(() => {
             lastRanMouseRef.current = Date.now();
             const pixel = event.target as HTMLDivElement;
-            if (pixel) colorPixelWithSelectedColor(pixel.id);
+            if (pixel) coloring([pixel.id]);
           }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanMouseRef.current));
         }
       });
@@ -63,7 +59,7 @@ function Grid() {
             event.touches[0].clientX,
             event.touches[0].clientY
           ) as HTMLDivElement;
-          if (pixel) colorPixelWithSelectedColor(pixel.id);
+          if (pixel) coloring([pixel.id]);
         } else {
           if (lastFuncTouchRef.current !== undefined)
             clearTimeout(lastFuncTouchRef.current);
@@ -73,7 +69,7 @@ function Grid() {
               event.touches[0].clientX,
               event.touches[0].clientY
             ) as HTMLDivElement;
-            if (pixel) colorPixelWithSelectedColor(pixel.id);
+            if (pixel) coloring([pixel.id]);
           }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanTouchRef.current));
         }
       });

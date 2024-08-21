@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import useStore from '../../../store/store';
+import coloring from '../../../utils/coloring';
 
 interface PixelProps {
   id: string;
@@ -41,10 +42,10 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   const handleClick = () => {
     if (userDragsGrid) return; // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel.
     if (pixelColor === selectedColor) {
-      setPixelColors(id, gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
+      coloring([id], gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
       return;
     }
-    setPixelColors(id, selectedColor); // Mettre à jour la couleur du pixel dans le store.
+    coloring([id]); // Colorer le pixel avec la couleur sélectionnée (selectedColor récupérée dans coloring).
   };
 
   return (
