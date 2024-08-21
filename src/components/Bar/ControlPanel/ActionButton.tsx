@@ -37,7 +37,7 @@ function ActionButton({
 }: ActionButtonProps) {
   const [isDisabled, setIsDisabled] = useState(
     deactivate ? deactivate.shouldDeactivate() : false
-  );
+  ); // si deactivate est fourni, on initialise isDisabled avec le résultat de shouldDeactivate(), sinon isDisabled est initialisé à false
   const [isFadingOut, setIsFadingOut] = useState(false);
   const timeoutId = useRef<number | null>(null);
 
@@ -55,17 +55,24 @@ function ActionButton({
     }, 100);
   };
 
-  useEffect(() => {
-    return () => {
-      if (timeoutId.current !== null) clearTimeout(timeoutId.current);
-    };
-  }, []);
-
+  // useEffect s'abonne aux changements de l'état du store définis par `subscribeToState`.
+  // Lorsqu'une modification est détectée, `shouldDeactivate` est évalué pour déterminer si le bouton doit être désactivé.
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
 
     if (deactivate?.subscribeToState) {
       const { subscribeToState, shouldDeactivate } = deactivate;
+
+      // subscribe permet d'écouter les changements d'une propriété spécifique du store.
+      // Chaque fois que cette propriété change, une fonction de rappel (callback) est déclenchée.
+      // => useStore.subscribe déclenche une réévaluation de shouldDeactivate lorsque la propriété correspondant à subscribeToState change mettant ainsi à jour isDisabled
+
+      // La fonction passée à `useStore.subscribe` renvoie la valeur de la propriété `subscribeToState` du store.
+      // Cette valeur n'est pas directement utilisée, mais permet de déclencher la réévaluation de `shouldDeactivate`.
+
+      // "value" retourné par la première fonction est utilisé par Zustand pour comparer les valeurs entre les rendus. Si la valeur retournée est différemmente d'un rendu à l'autre, Zustand sait qu'il doit exécuter le callback.
+      // Le "return" de "value" ne signifie pas qu'on l'utilisera directement dans le composant, mais que Zustand l'utilise en interne pour déterminer si un changement s'est produit.
+      // useStore.subscribe retourne toujours unsubscribe, qui est une fonction qui permet de se désabonner du store.
 
       unsubscribe = useStore.subscribe((state) => {
         const value = state[subscribeToState as keyof typeof state];
@@ -77,10 +84,17 @@ function ActionButton({
         return value;
       });
     }
+
+    // Nettoyage de l'abonnement et du délai d'exécution du setTimeout
     return () => {
       if (unsubscribe) unsubscribe(); // useStore.subscribe retourne une fonction (unsubscribe)
+      if (timeoutId.current !== null) clearTimeout(timeoutId.current);
     };
   }, [deactivate]);
+
+  // Sélectionne l'icône et le tooltip en fonction de l'état actuel (`isInMode2`).
+  // `iconSrcCurrentAction` et `tooltip` reflètent l'état courant,
+  // tandis que `iconSrcNextAction` montre l'action à venir après le clic.
 
   const iconSrcCurrentAction = isInMode2() ? iconSrcMode2 : iconSrcMode1;
   const iconSrcArrow =
