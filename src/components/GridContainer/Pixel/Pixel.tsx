@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import useStore from '../../../store/store';
 import coloring from '../../../utils/coloring';
+import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 
 interface PixelProps {
   id: string;
 }
 
+// React.memo est utilisé pour éviter de rendre à nouveau le composant Pixel si ses props n'ont pas changé.
+// Cela améliore les performances en évitant des re-renders inutiles.
+// L'optimisation est renforcée par le fait que l'on récupère uniquement la couleur du pixel actuel,
+// ce qui évite de provoquer un re-render de tous les pixels lorsque la couleur d'un seul change.
 const Pixel = React.memo(({ id }: PixelProps) => {
-  // function Pixel({ id }: PixelProps) {
   const pixelSize = useStore((state) => state.gridSize.pixelSize);
   const userDragsGrid = useStore((state) => state.userDragsGrid);
-  const selectedColor = useStore((state) => state.selectedColor);
   const pixelColor = useStore((state) => state.pixelColors[id]);
-  const setPixelColors = useStore((state) => state.setPixelColors);
   const [isHovered, setIsHovered] = useState(false);
 
   const gridColor = {
@@ -40,7 +42,12 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   };
 
   const handleClick = () => {
+    const { isBigBrush, selectedColor } = useStore.getState();
     if (userDragsGrid) return; // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel.
+    if (isBigBrush) {
+      coloring([id, ...getNeighboringPixels(id)]); // Colorer le pixel et ses pixels voisins avec la couleur sélectionnée (selectedColor récupérée dans coloring).
+      return;
+    }
     if (pixelColor === selectedColor) {
       coloring([id], gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
       return;
@@ -56,7 +63,9 @@ const Pixel = React.memo(({ id }: PixelProps) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
-      aria-label="Pixel Button"
+      aria-label={`Pixel ${id} - ${
+        pixelColor === gridColor.background ? 'uncolored' : 'colored'
+      }`}
     />
   );
 });

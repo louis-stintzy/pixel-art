@@ -3,6 +3,7 @@ import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDrop';
 import coloring from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
+import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 
 function Grid() {
   const lastRanMouseRef = useRef<number | undefined>(undefined);
@@ -24,6 +25,7 @@ function Grid() {
   const handleMouseMove = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       if (!isColoring) return;
+      const { isBigBrush } = useStore.getState();
       requestAnimationFrame(() => {
         if (
           !lastRanMouseRef.current ||
@@ -31,14 +33,24 @@ function Grid() {
         ) {
           lastRanMouseRef.current = Date.now();
           const pixel = event.target as HTMLDivElement;
-          if (pixel) coloring([pixel.id]);
+          if (pixel) {
+            const pixelIds = isBigBrush
+              ? [pixel.id, ...getNeighboringPixels(pixel.id)]
+              : [pixel.id];
+            coloring(pixelIds);
+          }
         } else {
           if (lastFuncMouseRef.current !== undefined)
             clearTimeout(lastFuncMouseRef.current);
           lastFuncMouseRef.current = setTimeout(() => {
             lastRanMouseRef.current = Date.now();
             const pixel = event.target as HTMLDivElement;
-            if (pixel) coloring([pixel.id]);
+            if (pixel) {
+              const pixelIds = isBigBrush
+                ? [pixel.id, ...getNeighboringPixels(pixel.id)]
+                : [pixel.id];
+              coloring(pixelIds);
+            }
           }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanMouseRef.current));
         }
       });
@@ -49,6 +61,7 @@ function Grid() {
   const handleTouchMove = useCallback(
     (event: React.TouchEvent<HTMLDivElement>) => {
       if (!isColoring) return;
+      const { isBigBrush } = useStore.getState();
       requestAnimationFrame(() => {
         if (
           !lastRanTouchRef.current ||
@@ -59,7 +72,12 @@ function Grid() {
             event.touches[0].clientX,
             event.touches[0].clientY
           ) as HTMLDivElement;
-          if (pixel) coloring([pixel.id]);
+          if (pixel) {
+            const pixelIds = isBigBrush
+              ? [pixel.id, ...getNeighboringPixels(pixel.id)]
+              : [pixel.id];
+            coloring(pixelIds);
+          }
         } else {
           if (lastFuncTouchRef.current !== undefined)
             clearTimeout(lastFuncTouchRef.current);
@@ -69,7 +87,12 @@ function Grid() {
               event.touches[0].clientX,
               event.touches[0].clientY
             ) as HTMLDivElement;
-            if (pixel) coloring([pixel.id]);
+            if (pixel) {
+              const pixelIds = isBigBrush
+                ? [pixel.id, ...getNeighboringPixels(pixel.id)]
+                : [pixel.id];
+              coloring(pixelIds);
+            }
           }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanTouchRef.current));
         }
       });
