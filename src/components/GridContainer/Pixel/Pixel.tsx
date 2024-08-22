@@ -14,7 +14,6 @@ interface PixelProps {
 // ce qui évite de provoquer un re-render de tous les pixels lorsque la couleur d'un seul change.
 const Pixel = React.memo(({ id }: PixelProps) => {
   const pixelSize = useStore((state) => state.gridSize.pixelSize);
-  const userDragsGrid = useStore((state) => state.userDragsGrid);
   const pixelColor = useStore((state) => state.pixelColors[id]);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -38,12 +37,28 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   };
 
   const handleClick = () => {
-    const { isBigTool, selectedColor } = useStore.getState();
-    if (userDragsGrid) return; // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel.
-    if (isBigTool) {
-      coloring([id, ...getNeighboringPixels(id)]); // Colorer le pixel et ses pixels voisins avec la couleur sélectionnée (selectedColor récupérée dans coloring).
+    const { userDragsGrid, isReadyToDraw, isEraser, isBigTool, selectedColor } =
+      useStore.getState();
+
+    // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel.
+    if (userDragsGrid) return;
+
+    // Si le mode dessin est activé :
+    if (isReadyToDraw) {
+      const color = isEraser ? gridColor.background : undefined; // Si le mode erase est activé, définir la couleur sur la couleur de fond de la grille.
+      if (isBigTool) {
+        coloring([id, ...getNeighboringPixels(id)], color); // Si le mode big tool est activé, colorer le pixel et ses pixels voisins
+        return;
+      }
+      if (pixelColor === selectedColor) {
+        coloring([id], gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
+        return;
+      }
+      coloring([id], color); // Cas par défaut : applique la couleur définie plus haut sur le pixel en mode dessin.
       return;
     }
+
+    // Si le mode dessin n'est pas activé :
     if (pixelColor === selectedColor) {
       coloring([id], gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
       return;

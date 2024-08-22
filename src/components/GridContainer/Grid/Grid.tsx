@@ -18,8 +18,8 @@ function Grid() {
 
   const gridRef = useRef<HTMLDivElement | null>(null);
   const gridSize = useStore((state) => state.gridSize);
-  const isReadyToColor = useStore((state) => state.isReadyToColor);
-  const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToColor);
+  const isReadyToDraw = useStore((state) => state.isReadyToDraw);
+  const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
 
   const PIXEL_COLOR_THROTTLE = 32;
 
