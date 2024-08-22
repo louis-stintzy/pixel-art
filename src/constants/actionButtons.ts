@@ -5,8 +5,11 @@ const buttonStyle = {};
 const switchToColorMode = () => useStore.getState().setIsReadyToColor(true);
 const switchToDragMode = () => useStore.getState().setIsReadyToColor(false);
 
-const switchToBigBrush = () => useStore.getState().setIsBigBrush(true);
-const switchToSmallBrush = () => useStore.getState().setIsBigBrush(false);
+const switchToEraseMode = () => useStore.getState().setIsEraser(true);
+const switchToColorMode2 = () => useStore.getState().setIsEraser(false);
+
+const switchToBigTool = () => useStore.getState().setIsBigTool(true);
+const switchToSmallTool = () => useStore.getState().setIsBigTool(false);
 
 const hideImage = () => useStore.getState().setIsImageHidden(true);
 const showImage = () => useStore.getState().setIsImageHidden(false);
@@ -31,24 +34,43 @@ const actionButtons = [
     switchToMode1: switchToDragMode,
     switchToMode2: switchToColorMode,
   },
-  // ----- toggle-brush-size -----
+  // ----- toggle-coloring-erasing-mode -----
   {
-    id: 'toggle-brush-size',
+    id: 'toggle-coloring-erasing-mode',
     buttonStyle,
     deactivate: {
       shouldDeactivate: () => false,
     },
     iconSrcMode1:
-      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWJydXNoIj48cGF0aCBkPSJtOS4wNiAxMS45IDguMDctOC4wNmEyLjg1IDIuODUgMCAxIDEgNC4wMyA0LjAzbC04LjA2IDguMDgiLz48cGF0aCBkPSJNNy4wNyAxNC45NGMtMS42NiAwLTMgMS4zNS0zIDMuMDIgMCAxLjMzLTIuNSAxLjUyLTIgMi4wMiAxLjA4IDEuMSAyLjQ5IDIuMDIgNCAyLjAyIDIuMiAwIDQtMS44IDQtNC4wNGEzLjAxIDMuMDEgMCAwIDAtMy0zLjAyeiIvPjwvc3ZnPg==',
-    iconSrcMode2:
       'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBhaW50YnJ1c2giPjxwYXRoIGQ9Im0xNC42MjIgMTcuODk3LTEwLjY4LTIuOTEzIi8+PHBhdGggZD0iTTE4LjM3NiAyLjYyMmExIDEgMCAxIDEgMy4wMDIgMy4wMDJMMTcuMzYgOS42NDNhLjUuNSAwIDAgMCAwIC43MDdsLjk0NC45NDRhMi40MSAyLjQxIDAgMCAxIDAgMy40MDhsLS45NDQuOTQ0YS41LjUgMCAwIDEtLjcwNyAwTDguMzU0IDcuMzQ4YS41LjUgMCAwIDEgMC0uNzA3bC45NDQtLjk0NGEyLjQxIDIuNDEgMCAwIDEgMy40MDggMGwuOTQ0Ljk0NGEuNS41IDAgMCAwIC43MDcgMHoiLz48cGF0aCBkPSJNOSA4Yy0xLjgwNCAyLjcxLTMuOTcgMy40Ni02LjU4MyAzLjk0OGEuNTA3LjUwNyAwIDAgMC0uMzAyLjgxOWw3LjMyIDguODgzYTEgMSAwIDAgMCAxLjE4NS4yMDRDMTIuNzM1IDIwLjQwNSAxNiAxNi43OTIgMTYgMTUiLz48L3N2Zz4=',
-    labelMode1: 'Big brush',
-    labelMode2: 'Small brush',
-    tooltipMode1: 'Switch to big brush',
-    tooltipMode2: 'Switch to small brush',
-    isInMode2: () => useStore.getState().isBigBrush,
-    switchToMode1: switchToSmallBrush,
-    switchToMode2: switchToBigBrush,
+    iconSrcMode2:
+      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWVyYXNlciI+PHBhdGggZD0ibTcgMjEtNC4zLTQuM2MtMS0xLTEtMi41IDAtMy40bDkuNi05LjZjMS0xIDIuNS0xIDMuNCAwbDUuNiA1LjZjMSAxIDEgMi41IDAgMy40TDEzIDIxIi8+PHBhdGggZD0iTTIyIDIxSDciLz48cGF0aCBkPSJtNSAxMSA5IDkiLz48L3N2Zz4=',
+    tooltipMode1: 'Switch to erasing mode',
+    tooltipMode2: 'Switch to coloring mode',
+    labelMode1: 'Switch to erasing mode',
+    labelMode2: 'Switch to coloring mode',
+    isInMode2: () => useStore.getState().isEraser,
+    switchToMode1: switchToColorMode2,
+    switchToMode2: switchToEraseMode,
+  },
+  // ----- toggle-tool-size -----
+  {
+    id: 'toggle-tool-size',
+    buttonStyle,
+    deactivate: {
+      shouldDeactivate: () => false,
+    },
+    iconSrcMode1:
+      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWRvdCI+PGNpcmNsZSBjeD0iMTIuMSIgY3k9IjEyLjEiIHI9IjEiLz48L3N2Zz4=',
+    iconSrcMode2:
+      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBsdXMiPjxwYXRoIGQ9Ik01IDEyaDE0Ii8+PHBhdGggZD0iTTEyIDV2MTQiLz48L3N2Zz4=',
+    labelMode1: 'Big tool',
+    labelMode2: 'Small tool',
+    tooltipMode1: 'Switch to big tool',
+    tooltipMode2: 'Switch to small tool',
+    isInMode2: () => useStore.getState().isBigTool,
+    switchToMode1: switchToSmallTool,
+    switchToMode2: switchToBigTool,
   },
   // ----- toggle-image-visibility -----
   {

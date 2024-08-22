@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useStore from '../../../store/store';
 import coloring from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
+import gridColor from '../../../constants/gridColor';
 
 interface PixelProps {
   id: string;
@@ -16,11 +17,6 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   const userDragsGrid = useStore((state) => state.userDragsGrid);
   const pixelColor = useStore((state) => state.pixelColors[id]);
   const [isHovered, setIsHovered] = useState(false);
-
-  const gridColor = {
-    background: '#fff',
-    line: '#ccc',
-  };
 
   const pixelBorderColor = gridColor.line;
   let pixelOpacity;
@@ -42,9 +38,9 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   };
 
   const handleClick = () => {
-    const { isBigBrush, selectedColor } = useStore.getState();
+    const { isBigTool, selectedColor } = useStore.getState();
     if (userDragsGrid) return; // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel.
-    if (isBigBrush) {
+    if (isBigTool) {
       coloring([id, ...getNeighboringPixels(id)]); // Colorer le pixel et ses pixels voisins avec la couleur sélectionnée (selectedColor récupérée dans coloring).
       return;
     }

@@ -36,10 +36,12 @@ type State = {
 
   // ----- Action Buttons -----
   isReadyToColor: boolean;
-  isBigBrush: boolean;
+  isEraser: boolean;
+  isBigTool: boolean;
   isImageHidden: boolean;
   setIsReadyToColor: (isReadyToColor: boolean) => void;
-  setIsBigBrush: (isBigBrush: boolean) => void;
+  setIsEraser: (isEraser: boolean) => void;
+  setIsBigTool: (isBigTool: boolean) => void;
   setIsImageHidden: (isImageHidden: boolean) => void;
 };
 
@@ -85,10 +87,12 @@ const useStore = create<State>()((set) => ({
 
   // ----- Action Buttons -----
   isReadyToColor: false,
-  isBigBrush: false,
+  isEraser: false,
+  isBigTool: false,
   isImageHidden: false,
   setIsReadyToColor: (isReadyToColor) => set({ isReadyToColor }),
-  setIsBigBrush: (isBigBrush) => set({ isBigBrush }),
+  setIsEraser: (isEraser) => set({ isEraser }),
+  setIsBigTool: (isBigTool) => set({ isBigTool }),
   setIsImageHidden: (isImageHidden) => set({ isImageHidden }),
 }));
 
