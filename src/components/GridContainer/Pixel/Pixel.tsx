@@ -43,7 +43,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
     cursor: isSelectingColorToChange ? `url(${pipetteIcon}), auto` : 'auto',
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const { userDragsGrid, isReadyToDraw, isEraser, isBigTool, selectedColor } =
       useStore.getState();
 
@@ -57,8 +57,31 @@ const Pixel = React.memo(({ id }: PixelProps) => {
         isSelectingColor: false,
         targetColor,
         savedPixelColors: { ...useStore.getState().pixelColors },
+        isLoading: true,
       });
-      replaceColor(targetColor);
+      // Attendre 50ms pour que l'icône de chargement apparaisse avant de remplacer la couleur,
+      // Le délai de 50 ms donne à React suffisamment de temps pour rendre le composant avec isLoading à true.
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
+      // Mesurer le temps nécessaire pour remplacer les couleurs
+      const startTime = performance.now();
+      await replaceColor(targetColor);
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+      // Assurer que le loader est affiché au moins pour une certaine durée
+      // si le remplacement de couleur est plus rapide que minDisplayTime, attendre le temps restant.
+      // si le remplacement de couleur est plus long que minDisplayTime, ne pas attendre.
+      const minDisplayTime = 50;
+      const maxDisplayTime = 500;
+      const remainingTime = Math.min(
+        maxDisplayTime,
+        Math.max(0, minDisplayTime - duration)
+      );
+      await new Promise((resolve) => {
+        setTimeout(resolve, remainingTime);
+      });
+      useStore.getState().setColorReplacement({ isLoading: false });
       return;
     }
 

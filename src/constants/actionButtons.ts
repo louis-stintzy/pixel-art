@@ -29,7 +29,7 @@ const isReadyToDraw = () => useStore.getState().isReadyToDraw;
 const isEraser = () => useStore.getState().isEraser;
 const isBigTool = () => useStore.getState().isBigTool;
 const savedPixelColors = () =>
-  useStore.getState().colorReplacement.savedPixelColors;
+  !!useStore.getState().colorReplacement.savedPixelColors; // "!!" is used to convert the value to a boolean sinon pb de type avec isInMode2
 const isImageHidden = () => useStore.getState().isImageHidden;
 
 // ----- Setters -----

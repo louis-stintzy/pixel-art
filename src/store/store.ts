@@ -42,6 +42,7 @@ type State = {
     isSelectingColor: boolean;
     targetColor: string | undefined;
     savedPixelColors: Record<string, string> | undefined;
+    isLoading: boolean;
   };
   isImageHidden: boolean;
   setIsReadyToDraw: (isReadyToDraw: boolean) => void;
@@ -51,6 +52,7 @@ type State = {
     isSelectingColor?: boolean;
     targetColor?: string | undefined;
     savedPixelColors?: Record<string, string> | undefined;
+    isLoading?: boolean;
   }) => void;
   setIsImageHidden: (isImageHidden: boolean) => void;
 };
@@ -103,6 +105,7 @@ const useStore = create<State>()((set) => ({
     isSelectingColor: false,
     targetColor: undefined,
     savedPixelColors: undefined,
+    isLoading: false,
   },
   isImageHidden: false,
   setIsReadyToDraw: (isReadyToDraw) => set({ isReadyToDraw }),
