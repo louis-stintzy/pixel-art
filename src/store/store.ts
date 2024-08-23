@@ -38,10 +38,20 @@ type State = {
   isReadyToDraw: boolean;
   isEraser: boolean;
   isBigTool: boolean;
+  colorReplacement: {
+    isSelectingColor: boolean;
+    targetColor: string | undefined;
+    savedPixelColors: Record<string, string> | undefined;
+  };
   isImageHidden: boolean;
   setIsReadyToDraw: (isReadyToDraw: boolean) => void;
   setIsEraser: (isEraser: boolean) => void;
   setIsBigTool: (isBigTool: boolean) => void;
+  setColorReplacement: (newState: {
+    isSelectingColor?: boolean;
+    targetColor?: string | undefined;
+    savedPixelColors?: Record<string, string> | undefined;
+  }) => void;
   setIsImageHidden: (isImageHidden: boolean) => void;
 };
 
@@ -89,10 +99,22 @@ const useStore = create<State>()((set) => ({
   isReadyToDraw: false,
   isEraser: false,
   isBigTool: false,
+  colorReplacement: {
+    isSelectingColor: false,
+    targetColor: undefined,
+    savedPixelColors: undefined,
+  },
   isImageHidden: false,
   setIsReadyToDraw: (isReadyToDraw) => set({ isReadyToDraw }),
   setIsEraser: (isEraser) => set({ isEraser }),
   setIsBigTool: (isBigTool) => set({ isBigTool }),
+  setColorReplacement: (newState) =>
+    set((state) => ({
+      colorReplacement: {
+        ...state.colorReplacement,
+        ...newState,
+      },
+    })),
   setIsImageHidden: (isImageHidden) => set({ isImageHidden }),
 }));
 

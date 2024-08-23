@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useStore from '../../../store/store';
-import coloring from '../../../utils/coloring';
+import { coloring, replaceColor } from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import gridColor from '../../../constants/gridColor';
 
@@ -15,7 +15,13 @@ interface PixelProps {
 const Pixel = React.memo(({ id }: PixelProps) => {
   const pixelSize = useStore((state) => state.gridSize.pixelSize);
   const pixelColor = useStore((state) => state.pixelColors[id]);
+  const isSelectingColorToChange = useStore(
+    (state) => state.colorReplacement.isSelectingColor
+  );
   const [isHovered, setIsHovered] = useState(false);
+
+  const pipetteIcon =
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBpcGV0dGUiPjxwYXRoIGQ9Im0yIDIyIDEtMWgzbDktOSIvPjxwYXRoIGQ9Ik0zIDIxdi0zbDktOSIvPjxwYXRoIGQ9Im0xNSA2IDMuNC0zLjRhMi4xIDIuMSAwIDEgMSAzIDNMMTggOWwuNC40YTIuMSAyLjEgMCAxIDEtMyAzbC0zLjgtMy44YTIuMSAyLjEgMCAxIDEgMy0zbC40LjRaIi8+PC9zdmc+';
 
   const pixelBorderColor = gridColor.line;
   let pixelOpacity;
@@ -34,14 +40,27 @@ const Pixel = React.memo(({ id }: PixelProps) => {
     opacity: pixelOpacity,
     transition: 'opacity 0.1s ease-out, background-color 0.1s ease-out',
     border: `1px solid ${pixelBorderColor}`,
+    cursor: isSelectingColorToChange ? `url(${pipetteIcon}), auto` : 'auto',
   };
 
   const handleClick = () => {
     const { userDragsGrid, isReadyToDraw, isEraser, isBigTool, selectedColor } =
       useStore.getState();
 
-    // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel.
+    // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel :
     if (userDragsGrid) return;
+
+    // Si l'utilisateur s'apprête à remplacer une couleur :
+    if (isSelectingColorToChange) {
+      const targetColor = pixelColor || gridColor.background;
+      useStore.getState().setColorReplacement({
+        isSelectingColor: false,
+        targetColor,
+        savedPixelColors: { ...useStore.getState().pixelColors },
+      });
+      replaceColor(targetColor);
+      return;
+    }
 
     // Si le mode dessin est activé :
     if (isReadyToDraw) {
