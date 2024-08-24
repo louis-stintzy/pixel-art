@@ -1,6 +1,8 @@
 import gridColor from '../constants/gridColor';
 import useStore from '../store/store';
 
+//----------------------------------
+
 /**
  * Colors the specified pixels with the given color.
  *
@@ -11,8 +13,14 @@ import useStore from '../store/store';
 export const coloring = (pixelIds: string[], color?: string) => {
   const { selectedColor } = useStore.getState();
   const colorToUSe = color || selectedColor;
-  pixelIds.forEach((id) => useStore.getState().setPixelColors(id, colorToUSe));
+  const newPixelColors: Record<string, string> = {};
+  pixelIds.forEach((id) => {
+    newPixelColors[id] = colorToUSe;
+  });
+  useStore.getState().setPixelColors(newPixelColors);
 };
+
+//----------------------------------
 
 /**
  * Replaces the specified color with the new color.
@@ -21,29 +29,69 @@ export const coloring = (pixelIds: string[], color?: string) => {
  * @param {string} [newColor] - The new color to use. If not provided, the selected color from the store is used.
  */
 
-export const replaceColor = (oldColor: string, newColor?: string) => {
-  const { pixelColors, gridSize } = useStore.getState();
-  const pixelIds: string[] = [];
+export const replaceColor2 = async (oldColor: string, newColor?: string) => {
+  const { pixelColors, selectedColor } = useStore.getState();
+
+  // Démarage du chargement
+  useStore.getState().setColorReplacement({
+    isSelectingColor: false,
+    targetColor: oldColor,
+    savedPixelColors: { ...pixelColors },
+    isLoading: true,
+  });
+
+  // Attendre pour laisser le temps au loader de s'afficher
+  await new Promise((resolve) => {
+    setTimeout(resolve, 50);
+  });
+
+  // Logique de remplacement de la couleur par "batch processing"
+  const newPixelColors: Record<string, string> = {};
 
   // Find all pixels with the old color
   Object.keys(pixelColors).forEach((id) => {
     if (pixelColors[id] === oldColor) {
-      pixelIds.push(id);
+      newPixelColors[id] = newColor || selectedColor;
     }
   });
 
   // If the old color is the grid background color, find all uncolored pixels
   if (oldColor === gridColor.background) {
+    const { gridSize } = useStore.getState();
     for (let row = 0; row < gridSize.height; row += 1) {
       for (let col = 0; col < gridSize.width; col += 1) {
         const id = `${row}-${col}`;
         if (!pixelColors[id]) {
-          pixelIds.push(id);
+          newPixelColors[id] = newColor || selectedColor;
         }
       }
     }
   }
 
-  // Color the pixels with the new color
-  coloring(pixelIds, newColor);
+  // Color the pixels with the new color (batch processing)
+  const arrayOfKeys = Object.keys(newPixelColors);
+  const numberOfKeys = arrayOfKeys.length;
+  const batchSize = 1500; // Number of pixels to color at a time
+  const totalBatches = Math.ceil(numberOfKeys / batchSize);
+
+  for (let i = 0; i < totalBatches; i += 1) {
+    const startIncluded = i * batchSize;
+    const endExcluded = startIncluded + batchSize;
+    const batch = arrayOfKeys.slice(startIncluded, endExcluded);
+    const batchUpdate: Record<string, string> = {};
+    batch.forEach((id) => {
+      batchUpdate[id] = newPixelColors[id];
+    });
+    useStore.getState().setPixelColors(batchUpdate);
+
+    // Wait for the UI to update
+    // désactive la règle eslint car nous souhaitons spécifiquement une éxecution séquentielle
+    // eslint-disable-next-line no-await-in-loop
+    await new Promise((resolve) => {
+      setTimeout(resolve, 50);
+    });
+  }
+
+  // Arrêt du chargement
+  useStore.getState().setColorReplacement({ isLoading: false });
 };

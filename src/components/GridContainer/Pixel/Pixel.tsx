@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useStore from '../../../store/store';
-import { coloring, replaceColor } from '../../../utils/coloring';
+import { coloring, replaceColor2 } from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import gridColor from '../../../constants/gridColor';
 
@@ -59,29 +59,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
         savedPixelColors: { ...useStore.getState().pixelColors },
         isLoading: true,
       });
-      // Attendre 50ms pour que l'icône de chargement apparaisse avant de remplacer la couleur,
-      // Le délai de 50 ms donne à React suffisamment de temps pour rendre le composant avec isLoading à true.
-      await new Promise((resolve) => {
-        setTimeout(resolve, 50);
-      });
-      // Mesurer le temps nécessaire pour remplacer les couleurs
-      const startTime = performance.now();
-      await replaceColor(targetColor);
-      const endTime = performance.now();
-      const duration = endTime - startTime;
-      // Assurer que le loader est affiché au moins pour une certaine durée
-      // si le remplacement de couleur est plus rapide que minDisplayTime, attendre le temps restant.
-      // si le remplacement de couleur est plus long que minDisplayTime, ne pas attendre.
-      const minDisplayTime = 50;
-      const maxDisplayTime = 500;
-      const remainingTime = Math.min(
-        maxDisplayTime,
-        Math.max(0, minDisplayTime - duration)
-      );
-      await new Promise((resolve) => {
-        setTimeout(resolve, remainingTime);
-      });
-      useStore.getState().setColorReplacement({ isLoading: false });
+      await replaceColor2(targetColor);
       return;
     }
 

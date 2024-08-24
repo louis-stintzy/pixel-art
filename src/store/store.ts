@@ -32,7 +32,7 @@ type State = {
   pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
   setSelectedPalette: (paletteName: PaletteName) => void;
   setSelectedColor: (selectedColor: string) => void;
-  setPixelColors: (id: string, color: string) => void;
+  setPixelColors: (newPixelColors: Record<string, string>) => void;
 
   // ----- Action Buttons -----
   isReadyToDraw: boolean;
@@ -92,9 +92,9 @@ const useStore = create<State>()((set) => ({
       selectedColor: colorPalettes[paletteName][0],
     }),
   setSelectedColor: (selectedColor) => set({ selectedColor }),
-  setPixelColors: (id, color) =>
+  setPixelColors: (newPixelColors: Record<string, string>) =>
     set((state) => ({
-      pixelColors: { ...state.pixelColors, [id]: color },
+      pixelColors: { ...state.pixelColors, ...newPixelColors },
     })),
 
   // ----- Action Buttons -----

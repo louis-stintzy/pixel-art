@@ -403,13 +403,13 @@ export const resetAspectRatio: AspectRatio = {
       display: '800x600',
       width: 800,
       height: 600,
-      pixelSize: [8, 10, 20, 25, 40, 50, 100],
+      pixelSize: [10, 20, 25, 40, 50, 100],
     },
     {
       display: '1024x768',
       width: 1024,
       height: 768,
-      pixelSize: [8, 16, 32, 64, 128],
+      pixelSize: [16, 32, 64, 128],
     },
   ],
 };
