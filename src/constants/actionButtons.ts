@@ -15,10 +15,10 @@ const smallToolIcon =
   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWRvdCI+PGNpcmNsZSBjeD0iMTIuMSIgY3k9IjEyLjEiIHI9IjEiLz48L3N2Zz4=';
 const bigToolIcon =
   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBsdXMiPjxwYXRoIGQ9Ik01IDEyaDE0Ii8+PHBhdGggZD0iTTEyIDV2MTQiLz48L3N2Zz4=';
+const paperIcon =
+  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXN0aWNreS1ub3RlIj48cGF0aCBkPSJNMTYgM0g1YTIgMiAwIDAgMC0yIDJ2MTRhMiAyIDAgMCAwIDIgMmgxNGEyIDIgMCAwIDAgMi0yVjhaIi8+PHBhdGggZD0iTTE1IDN2NGEyIDIgMCAwIDAgMiAyaDQiLz48L3N2Zz4=';
 const bucketIcon =
   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBhaW50LWJ1Y2tldCI+PHBhdGggZD0ibTE5IDExLTgtOC04LjYgOC42YTIgMiAwIDAgMCAwIDIuOGw1LjIgNS4yYy44LjggMiAuOCAyLjggMEwxOSAxMVoiLz48cGF0aCBkPSJtNSAyIDUgNSIvPjxwYXRoIGQ9Ik0yIDEzaDE1Ii8+PHBhdGggZD0iTTIyIDIwYTIgMiAwIDEgMS00IDBjMC0xLjYgMS43LTIuNCAyLTQgLjMgMS42IDIgMi40IDIgNFoiLz48L3N2Zz4=';
-const undoIcon =
-  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXJlZnJlc2gtY3ctb2ZmIj48cGF0aCBkPSJNMjEgOEwxOC43NCA1Ljc0QTkuNzUgOS43NSAwIDAgMCAxMiAzQzExIDMgMTAuMDMgMy4xNiA5LjEzIDMuNDciLz48cGF0aCBkPSJNOCAxNkgzdjUiLz48cGF0aCBkPSJNMyAxMkMzIDkuNTEgNCA3LjI2IDUuNjQgNS42NCIvPjxwYXRoIGQ9Im0zIDE2IDIuMjYgMi4yNkE5Ljc1IDkuNzUgMCAwIDAgMTIgMjFjMi40OSAwIDQuNzQtMSA2LjM2LTIuNjQiLz48cGF0aCBkPSJNMjEgMTJjMCAxLS4xNiAxLjk3LS40NyAyLjg3Ii8+PHBhdGggZD0iTTIxIDN2NWgtNSIvPjxwYXRoIGQ9Ik0yMiAyMiAyIDIiLz48L3N2Zz4=';
 const showIcon =
   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWltYWdlIj48cmVjdCB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHg9IjMiIHk9IjMiIHJ4PSIyIiByeT0iMiIvPjxjaXJjbGUgY3g9IjkiIGN5PSI5IiByPSIyIi8+PHBhdGggZD0ibTIxIDE1LTMuMDg2LTMuMDg2YTIgMiAwIDAgMC0yLjgyOCAwTDYgMjEiLz48L3N2Zz4=';
 const hideIcon =
@@ -28,8 +28,8 @@ const hideIcon =
 const isReadyToDraw = () => useStore.getState().isReadyToDraw;
 const isEraser = () => useStore.getState().isEraser;
 const isBigTool = () => useStore.getState().isBigTool;
-const savedPixelColors = () =>
-  !!useStore.getState().colorReplacement.savedPixelColors; // "!!" is used to convert the value to a boolean sinon pb de type avec isInMode2
+const isSelectingColor = () =>
+  useStore.getState().colorReplacement.isSelectingColor;
 const isImageHidden = () => useStore.getState().isImageHidden;
 
 // ----- Setters -----
@@ -42,6 +42,10 @@ const switchToSmallTool = () => useStore.getState().setIsBigTool(false);
 const activateColorReplacement = () =>
   useStore.getState().setColorReplacement({
     isSelectingColor: true,
+  });
+const deactivateColorReplacement = () =>
+  useStore.getState().setColorReplacement({
+    isSelectingColor: false,
   });
 const hideImage = () => useStore.getState().setIsImageHidden(true);
 const showImage = () => useStore.getState().setIsImageHidden(false);
@@ -107,14 +111,14 @@ const actionButtons = [
     deactivate: {
       shouldDeactivate: () => false,
     },
-    iconSrcMode1: bucketIcon,
-    iconSrcMode2: undoIcon,
+    iconSrcMode1: paperIcon,
+    iconSrcMode2: bucketIcon,
     tooltipMode1: 'Replace a color',
-    tooltipMode2: 'Cancel color change',
+    tooltipMode2: 'Return to normal mode',
     labelMode1: 'Replace a color',
-    labelMode2: 'Cancel color change',
-    isInMode2: savedPixelColors,
-    switchToMode1: () => {},
+    labelMode2: 'Return to normal mode',
+    isInMode2: isSelectingColor,
+    switchToMode1: deactivateColorReplacement,
     switchToMode2: activateColorReplacement,
   },
   // ----- toggle-show-hide-image -----

@@ -53,12 +53,6 @@ const Pixel = React.memo(({ id }: PixelProps) => {
     // Si l'utilisateur s'apprête à remplacer une couleur :
     if (isSelectingColorToChange) {
       const targetColor = pixelColor || gridColor.background;
-      useStore.getState().setColorReplacement({
-        isSelectingColor: false,
-        targetColor,
-        savedPixelColors: { ...useStore.getState().pixelColors },
-        isLoading: true,
-      });
       await replaceColor2(targetColor);
       return;
     }

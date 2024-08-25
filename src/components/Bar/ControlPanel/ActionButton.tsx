@@ -40,13 +40,14 @@ function ActionButton({
   ); // si deactivate est fourni, on initialise isDisabled avec le résultat de shouldDeactivate(), sinon isDisabled est initialisé à false
   const [isFadingOut, setIsFadingOut] = useState(false);
   const timeoutId = useRef<number | null>(null);
+  const isInMode2State = useStore(isInMode2);
 
   const handleClick = () => {
     if (isDisabled) return;
     setIsFadingOut(true);
     timeoutId.current = window.setTimeout(() => {
       // window.setTimeout() vs setTimeout() : en typescript, setTimeout() peut être du type NodeJS.Timeout ou number, window.setTimeout() est toujours du type number
-      if (isInMode2()) {
+      if (isInMode2State) {
         switchToMode1();
       } else {
         switchToMode2();
@@ -96,17 +97,17 @@ function ActionButton({
   // `iconSrcCurrentAction` et `tooltip` reflètent l'état courant,
   // tandis que `iconSrcNextAction` montre l'action à venir après le clic.
 
-  const iconSrcCurrentAction = isInMode2() ? iconSrcMode2 : iconSrcMode1;
+  const iconSrcCurrentAction = isInMode2State ? iconSrcMode2 : iconSrcMode1;
   const iconSrcArrow =
     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tcmlnaHQiPjxwYXRoIGQ9Im05IDE4IDYtNi02LTYiLz48L3N2Zz4=';
-  const iconSrcNextAction = isInMode2() ? iconSrcMode1 : iconSrcMode2;
+  const iconSrcNextAction = isInMode2State ? iconSrcMode1 : iconSrcMode2;
 
   let tooltip: string | undefined;
   if (tooltipMode1 && tooltipMode2) {
-    tooltip = isInMode2() ? tooltipMode2 : tooltipMode1;
+    tooltip = isInMode2State ? tooltipMode2 : tooltipMode1;
   }
 
-  const label = isInMode2() ? labelMode2 : labelMode1;
+  const label = isInMode2State ? labelMode2 : labelMode1;
 
   const IconStyle = {
     display: 'flex',
