@@ -92,6 +92,8 @@ export const replaceColor2 = async (oldColor: string, newColor?: string) => {
     });
   }
 
-  // Arrêt du chargement
-  useStore.getState().setColorReplacement({ isLoading: false });
+  // Arrêt du chargement et affichage du toast
+  useStore
+    .getState()
+    .setColorReplacement({ isLoading: false, toastVisible: true });
 };
