@@ -14,13 +14,17 @@ import {
 
 const buttonStyle = {};
 
+const alwaysActive = () => false;
+
 // ----- Getters -----
 const isReadyToDraw = () => useStore.getState().isReadyToDraw;
+const isNotReadyToDraw = () => !useStore.getState().isReadyToDraw;
 const isEraser = () => useStore.getState().isEraser;
 const isBigTool = () => useStore.getState().isBigTool;
 const isSelectingColor = () =>
   useStore.getState().colorReplacement.isSelectingColor;
 const isImageHidden = () => useStore.getState().isImageHidden;
+const noImage = () => !useStore.getState().imageUrl;
 
 // ----- Setters -----
 const switchToColorMode = () => useStore.getState().setIsReadyToDraw(true);
@@ -46,7 +50,7 @@ const actionButtons = [
     id: 'toggle-drag-draw-mode',
     buttonStyle,
     deactivate: {
-      shouldDeactivate: () => false,
+      shouldDeactivate: alwaysActive,
     },
     iconSrcMode1: dragIcon,
     iconSrcMode2: drawIcon,
@@ -64,7 +68,7 @@ const actionButtons = [
     buttonStyle,
     deactivate: {
       subscribeToState: 'isReadyToDraw',
-      shouldDeactivate: () => !isReadyToDraw(),
+      shouldDeactivate: isNotReadyToDraw,
     },
     iconSrcMode1: colorIcon,
     iconSrcMode2: eraseIcon,
@@ -82,7 +86,7 @@ const actionButtons = [
     buttonStyle,
     deactivate: {
       subscribeToState: 'isReadyToDraw',
-      shouldDeactivate: () => !isReadyToDraw(),
+      shouldDeactivate: isNotReadyToDraw,
     },
     iconSrcMode1: smallToolIcon,
     iconSrcMode2: bigToolIcon,
@@ -99,7 +103,7 @@ const actionButtons = [
     id: 'replace-a-color',
     buttonStyle,
     deactivate: {
-      shouldDeactivate: () => false,
+      shouldDeactivate: alwaysActive,
     },
     iconSrcMode1: paperIcon,
     iconSrcMode2: bucketIcon,
@@ -117,7 +121,7 @@ const actionButtons = [
     buttonStyle,
     deactivate: {
       subscribeToState: 'imageUrl',
-      shouldDeactivate: () => !useStore.getState().imageUrl,
+      shouldDeactivate: noImage,
     },
     iconSrcMode1: showIcon,
     iconSrcMode2: hideIcon,
