@@ -3,6 +3,7 @@ import useStore from '../../../store/store';
 import { coloring, replaceColor2 } from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import gridColor from '../../../constants/gridColor';
+import { pipetteIcon } from '../../../constants/icons';
 
 interface PixelProps {
   id: string;
@@ -19,9 +20,6 @@ const Pixel = React.memo(({ id }: PixelProps) => {
     (state) => state.colorReplacement.isSelectingColor
   );
   const [isHovered, setIsHovered] = useState(false);
-
-  const pipetteIcon =
-    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBpcGV0dGUiPjxwYXRoIGQ9Im0yIDIyIDEtMWgzbDktOSIvPjxwYXRoIGQ9Ik0zIDIxdi0zbDktOSIvPjxwYXRoIGQ9Im0xNSA2IDMuNC0zLjRhMi4xIDIuMSAwIDEgMSAzIDNMMTggOWwuNC40YTIuMSAyLjEgMCAxIDEtMyAzbC0zLjgtMy44YTIuMSAyLjEgMCAxIDEgMy0zbC40LjRaIi8+PC9zdmc+';
 
   const pixelBorderColor = gridColor.line;
   let pixelOpacity;
