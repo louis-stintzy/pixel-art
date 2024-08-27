@@ -17,12 +17,12 @@ function Toast({ message, onUndo, onClose, duration = 5000 }: ToastProps) {
   }, [duration, onClose]);
 
   return (
-    <div className="toast">
-      <div className="toast__message">{message}</div>
-      <button type="button" className="toast__undo-button" onClick={onUndo}>
+    <div id="toast-container">
+      <div id="toast-message">{message}</div>
+      <button type="button" id="toast-undo-button" onClick={onUndo}>
         Undo
       </button>
-      <button type="button" className="toast__close-button" onClick={onClose}>
+      <button type="button" id="toast-close-button" onClick={onClose}>
         <img src={closeIcon} alt="Close" />
       </button>
     </div>

@@ -1,18 +1,4 @@
-// .toast {
-//   position: fixed;
-//   top: 0;
-//   right: 0;
-//   z-index: 9999;
-//   padding: 1rem;
-//   margin: 1rem;
-//   background-color: #333;
-//   color: #fff;
-//   border-radius: 0.25rem;
-//   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-//   animation: slideIn 0.5s forwards, fadeOut 0.5s 2.5s forwards;
-// }
-
-.toast {
+#toast-container {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -26,9 +12,9 @@
   align-items: center;
   gap: 10px;
 }
-.toast__close-button {
+
+#toast-close-button {
   background: none;
   border: none;
-  color: #ff5555;
   cursor: pointer;
 }
