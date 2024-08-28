@@ -62,7 +62,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
         coloring([id, ...getNeighboringPixels(id)], color); // Si le mode big tool est activé, colorer le pixel et ses pixels voisins
         return;
       }
-      if (pixelColor === selectedColor) {
+      if (pixelColor === selectedColor.code) {
         coloring([id], gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
         return;
       }
@@ -71,7 +71,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
     }
 
     // Si le mode dessin n'est pas activé :
-    if (pixelColor === selectedColor) {
+    if (pixelColor === selectedColor.code) {
       coloring([id], gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
       return;
     }

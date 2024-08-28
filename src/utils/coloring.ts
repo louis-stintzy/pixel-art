@@ -12,7 +12,7 @@ import useStore from '../store/store';
 
 export const coloring = (pixelIds: string[], color?: string) => {
   const { selectedColor } = useStore.getState();
-  const colorToUSe = color || selectedColor;
+  const colorToUSe = color || selectedColor.code;
   const newPixelColors: Record<string, string> = {};
   pixelIds.forEach((id) => {
     newPixelColors[id] = colorToUSe;
@@ -51,7 +51,7 @@ export const replaceColor2 = async (oldColor: string, newColor?: string) => {
   // Find all pixels with the old color
   Object.keys(pixelColors).forEach((id) => {
     if (pixelColors[id] === oldColor) {
-      newPixelColors[id] = newColor || selectedColor;
+      newPixelColors[id] = newColor || selectedColor.code;
     }
   });
 
@@ -62,7 +62,7 @@ export const replaceColor2 = async (oldColor: string, newColor?: string) => {
       for (let col = 0; col < gridSize.width; col += 1) {
         const id = `${row}-${col}`;
         if (!pixelColors[id]) {
-          newPixelColors[id] = newColor || selectedColor;
+          newPixelColors[id] = newColor || selectedColor.code;
         }
       }
     }

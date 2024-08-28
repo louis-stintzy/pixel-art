@@ -1,11 +1,11 @@
-import colorPalettes, { PaletteName } from '../../../constants/colors';
+import colorPalettes, { PaletteNameCamelCase } from '../../../constants/colors';
 import useStore from '../../../store/store';
 
 function ColorPaletteSelector() {
   const selectedPalette = useStore((state) => state.selectedPalette);
   const setSelectedPalette = useStore((state) => state.setSelectedPalette);
 
-  const handleChange = (paletteName: PaletteName) => {
+  const handleChange = (paletteName: PaletteNameCamelCase) => {
     setSelectedPalette(paletteName);
   };
 
@@ -19,7 +19,7 @@ function ColorPaletteSelector() {
         <select
           name="colorPalette"
           value={selectedPalette.name}
-          onChange={(e) => handleChange(e.target.value as PaletteName)}
+          onChange={(e) => handleChange(e.target.value as PaletteNameCamelCase)}
         >
           {Object.keys(colorPalettes).map((paletteName) => (
             <option key={paletteName} value={paletteName}>

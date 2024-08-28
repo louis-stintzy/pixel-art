@@ -1,5 +1,8 @@
 import { create } from 'zustand';
-import colorPalettes, { PaletteName } from '../constants/colors';
+import colorPalettes, {
+  PaletteNameCamelCase,
+  PaletteName,
+} from '../constants/colors';
 import { resetAspectRatio } from '../constants/aspectRatio';
 import { AspectRatio, Format } from '../@types/aspectRatio';
 
@@ -27,11 +30,14 @@ type State = {
   setImageUrl: (imageUrl: string | undefined) => void;
 
   // ----- Palette & Color-----
-  selectedPalette: { name: PaletteName; colors: string[] };
-  selectedColor: string;
+  selectedPalette: {
+    name: PaletteName;
+    colors: { name: string; code: string }[];
+  };
+  selectedColor: { name: string; code: string };
   pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
-  setSelectedPalette: (paletteName: PaletteName) => void;
-  setSelectedColor: (selectedColor: string) => void;
+  setSelectedPalette: (paletteName: PaletteNameCamelCase) => void;
+  setSelectedColor: (selectedColor: { name: string; code: string }) => void;
   setPixelColors: (newPixelColors: Record<string, string>) => void;
 
   // ----- Action Buttons -----
@@ -81,17 +87,17 @@ const useStore = create<State>()((set) => ({
   // ----- Palette & Color-----
   selectedPalette: {
     name: 'materialDesign' as PaletteName,
-    colors: colorPalettes.materialDesign,
+    colors: colorPalettes.materialDesign.colors,
   },
-  selectedColor: colorPalettes.materialDesign[0],
+  selectedColor: colorPalettes.materialDesign.colors[0],
   pixelColors: {},
   setSelectedPalette: (paletteName) =>
     set({
       selectedPalette: {
         name: paletteName,
-        colors: colorPalettes[paletteName],
+        colors: colorPalettes[paletteName].colors,
       },
-      selectedColor: colorPalettes[paletteName][0],
+      selectedColor: colorPalettes[paletteName].colors[0],
     }),
   setSelectedColor: (selectedColor) => set({ selectedColor }),
   setPixelColors: (newPixelColors: Record<string, string>) =>

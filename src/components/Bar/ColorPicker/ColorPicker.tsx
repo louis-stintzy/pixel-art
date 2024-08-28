@@ -7,15 +7,16 @@ function ColorPicker() {
     <div style={{ display: 'flex', justifyContent: 'space-around' }}>
       {selectedPalette.colors.map((color) => (
         <button
-          key={color}
+          key={color.code}
           type="button"
           style={{
-            backgroundColor: color,
+            backgroundColor: color.code,
             width: '2rem',
             height: '2rem',
-            borderRadius: '50%',
+            borderRadius: '40%',
             cursor: 'pointer',
           }}
+          title={color.name}
           onClick={() => setSelectedColor(color)}
           aria-label={`Select ${color} color`}
         />
