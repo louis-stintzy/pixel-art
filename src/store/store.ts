@@ -5,6 +5,7 @@ import colorPalettes, {
 } from '../constants/colors';
 import { resetAspectRatio } from '../constants/aspectRatio';
 import { AspectRatio, Format } from '../@types/aspectRatio';
+import gridColor from '../constants/gridColor';
 
 type State = {
   // ----- Grid -----
@@ -36,9 +37,14 @@ type State = {
   };
   selectedColor: { name: string; code: string };
   pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
+  recentColors: { name: string; code: string }[];
+  favoriteColors: { name: string; code: string }[];
   setSelectedPalette: (paletteName: PaletteNameCamelCase) => void;
   setSelectedColor: (selectedColor: { name: string; code: string }) => void;
   setPixelColors: (newPixelColors: Record<string, string>) => void;
+  addRecentColor: (color: { name: string; code: string }) => void;
+  addFavoriteColor: (color: { name: string; code: string }) => void;
+  removeFavoriteColor: (color: { name: string; code: string }) => void;
 
   // ----- Action Buttons -----
   isReadyToDraw: boolean;
@@ -91,6 +97,14 @@ const useStore = create<State>()((set) => ({
   },
   selectedColor: colorPalettes.materialDesign.colors[0],
   pixelColors: {},
+  recentColors: new Array(20).fill({
+    name: 'Background',
+    code: gridColor.background,
+  }),
+  favoriteColors: new Array(20).fill({
+    name: 'Background',
+    code: gridColor.background,
+  }),
   setSelectedPalette: (paletteName) =>
     set({
       selectedPalette: {
@@ -103,6 +117,33 @@ const useStore = create<State>()((set) => ({
   setPixelColors: (newPixelColors: Record<string, string>) =>
     set((state) => ({
       pixelColors: { ...state.pixelColors, ...newPixelColors },
+    })),
+  addRecentColor: (color) =>
+    set((state) => {
+      const updatedRecentColors = [...state.recentColors]; // Copie du tableau
+      const colorIndex = updatedRecentColors.findIndex(
+        (c) => c.code === color.code
+      ); // Recherche de la couleur dans le tableau
+      if (colorIndex !== -1) {
+        // Si la couleur est déjà dans le tableau, la supprimer
+        updatedRecentColors.splice(colorIndex, 1);
+      }
+      updatedRecentColors.unshift(color); // Ajouter la couleur en premier
+      return { recentColors: updatedRecentColors.slice(0, 20) }; // Limiter le tableau à 20 couleurs
+    }),
+  addFavoriteColor: (color) =>
+    set((state) => {
+      if (
+        state.favoriteColors.length < 20 &&
+        !state.favoriteColors.includes(color)
+      ) {
+        return { favoriteColors: [...state.favoriteColors, color] };
+      }
+      return state;
+    }),
+  removeFavoriteColor: (color) =>
+    set((state) => ({
+      favoriteColors: state.favoriteColors.filter((c) => c.code !== color.code),
     })),
 
   // ----- Action Buttons -----
