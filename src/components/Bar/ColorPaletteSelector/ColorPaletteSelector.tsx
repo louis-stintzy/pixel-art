@@ -1,4 +1,5 @@
-import colorPalettes, { PaletteNameCamelCase } from '../../../constants/colors';
+import { PaletteNameCamelCase } from '../../../@types/colorPalette';
+import colorPalettes from '../../../constants/colors';
 import useStore from '../../../store/store';
 
 function ColorPaletteSelector() {

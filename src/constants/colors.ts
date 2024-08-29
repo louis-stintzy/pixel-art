@@ -23,6 +23,7 @@ const colorPalettes = {
       { name: 'Brown', code: '#795548' },
       { name: 'Gray', code: '#9e9e9e' },
       { name: 'Blue Gray', code: '#607d8b' },
+      { name: 'Black', code: '#000000' },
     ],
   },
   minecraftColors: {
@@ -424,8 +425,5 @@ const colorPalettes = {
     ],
   },
 };
-
-export type PaletteNameCamelCase = keyof typeof colorPalettes;
-export type PaletteName = (typeof colorPalettes)[PaletteNameCamelCase]['name'];
 
 export default colorPalettes;

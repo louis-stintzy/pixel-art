@@ -1,23 +1,26 @@
 import { StateCreator } from 'zustand';
-import colorPalettes, {
+import {
+  Color,
   PaletteName,
   PaletteNameCamelCase,
-} from '../constants/colors';
+} from '../@types/colorPalette';
+import colorPalettes from '../constants/colors';
+
 import gridColor from '../constants/gridColor';
 
 export interface PaletteSlice {
   selectedPalette: {
     name: PaletteName;
-    colors: { name: string; code: string }[];
+    colors: Color[];
   };
-  selectedColor: { name: string; code: string };
-  recentColors: { name: string; code: string }[];
-  favoriteColors: { name: string; code: string }[];
+  selectedColor: Color;
+  recentColors: Color[];
+  favoriteColors: Color[];
   setSelectedPalette: (paletteName: PaletteNameCamelCase) => void;
-  setSelectedColor: (selectedColor: { name: string; code: string }) => void;
-  addRecentColor: (color: { name: string; code: string }) => void;
-  addFavoriteColor: (color: { name: string; code: string }) => void;
-  removeFavoriteColor: (color: { name: string; code: string }) => void;
+  setSelectedColor: (selectedColor: Color) => void;
+  addRecentColor: (color: Color) => void;
+  addFavoriteColor: (color: Color) => void;
+  removeFavoriteColor: (color: Color) => void;
 }
 
 const createPaletteSlice: StateCreator<PaletteSlice> = (set) => ({
