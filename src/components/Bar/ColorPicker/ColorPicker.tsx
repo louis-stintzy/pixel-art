@@ -1,8 +1,48 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Color } from '../../../@types/colorPalette';
 import useStore from '../../../store/store';
+import ColorPaletteColors from './ColorPaletteColors/ColorPaletteColors';
 
 function ColorPicker() {
   const selectedPalette = useStore((state) => state.selectedPalette);
+  const recentColors = useStore((state) => state.recentColors);
+  const favoriteColors = useStore((state) => state.favoriteColors);
+
+  const paletteAvaibleToDisplay = useMemo(
+    () => [
+      {
+        name: 'Selected Palette',
+        colors: selectedPalette.colors,
+      },
+      { name: 'Recent Colors', colors: recentColors },
+      {
+        name: 'Favorite Colors',
+        colors: favoriteColors,
+      },
+    ],
+    [selectedPalette.colors, recentColors, favoriteColors]
+  );
+
+  const [paletteToDisplay, setPaletteToDisplay] = useState([
+    paletteAvaibleToDisplay[0],
+  ]);
+
+  useEffect(() => {
+    setPaletteToDisplay((current) =>
+      current.map((palette) => {
+        if (palette.name === 'Selected Palette') {
+          return paletteAvaibleToDisplay[0];
+        }
+        if (palette.name === 'Recent Colors') {
+          return paletteAvaibleToDisplay[1];
+        }
+        if (palette.name === 'Favorite Colors') {
+          return paletteAvaibleToDisplay[2];
+        }
+        return palette;
+      })
+    );
+  }, [selectedPalette, recentColors, favoriteColors, paletteAvaibleToDisplay]);
 
   let touchStart: number;
 
@@ -30,24 +70,39 @@ function ColorPicker() {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-      {selectedPalette.colors.map((color) => (
-        <button
-          key={color.code}
-          type="button"
-          style={{
-            backgroundColor: color.code,
-            width: '2rem',
-            height: '2rem',
-            borderRadius: '40%',
-            cursor: 'pointer',
-          }}
-          title={color.name}
-          onClick={() => handleClick(color)}
-          onTouchStart={() => handleTouchStart()}
-          onTouchEnd={() => handleTouchEnd(color)}
-          onContextMenu={(e) => handleContextMenu(e, color)}
-          aria-label={`Select ${color} color`}
+    <div>
+      <fieldset>
+        <legend>Select the palettes to display :</legend>
+        {paletteAvaibleToDisplay.map((palette) => (
+          <label key={palette.name}>
+            <input
+              type="checkbox"
+              id={palette.name}
+              name={palette.name}
+              checked={paletteToDisplay.some((p) => p.name === palette.name)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setPaletteToDisplay([...paletteToDisplay, palette]);
+                } else {
+                  setPaletteToDisplay(
+                    paletteToDisplay.filter((p) => p.name !== palette.name)
+                  );
+                }
+              }}
+            />
+            {palette.name}
+          </label>
+        ))}
+      </fieldset>
+
+      {paletteToDisplay.map((palette) => (
+        <ColorPaletteColors
+          key={palette.name}
+          palette={palette}
+          onColorClick={handleClick}
+          onColorTouchStart={handleTouchStart}
+          onColorTouchEnd={handleTouchEnd}
+          onColorContextMenu={handleContextMenu}
         />
       ))}
     </div>
