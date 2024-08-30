@@ -4,16 +4,29 @@ import useStore from '../../../store/store';
 function ColorPicker() {
   const selectedPalette = useStore((state) => state.selectedPalette);
 
-  const handleClick = (color: Color) => {
-    const { setSelectedColor, addRecentColor } = useStore.getState();
-    setSelectedColor(color);
-    addRecentColor(color);
+  let touchStart: number;
+
+  const handleTouchStart = () => {
+    touchStart = Date.now();
+  };
+
+  const handleTouchEnd = (color: Color) => {
+    if (Date.now() - touchStart > 3000) {
+      console.log('ouvrir menu contextuel');
+    }
   };
 
   const handleContextMenu = (e: React.MouseEvent, color: Color) => {
     e.preventDefault();
-    const { addFavoriteColor } = useStore.getState();
-    addFavoriteColor(color);
+    console.log('ouvrir menu contextuel');
+    // const { addFavoriteColor } = useStore.getState();
+    // addFavoriteColor(color);
+  };
+
+  const handleClick = (color: Color) => {
+    const { setSelectedColor, addRecentColor } = useStore.getState();
+    setSelectedColor(color);
+    addRecentColor(color);
   };
 
   return (
@@ -31,6 +44,8 @@ function ColorPicker() {
           }}
           title={color.name}
           onClick={() => handleClick(color)}
+          onTouchStart={() => handleTouchStart()}
+          onTouchEnd={() => handleTouchEnd(color)}
           onContextMenu={(e) => handleContextMenu(e, color)}
           aria-label={`Select ${color} color`}
         />
