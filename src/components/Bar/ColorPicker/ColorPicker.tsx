@@ -3,6 +3,7 @@ import { Color } from '../../../@types/colorPalette';
 import useStore from '../../../store/store';
 import ColorPaletteColors from './ColorPaletteColors/ColorPaletteColors';
 import SelectPalettesToDisplay from './SelectPalettesToDisplay/SelectPalettesToDisplay';
+import ColorContextMenu from './ColorContextMenu/ColorContextMenu';
 
 function ColorPicker() {
   const selectedPalette = useStore((state) => state.selectedPalette);
@@ -45,31 +46,6 @@ function ColorPicker() {
     );
   }, [selectedPalette, recentColors, favoriteColors, paletteAvaibleToDisplay]);
 
-  let touchStart: number;
-
-  const handleTouchStart = () => {
-    touchStart = Date.now();
-  };
-
-  const handleTouchEnd = (color: Color) => {
-    if (Date.now() - touchStart > 3000) {
-      console.log('ouvrir menu contextuel');
-    }
-  };
-
-  const handleContextMenu = (e: React.MouseEvent, color: Color) => {
-    e.preventDefault();
-    console.log('ouvrir menu contextuel');
-    // const { addFavoriteColor } = useStore.getState();
-    // addFavoriteColor(color);
-  };
-
-  const handleClick = (color: Color) => {
-    const { setSelectedColor, addRecentColor } = useStore.getState();
-    setSelectedColor(color);
-    addRecentColor(color);
-  };
-
   return (
     <div>
       <SelectPalettesToDisplay
@@ -82,10 +58,10 @@ function ColorPicker() {
         <ColorPaletteColors
           key={palette.name}
           palette={palette}
-          onColorClick={handleClick}
-          onColorTouchStart={handleTouchStart}
-          onColorTouchEnd={handleTouchEnd}
-          onColorContextMenu={handleContextMenu}
+          // onColorClick={handleClick}
+          // onColorTouchStart={handleTouchStart}
+          // onColorTouchEnd={handleTouchEnd}
+          // onColorContextMenu={handleContextMenu}
         />
       ))}
     </div>
