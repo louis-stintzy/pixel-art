@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Color } from '../../../@types/colorPalette';
 import useStore from '../../../store/store';
 import ColorPaletteColors from './ColorPaletteColors/ColorPaletteColors';
+import SelectPalettesToDisplay from './SelectPalettesToDisplay/SelectPalettesToDisplay';
 
 function ColorPicker() {
   const selectedPalette = useStore((state) => state.selectedPalette);
@@ -71,29 +72,11 @@ function ColorPicker() {
 
   return (
     <div>
-      <fieldset>
-        <legend>Select the palettes to display :</legend>
-        {paletteAvaibleToDisplay.map((palette) => (
-          <label key={palette.name}>
-            <input
-              type="checkbox"
-              id={palette.name}
-              name={palette.name}
-              checked={paletteToDisplay.some((p) => p.name === palette.name)}
-              onChange={(e) => {
-                if (e.target.checked) {
-                  setPaletteToDisplay([...paletteToDisplay, palette]);
-                } else {
-                  setPaletteToDisplay(
-                    paletteToDisplay.filter((p) => p.name !== palette.name)
-                  );
-                }
-              }}
-            />
-            {palette.name}
-          </label>
-        ))}
-      </fieldset>
+      <SelectPalettesToDisplay
+        paletteAvaibleToDisplay={paletteAvaibleToDisplay}
+        paletteToDisplay={paletteToDisplay}
+        setPaletteToDisplay={setPaletteToDisplay}
+      />
 
       {paletteToDisplay.map((palette) => (
         <ColorPaletteColors
