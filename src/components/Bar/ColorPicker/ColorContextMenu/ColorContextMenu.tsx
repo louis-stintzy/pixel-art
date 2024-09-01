@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Color } from '../../../../@types/colorPalette';
 import gridColor from '../../../../constants/gridColor';
 import useStore from '../../../../store/store';
@@ -10,6 +11,7 @@ interface ContextMenuProps {
 }
 
 function ColorContextMenu({ x, y, color, onClose }: ContextMenuProps) {
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const favoriteColors = useStore((state) => state.favoriteColors);
   const validFavoriteColors = favoriteColors.filter(
     (c) => c.code !== gridColor.background
@@ -27,6 +29,21 @@ function ColorContextMenu({ x, y, color, onClose }: ContextMenuProps) {
     }
     onClose();
   };
+
+  // le useEffect est utilisé pour fermer le menu contextuel lorsqu'on clique en dehors
+  // il permet e placer l'écouteur d'événement sur le document après que le composant ait été monté
+  // et de le retirer après que le composant ait été démonté
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
 
   const menuWidth = 200;
   const appContainerMargin = 17; // 1rem + border
@@ -64,7 +81,11 @@ function ColorContextMenu({ x, y, color, onClose }: ContextMenuProps) {
   }
 
   return (
-    <div id="contextMenuContainer" style={contextMenuContainerStyle}>
+    <div
+      id="contextMenuContainer"
+      ref={menuRef}
+      style={contextMenuContainerStyle}
+    >
       <button
         id="removeOrAddButton"
         type="button"
