@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Color } from '../../../../@types/colorPalette';
 import useStore from '../../../../store/store';
 import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
+import ColorButton from '../ColorButton/ColorButton';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
@@ -44,12 +45,6 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     setContextMenu(null);
   };
 
-  const handleClick = (color: Color) => {
-    const { setSelectedColor, addRecentColor } = useStore.getState();
-    setSelectedColor(color);
-    addRecentColor(color);
-  };
-
   const colorKeys: string[] = [];
   for (let i = 0; i < 20; i += 1) {
     colorKeys.push(`color${i}`);
@@ -57,22 +52,14 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
       {palette.colors.map((color, index) => (
-        <button
+        <ColorButton
           key={`${colorKeys[index]}-${palette.name}-${color.code}`}
-          type="button"
-          style={{
-            backgroundColor: color.code,
-            width: '2rem',
-            height: '2rem',
-            borderRadius: '40%',
-            cursor: 'pointer',
-          }}
-          title={color.name}
-          onClick={() => handleClick(color)}
-          onTouchStart={() => handleTouchStart()}
-          onTouchEnd={(e) => handleTouchEnd(e, color)}
-          onContextMenu={(e) => handleContextMenu(e, color)}
-          aria-label={`Select ${color.name} color`}
+          color={color}
+          paletteName={palette.name}
+          index={index}
+          onTouchStart={handleTouchStart}
+          onTouchEndd={handleTouchEnd}
+          onContextMenu={handleContextMenu}
         />
       ))}
 
