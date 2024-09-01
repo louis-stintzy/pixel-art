@@ -1,5 +1,5 @@
 const gridColor = {
-  background: '#fff',
+  background: '#FFFEFF',
   line: '#ccc',
 };
 

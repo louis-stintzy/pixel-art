@@ -5,19 +5,9 @@ import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
-  // onColorClick: (color: Color) => void;
-  // onColorTouchStart: () => void;
-  // onColorTouchEnd: (e: React.TouchEvent, color: Color) => void;
-  // onColorContextMenu: (e: React.MouseEvent, color: Color) => void;
 }
 
-function ColorPaletteColors({
-  palette,
-}: // onColorClick,
-// onColorTouchStart,
-// onColorTouchEnd,
-// onColorContextMenu,
-ColorPaletteColorsProps) {
+function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -38,7 +28,6 @@ ColorPaletteColorsProps) {
         y: e.touches[0].clientY,
         color,
       });
-      console.log('ouvrir menu contextuel');
     }
   };
 
@@ -49,9 +38,10 @@ ColorPaletteColorsProps) {
       y: e.clientY,
       color,
     });
-    console.log('ouvrir menu contextuel');
-    // const { addFavoriteColor } = useStore.getState();
-    // addFavoriteColor(color);
+  };
+
+  const closeContextMenu = () => {
+    setContextMenu(null);
   };
 
   const handleClick = (color: Color) => {
@@ -86,7 +76,9 @@ ColorPaletteColorsProps) {
         />
       ))}
 
-      {contextMenu && <ColorContextMenu {...contextMenu} />}
+      {contextMenu && (
+        <ColorContextMenu {...contextMenu} onClose={closeContextMenu} />
+      )}
     </div>
   );
 }

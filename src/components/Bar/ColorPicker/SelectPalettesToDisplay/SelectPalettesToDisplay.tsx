@@ -1,5 +1,7 @@
 import { Palette } from '../../../../@types/colorPalette';
 
+import './SelectPalettesToDisplay.scss';
+
 interface SelectPalettesToDisplayProps {
   paletteAvaibleToDisplay: Palette[];
   paletteToDisplay: Palette[];

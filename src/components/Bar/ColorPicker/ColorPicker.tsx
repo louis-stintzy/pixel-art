@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Color } from '../../../@types/colorPalette';
 import useStore from '../../../store/store';
 import ColorPaletteColors from './ColorPaletteColors/ColorPaletteColors';
 import SelectPalettesToDisplay from './SelectPalettesToDisplay/SelectPalettesToDisplay';
-import ColorContextMenu from './ColorContextMenu/ColorContextMenu';
 
 function ColorPicker() {
   const selectedPalette = useStore((state) => state.selectedPalette);
@@ -55,14 +53,7 @@ function ColorPicker() {
       />
 
       {paletteToDisplay.map((palette) => (
-        <ColorPaletteColors
-          key={palette.name}
-          palette={palette}
-          // onColorClick={handleClick}
-          // onColorTouchStart={handleTouchStart}
-          // onColorTouchEnd={handleTouchEnd}
-          // onColorContextMenu={handleContextMenu}
-        />
+        <ColorPaletteColors key={palette.name} palette={palette} />
       ))}
     </div>
   );

@@ -61,18 +61,34 @@ const createPaletteSlice: StateCreator<PaletteSlice> = (set) => ({
     }),
   addFavoriteColor: (color) =>
     set((state) => {
+      const updatedFavoriteColors = [...state.favoriteColors]; // Copie du tableau
+      // Exclure gridColor.background du décompte
+      const validFavoriteColors = updatedFavoriteColors.filter(
+        (c) => c.code !== gridColor.background
+      );
       if (
-        state.favoriteColors.length < 20 &&
+        validFavoriteColors.length < 20 &&
         !state.favoriteColors.includes(color)
       ) {
-        return { favoriteColors: [...state.favoriteColors, color] };
+        updatedFavoriteColors.unshift(color); // Ajouter la couleur en premier
+        return { favoriteColors: updatedFavoriteColors.slice(0, 20) }; // Limiter le tableau à 20 couleurs
       }
       return state;
     }),
   removeFavoriteColor: (color) =>
-    set((state) => ({
-      favoriteColors: state.favoriteColors.filter((c) => c.code !== color.code),
-    })),
+    set((state) => {
+      const updatedFavoriteColors = [...state.favoriteColors].filter(
+        (c) => c.code !== color.code
+      ); // Copie du tableau sans la couleur à supprimer
+      const filledColors = [
+        ...updatedFavoriteColors,
+        ...new Array(20 - updatedFavoriteColors.length).fill({
+          name: 'Background',
+          code: gridColor.background,
+        }),
+      ]; // Compléter le tableau avec gridColor.background
+      return { favoriteColors: filledColors };
+    }),
 });
 
 export default createPaletteSlice;
