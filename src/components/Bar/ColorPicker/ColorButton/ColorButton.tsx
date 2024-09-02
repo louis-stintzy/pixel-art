@@ -8,6 +8,11 @@ interface ColorButtonProps {
   onTouchStart: () => void;
   onTouchEndd: (e: React.TouchEvent, color: Color) => void;
   onContextMenu: (e: React.MouseEvent, color: Color) => void;
+  onMouseDown: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onMouseUp: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  button?: HTMLButtonElement | null;
+  translateX?: number | null;
+  translateY?: number | null;
 }
 
 function ColorButton({
@@ -17,6 +22,11 @@ function ColorButton({
   onTouchStart,
   onTouchEndd,
   onContextMenu,
+  onMouseDown,
+  onMouseUp,
+  button,
+  translateX,
+  translateY,
 }: ColorButtonProps) {
   const handleClick = (clickedColor: Color) => {
     const { setSelectedColor, addRecentColor } = useStore.getState();
@@ -30,6 +40,11 @@ function ColorButton({
     height: '2rem',
     borderRadius: '40%',
     cursor: 'pointer',
+    transform:
+      button && button.id === `color${index}-${paletteName}-${color.code}`
+        ? `translate(${translateX}px, ${translateY}px)`
+        : 'none',
+    transition: 'transform 0.1s ease-out',
   };
   return (
     <button
@@ -41,9 +56,17 @@ function ColorButton({
       onTouchStart={onTouchStart}
       onTouchEnd={(e) => onTouchEndd(e, color)}
       onContextMenu={(e) => onContextMenu(e, color)}
+      onMouseDown={(e) => onMouseDown(e)}
+      onMouseUp={(e) => onMouseUp(e)}
       aria-label={`Select ${color.name} color`}
     />
   );
 }
+
+ColorButton.defaultProps = {
+  button: null,
+  translateX: null,
+  translateY: null,
+};
 
 export default ColorButton;
