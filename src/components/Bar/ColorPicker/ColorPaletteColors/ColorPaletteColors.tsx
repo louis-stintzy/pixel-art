@@ -1,14 +1,16 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Color } from '../../../../@types/colorPalette';
 import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
 import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
+import useStore from '../../../../store/store';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
 }
 
 function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
+  const favoriteColors = useStore((state) => state.favoriteColors);
   const lastRanMouseRef = useRef<number | undefined>(undefined);
   const lastFuncMouseRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
@@ -19,9 +21,10 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   );
 
   const paletteRef = useRef<HTMLDivElement | null>(null);
-  const { isDragging, position } = useDragAndDrop(paletteRef);
+  const { isDragging, position, resetPosition } = useDragAndDrop(paletteRef);
   const [draggedColorButton, setDraggedColorButton] = useState<{
     button: HTMLButtonElement;
+    // index: number;
     translateX: number;
     translateY: number;
   } | null>(null);
@@ -30,6 +33,8 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     y: number;
     color: Color;
   } | null>(null);
+
+  // --------------------------------- CONTEXT MENU ---------------------------------
 
   let touchStart: number;
 
@@ -61,6 +66,8 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     setContextMenu(null);
   };
 
+  // -------------------------------- DRAG AND DROP --------------------------------
+
   const handleMouseDragStart = (event: React.MouseEvent<HTMLButtonElement>) => {
     const selectedColorButton = event.target as HTMLButtonElement;
     if (selectedColorButton)
@@ -69,7 +76,6 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
         translateX: 0,
         translateY: 0,
       });
-    console.log(selectedColorButton);
   };
 
   const handleMouseDragInProgress = useCallback(
@@ -88,52 +94,39 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     [draggedColorButton, isDragging, position.x, position.y]
   );
 
-  const handleMouseDragStop = () => {
+  const handleMouseDragStop = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { setFavoriteColors } = useStore.getState();
+    // const buttonToBeInterchanged = event.target as HTMLButtonElement;
+    const buttonToBeInterchanged = document.elementFromPoint(
+      event.clientX,
+      event.clientY
+    ) as HTMLButtonElement;
+    if (!draggedColorButton || !buttonToBeInterchanged) return;
+    console.log('buttonToBeInterchanged', buttonToBeInterchanged);
+    console.log('draggedColorButton', draggedColorButton);
+    const draggedColorIndex = parseInt(
+      draggedColorButton.button.id.split('-')[0].replace('color', ''),
+      10
+    );
+    const colorIndexToBeInterchanged = parseInt(
+      buttonToBeInterchanged.id.split('-')[0].replace('color', ''),
+      10
+    );
+    const updatedFavoriteColors = [...favoriteColors]; // todo: en veillant initialement à ce qu'on opère le drag and drop que sur favorite colors
+    // voir https://www.aality.fr/blog/javascript/inverser-deux-valeurs-array-javascript/
+    [
+      updatedFavoriteColors[draggedColorIndex],
+      updatedFavoriteColors[colorIndexToBeInterchanged],
+    ] = [
+      updatedFavoriteColors[colorIndexToBeInterchanged],
+      updatedFavoriteColors[draggedColorIndex],
+    ];
+    setFavoriteColors(updatedFavoriteColors);
     setDraggedColorButton(null);
+    resetPosition();
   };
-  // const handleMouseDragStart = useCallback(
-  //   (event: React.MouseEvent<HTMLDivElement>) => {
-  //     if (!isDragging) return;
-  //     const selectedColorButton = event.target as HTMLDivElement;
-  //     if (selectedColorButton) setDraggedColorButton(selectedColorButton);
-  //     console.log(selectedColorButton);
-  //   },
-  //   [isDragging]
-  // );
 
-  // const COLOR_BUTTON_THROTTLE = 32;
-
-  // const handleMouseMove = useCallback(
-  //   (event: React.MouseEvent<HTMLDivElement>) => {
-  //     if (!isDragging) return;
-  //     requestAnimationFrame(() => {
-  //       if (
-  //         !lastRanMouseRef.current ||
-  //         Date.now() - lastRanMouseRef.current >= COLOR_BUTTON_THROTTLE
-  //       ) {
-  //         lastRanMouseRef.current = Date.now();
-  //         const pixel = event.target as HTMLDivElement;
-  //         if (pixel) applyToolOnPixel(pixel);
-  //       } else {
-  //         if (lastFuncMouseRef.current !== undefined)
-  //           clearTimeout(lastFuncMouseRef.current);
-  //         lastFuncMouseRef.current = setTimeout(() => {
-  //           lastRanMouseRef.current = Date.now();
-  //           const pixel = event.target as HTMLDivElement;
-  //           if (pixel) applyToolOnPixel(pixel);
-  //         }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanMouseRef.current));
-  //       }
-  //     });
-  //   },
-  //   [isDragging]
-  // );
-
-  // const handleTouchMove = useCallback(
-  //   (e: React.TouchEvent<HTMLDivElement>) => {
-  //     if (!isDragging) return;
-  //   },
-  //   [isDragging]
-  // );
+  // --------------------------------- RETURN ---------------------------------
 
   const colorKeys: string[] = [];
   for (let i = 0; i < 20; i += 1) {

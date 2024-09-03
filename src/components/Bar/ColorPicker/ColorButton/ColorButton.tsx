@@ -46,6 +46,7 @@ function ColorButton({
         : 'none',
     transition: 'transform 0.1s ease-out',
   };
+
   return (
     <button
       id={`color${index}-${paletteName}-${color.code}`}

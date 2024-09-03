@@ -18,6 +18,7 @@ export interface PaletteSlice {
   favoriteColors: Color[];
   setSelectedPalette: (paletteName: PaletteNameCamelCase) => void;
   setSelectedColor: (selectedColor: Color) => void;
+  setFavoriteColors: (updatedFavoriteColors: Color[]) => void;
   addRecentColor: (color: Color) => void;
   addFavoriteColor: (color: Color) => void;
   removeFavoriteColor: (color: Color) => void;
@@ -46,6 +47,8 @@ const createPaletteSlice: StateCreator<PaletteSlice> = (set) => ({
       selectedColor: colorPalettes[paletteName].colors[0],
     }),
   setSelectedColor: (selectedColor) => set({ selectedColor }),
+  setFavoriteColors: (updatedFavoriteColors) =>
+    set({ favoriteColors: updatedFavoriteColors }),
   addRecentColor: (color) =>
     set((state) => {
       const updatedRecentColors = [...state.recentColors]; // Copie du tableau

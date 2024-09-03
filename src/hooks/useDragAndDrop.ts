@@ -26,6 +26,10 @@ function useDragAndDrop(
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 }); // Position de la grille
   const MIN_DRAG_DISTANCE = 7; // Distance minimale de glissement pour commencer à faire glisser la grille
 
+  const resetPosition = () => {
+    setPosition({ x: 0, y: 0 });
+  };
+
   // L'utilisateur clique : met à jour l'état de mouseDownRef et enregistre la position de la souris
   const handleMouseDown = useCallback(
     (e: MouseEvent) => {
@@ -213,7 +217,7 @@ function useDragAndDrop(
     handleTouchStart,
   ]);
 
-  return { position, isDragging };
+  return { position, isDragging, resetPosition };
 }
 
 export default useDragAndDrop;
