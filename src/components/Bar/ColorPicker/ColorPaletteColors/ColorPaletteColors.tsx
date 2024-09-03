@@ -81,14 +81,15 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   const handleMouseDragInProgress = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       if (!isDragging) return;
-      const deltaX = event.clientX - position.x;
-      const deltaY = event.clientY - position.y;
       if (draggedColorButton) {
         setDraggedColorButton({
           button: draggedColorButton.button,
           translateX: position.x,
           translateY: position.y,
         });
+        // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
+        // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
+        draggedColorButton.button.style.pointerEvents = 'none';
       }
     },
     [draggedColorButton, isDragging, position.x, position.y]
@@ -96,14 +97,12 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
 
   const handleMouseDragStop = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { setFavoriteColors } = useStore.getState();
-    // const buttonToBeInterchanged = event.target as HTMLButtonElement;
     const buttonToBeInterchanged = document.elementFromPoint(
       event.clientX,
       event.clientY
     ) as HTMLButtonElement;
     if (!draggedColorButton || !buttonToBeInterchanged) return;
-    console.log('buttonToBeInterchanged', buttonToBeInterchanged);
-    console.log('draggedColorButton', draggedColorButton);
+
     const draggedColorIndex = parseInt(
       draggedColorButton.button.id.split('-')[0].replace('color', ''),
       10
@@ -123,7 +122,10 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     ];
     setFavoriteColors(updatedFavoriteColors);
     setDraggedColorButton(null);
+    // Réinitialiser la position après avoir terminé le drag-and-drop (sinon lors d'un prochain drag and drop, on reprendrait la position x et y précédente en point de départ)
     resetPosition();
+    // Réactiver les événements du pointeur après avoir terminé le drag-and-drop
+    draggedColorButton.button.style.pointerEvents = 'auto';
   };
 
   // --------------------------------- RETURN ---------------------------------

@@ -73,8 +73,23 @@ const createPaletteSlice: StateCreator<PaletteSlice> = (set) => ({
         validFavoriteColors.length < 20 &&
         !state.favoriteColors.includes(color)
       ) {
-        updatedFavoriteColors.unshift(color); // Ajouter la couleur en premier
-        return { favoriteColors: updatedFavoriteColors.slice(0, 20) }; // Limiter le tableau à 20 couleurs
+        // Ajouter la couleur en premier (le tableau possède 21 éléments)
+        updatedFavoriteColors.unshift(color);
+
+        // Recherche de la première occurrence de gridColor.background
+        const invalidFavoriteColorIndex = updatedFavoriteColors.findIndex(
+          (c) => c.code === gridColor.background
+        );
+
+        // Si trouvé, supprimer cette couleur de fond du tableau
+        if (invalidFavoriteColorIndex !== -1) {
+          updatedFavoriteColors.splice(invalidFavoriteColorIndex, 1);
+        }
+
+        // Limiter le tableau à 20 couleurs
+        return {
+          favoriteColors: updatedFavoriteColors.splice(0, 20),
+        };
       }
       return state;
     }),
