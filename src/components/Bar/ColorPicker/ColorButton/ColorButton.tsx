@@ -5,7 +5,7 @@ interface ColorButtonProps {
   color: Color;
   paletteName: string;
   index: number;
-  onTouchStart: () => void;
+  onTouchStart: (e: React.TouchEvent) => void;
   onTouchEndd: (e: React.TouchEvent, color: Color) => void;
   onContextMenu: (e: React.MouseEvent, color: Color) => void;
   onMouseDown: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -54,7 +54,7 @@ function ColorButton({
       style={colorButtonStyle}
       title={color.name}
       onClick={() => handleClick(color)}
-      onTouchStart={onTouchStart}
+      onTouchStart={(e) => onTouchStart(e)}
       onTouchEnd={(e) => onTouchEndd(e, color)}
       onContextMenu={(e) => onContextMenu(e, color)}
       onMouseDown={(e) => onMouseDown(e)}
