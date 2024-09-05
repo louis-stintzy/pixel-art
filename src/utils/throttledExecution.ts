@@ -1,96 +1,59 @@
-// note: throttle est une fonction qui permet de limiter le nombre d'appels à une fonction
-const throttledExecution = (
-  throttleLimit: number,
-  cbShouldNotRun: boolean,
+type ThrottledExecutionOptions = {
+  throttleLimit?: number;
+  cbShouldNotRun: boolean;
   cb: {
-    forMouseEvent: (args: any[], e?: MouseEvent) => void | undefined;
-    forTouchEvent: (args: any[], e?: TouchEvent) => void | undefined;
-  },
-  args: {
-    forMouseEvent: {
-      args: any[];
-      event: MouseEvent | undefined;
+    function: {
+      forMouseEvent?: (e: React.MouseEvent, args?: any[]) => void;
+      forTouchEvent?: (e: React.TouchEvent, args?: any[]) => void;
+      forNoEvent?: (args?: any[]) => void;
     };
-    forTouchEvent: {
-      args: any[];
-      event: TouchEvent | undefined;
+    args: {
+      array?: any[];
+      mouseEvent?: React.MouseEvent;
+      touchEvent?: React.TouchEvent;
     };
-  }
-) => {
-  if (cbShouldNotRun || (!cb.forMouseEvent && !cb.forTouchEvent)) return;
+  };
+};
+
+// note: throttledExecution est une fonction qui permet de limiter le nombre d'appels à une fonction
+const throttledExecution = ({
+  throttleLimit = 32,
+  cbShouldNotRun,
+  cb,
+}: ThrottledExecutionOptions) => {
+  if (cbShouldNotRun || !cb.function) return; // Si la fonction ne doit pas être exécutée ou si la fonction n'est pas définie, ne rien faire
 
   let lastRan: number | undefined; // stocke l'heure à laquelle la fonction a été exécutée pour la dernière fois (en millisecondes)
   let lastFunc: ReturnType<typeof setTimeout>; // stocke le setTimeout
 
+  const { forMouseEvent, forTouchEvent, forNoEvent } = cb.function; // Destructuration de la fonction
+  const { mouseEvent, touchEvent, array } = cb.args; // Destructuration des arguments
+
   const executeCallback = () => {
-    if (cb.forMouseEvent && args.forMouseEvent.event)
-      cb.forMouseEvent(args.forMouseEvent.args, args.forMouseEvent.event);
-    if (cb.forMouseEvent && !args.forMouseEvent.event)
-      cb.forMouseEvent(args.forMouseEvent.args);
-    if (cb.forTouchEvent && args.forTouchEvent.event)
-      cb.forTouchEvent(args.forTouchEvent.args, args.forTouchEvent.event);
-    if (cb.forTouchEvent && !args.forTouchEvent.event)
-      cb.forTouchEvent(args.forTouchEvent.args);
+    if (forMouseEvent && mouseEvent) {
+      forMouseEvent(mouseEvent, array);
+    } else if (forTouchEvent && touchEvent) {
+      forTouchEvent(touchEvent, array);
+    } else if (forNoEvent) {
+      forNoEvent(array);
+    }
   };
 
   requestAnimationFrame(() => {
+    // requestAnimationFrame: permet de synchroniser l'exécution d'une fonction avec le rafraîchissement de l'écran
     if (!lastRan || Date.now() - lastRan >= throttleLimit) {
-      lastRan = Date.now();
+      // Si la fonction n'a jamais été exécutée ou si le délai entre deux exécutions est supérieur au délai limite
+      lastRan = Date.now(); // Enregistre le moment où la fonction a été exécutée
       executeCallback();
     } else {
-      if (lastFunc) clearTimeout(lastFunc);
+      // Sinon (si le délai entre deux exécutions est inférieur au délai limite)
+      if (lastFunc) clearTimeout(lastFunc); // Efface le dernier setTimeout
       lastFunc = setTimeout(() => {
         lastRan = Date.now();
         executeCallback();
-      }, throttleLimit - (Date.now() - lastRan));
+      }, throttleLimit - (Date.now() - lastRan)); // Définit un nouveau timer pour exécuter la fonction après un certain délai
     }
   });
-
-  // let lastRan: number | undefined;
-  // let lastFunc: ReturnType<typeof setTimeout> | undefined;
-
-  // return function (this: any, ...args: [e: MouseEvent] | [e: TouchEvent]) {
-  //   if (!lastRan || Date.now() - lastRan >= throttleLimit) {
-  //     lastRan = Date.now();
-  //     callback.apply(this, args);
-  //   } else {
-  //     if (lastFunc) clearTimeout(lastFunc);
-  //     lastFunc = setTimeout(() => {
-  //       lastRan = Date.now();
-  //       callback.apply(this, args);
-  //     }, throttleLimit - (Date.now() - lastRan));
-  //   }
-  // };
 };
-
-// const throttle = (
-//   func: ((e: MouseEvent) => void) | ((e: TouchEvent) => void),
-//   limit: number
-// ) => {
-//   let lastFunc: ReturnType<typeof setTimeout>; // stocke le setTimeout
-//   let lastRan: number | undefined; // stocke l'heure à laquelle la fonction a été exécutée pour la dernière fois (en millisecondes)
-
-//   return function (this: any, ...args: [e: MouseEvent] | [e: TouchEvent]) {
-//     // 'this: any' : préserve le contexte de la fonction, '...args: any[]' : capture tous les arguments passés à la fonction throttle et les passe à la fonction 'func'
-//     if (!lastRan) {
-//       // Si la fonction n'a jamais été exécutée
-//       func.apply(this, args); // Exécute la fonction 'func' avec les arguments 'args'
-//       lastRan = Date.now(); // Enregistre le moment où la fonction a été exécutée
-//     } else {
-//       // Si la fonction a déjà été exécutée
-//       clearTimeout(lastFunc); // Efface le dernier setTimeout
-//       lastFunc = setTimeout(() => {
-//         // Définit un nouveau timer pour exécuter la fonction après un certain délai
-//         if (lastRan) {
-//           if (Date.now() - lastRan >= limit) {
-//             // Vérifie si le temps écoulé depuis la dernière exécution est supérieur ou égal à la limite définie
-//             func.apply(this, args); // Si oui : exécute la fonction,
-//             lastRan = Date.now(); // et enregistre le moment où la fonction a été exécutée
-//           }
-//         }
-//       }, limit - (Date.now() - lastRan)); // Calcule le temps restant avant que la fonction puisse être exécutée à nouveau
-//     }
-//   };
-// };
 
 export default throttledExecution;

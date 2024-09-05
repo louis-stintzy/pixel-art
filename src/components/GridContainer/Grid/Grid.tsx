@@ -5,23 +5,13 @@ import { coloring } from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import gridColor from '../../../constants/gridColor';
+import throttledExecution from '../../../utils/throttledExecution';
 
 function Grid() {
-  const lastRanMouseRef = useRef<number | undefined>(undefined);
-  const lastFuncMouseRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
-  const lastRanTouchRef = useRef<number | undefined>(undefined);
-  const lastFuncTouchRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
-
   const gridRef = useRef<HTMLDivElement | null>(null);
   const gridSize = useStore((state) => state.gridSize);
   const isReadyToDraw = useStore((state) => state.isReadyToDraw);
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
-
-  const PIXEL_COLOR_THROTTLE = 32;
 
   const applyToolOnPixel = (pixel: HTMLDivElement) => {
     const { isBigTool, isEraser } = useStore.getState();
@@ -34,24 +24,19 @@ function Grid() {
 
   const handleMouseMove = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
-      if (!isColoring) return;
-      requestAnimationFrame(() => {
-        if (
-          !lastRanMouseRef.current ||
-          Date.now() - lastRanMouseRef.current >= PIXEL_COLOR_THROTTLE
-        ) {
-          lastRanMouseRef.current = Date.now();
-          const pixel = event.target as HTMLDivElement;
-          if (pixel) applyToolOnPixel(pixel);
-        } else {
-          if (lastFuncMouseRef.current !== undefined)
-            clearTimeout(lastFuncMouseRef.current);
-          lastFuncMouseRef.current = setTimeout(() => {
-            lastRanMouseRef.current = Date.now();
-            const pixel = event.target as HTMLDivElement;
-            if (pixel) applyToolOnPixel(pixel);
-          }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanMouseRef.current));
-        }
+      throttledExecution({
+        cbShouldNotRun: !isColoring,
+        cb: {
+          function: {
+            forMouseEvent: (e: React.MouseEvent) => {
+              const pixel = e.target as HTMLDivElement;
+              if (pixel) applyToolOnPixel(pixel);
+            },
+          },
+          args: {
+            mouseEvent: event,
+          },
+        },
       });
     },
     [isColoring]
@@ -59,30 +44,22 @@ function Grid() {
 
   const handleTouchMove = useCallback(
     (event: React.TouchEvent<HTMLDivElement>) => {
-      if (!isColoring) return;
-      requestAnimationFrame(() => {
-        if (
-          !lastRanTouchRef.current ||
-          Date.now() - lastRanTouchRef.current >= PIXEL_COLOR_THROTTLE
-        ) {
-          lastRanTouchRef.current = Date.now();
-          const pixel = document.elementFromPoint(
-            event.touches[0].clientX,
-            event.touches[0].clientY
-          ) as HTMLDivElement;
-          if (pixel) applyToolOnPixel(pixel);
-        } else {
-          if (lastFuncTouchRef.current !== undefined)
-            clearTimeout(lastFuncTouchRef.current);
-          lastFuncTouchRef.current = setTimeout(() => {
-            lastRanTouchRef.current = Date.now();
-            const pixel = document.elementFromPoint(
-              event.touches[0].clientX,
-              event.touches[0].clientY
-            ) as HTMLDivElement;
-            if (pixel) applyToolOnPixel(pixel);
-          }, PIXEL_COLOR_THROTTLE - (Date.now() - lastRanTouchRef.current));
-        }
+      throttledExecution({
+        cbShouldNotRun: !isColoring,
+        cb: {
+          function: {
+            forTouchEvent: (e: React.TouchEvent) => {
+              const pixel = document.elementFromPoint(
+                e.touches[0].clientX,
+                e.touches[0].clientY
+              ) as HTMLDivElement;
+              if (pixel) applyToolOnPixel(pixel);
+            },
+          },
+          args: {
+            touchEvent: event,
+          },
+        },
       });
     },
     [isColoring]
