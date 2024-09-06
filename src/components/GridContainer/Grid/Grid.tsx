@@ -22,48 +22,100 @@ function Grid() {
     coloring(pixelIds, color);
   };
 
-  const handleMouseMove = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
+  const cbShouldNotRun = !isColoring;
+
+  const executeMouseLogic = useCallback((e: React.MouseEvent | MouseEvent) => {
+    const pixel = e.target as HTMLDivElement;
+    if (pixel) applyToolOnPixel(pixel);
+  }, []);
+
+  const executeTouchLogic = useCallback((e: React.TouchEvent | TouchEvent) => {
+    const pixel = document.elementFromPoint(
+      e.touches[0].clientX,
+      e.touches[0].clientY
+    ) as HTMLDivElement;
+    if (pixel) applyToolOnPixel(pixel);
+  }, []);
+
+  const handleMouseTouchMove = useCallback(
+    (
+      event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+    ) => {
       throttledExecution({
-        cbShouldNotRun: !isColoring,
+        cbShouldNotRun,
         cb: {
           function: {
-            forMouseEvent: (e: React.MouseEvent) => {
-              const pixel = e.target as HTMLDivElement;
-              if (pixel) applyToolOnPixel(pixel);
-            },
+            forMouseEvent:
+              event.type === 'mousemove'
+                ? (e: React.MouseEvent | MouseEvent) => {
+                    executeMouseLogic(e);
+                  }
+                : undefined,
+            forTouchEvent:
+              event.type === 'touchmove'
+                ? (e: React.TouchEvent | TouchEvent) => {
+                    executeTouchLogic(e);
+                  }
+                : undefined,
           },
           args: {
-            mouseEvent: event,
+            mouseEvent:
+              event.type === 'mousemove'
+                ? (event as React.MouseEvent | MouseEvent)
+                : undefined,
+            touchEvent:
+              event.type === 'touchmove'
+                ? (event as React.TouchEvent | TouchEvent)
+                : undefined,
           },
         },
       });
     },
-    [isColoring]
+    [cbShouldNotRun, executeMouseLogic, executeTouchLogic]
   );
 
-  const handleTouchMove = useCallback(
-    (event: React.TouchEvent<HTMLDivElement>) => {
-      throttledExecution({
-        cbShouldNotRun: !isColoring,
-        cb: {
-          function: {
-            forTouchEvent: (e: React.TouchEvent) => {
-              const pixel = document.elementFromPoint(
-                e.touches[0].clientX,
-                e.touches[0].clientY
-              ) as HTMLDivElement;
-              if (pixel) applyToolOnPixel(pixel);
-            },
-          },
-          args: {
-            touchEvent: event,
-          },
-        },
-      });
-    },
-    [isColoring]
-  );
+  // const handleMouseMove = useCallback(
+  //   (event: React.MouseEvent<HTMLDivElement>) => {
+  //     throttledExecution({
+  //       cbShouldNotRun: !isColoring,
+  //       cb: {
+  //         function: {
+  //           forMouseEvent: (e: React.MouseEvent | MouseEvent) => {
+  //             const pixel = e.target as HTMLDivElement;
+  //             if (pixel) applyToolOnPixel(pixel);
+  //           },
+  //         },
+  //         args: {
+  //           mouseEvent: event,
+  //         },
+  //       },
+  //     });
+  //   },
+  //   [isColoring]
+  // );
+
+  // const handleTouchMove = useCallback(
+  //   (event: React.TouchEvent<HTMLDivElement>) => {
+  //     throttledExecution({
+  //       cbShouldNotRun: !isColoring,
+  //       cb: {
+  //         function: {
+  //           forTouchEvent: (e: React.TouchEvent | TouchEvent) => {
+  //             const pixel = document.elementFromPoint(
+  //               e.touches[0].clientX,
+  //               e.touches[0].clientY
+  //             ) as HTMLDivElement;
+  //             if (pixel) applyToolOnPixel(pixel);
+  //           },
+  //         },
+  //         args: {
+  //           touchEvent: event,
+  //         },
+  //       },
+  //     });
+  //   },
+  //   [isColoring]
+  // );
 
   const gridStyle: React.CSSProperties = {
     display: 'grid',
@@ -80,8 +132,8 @@ function Grid() {
       tabIndex={0} // role et tabIndex pour pouvoir utiliser onMouseDown et onTouchStart
       ref={gridRef}
       style={gridStyle}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
+      onMouseMove={handleMouseTouchMove}
+      onTouchMove={handleMouseTouchMove}
     >
       {Array.from({ length: gridSize.width * gridSize.height }).map(
         (_, index) => {

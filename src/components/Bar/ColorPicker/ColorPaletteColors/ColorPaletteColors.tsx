@@ -4,6 +4,7 @@ import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
 import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 import useStore from '../../../../store/store';
+import throttledExecution from '../../../../utils/throttledExecution';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
@@ -236,6 +237,78 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     // Réactiver les événements du pointeur après avoir terminé le drag-and-drop
     draggedColorButton.button.style.pointerEvents = 'auto';
   };
+  // --------------------------------- NEW ---------------------------------
+
+  const cbShouldNotRun = !isDragging;
+
+  const executeMouseLogic = useCallback(
+    (e: React.MouseEvent | MouseEvent) => {
+      if (draggedColorButton) {
+        setDraggedColorButton({
+          button: draggedColorButton.button,
+          translateX: position.x,
+          translateY: position.y,
+        });
+        // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
+        // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
+        draggedColorButton.button.style.pointerEvents = 'none';
+      }
+    },
+    [draggedColorButton, position.x, position.y]
+  );
+
+  const executeTouchLogic = useCallback(
+    (e: React.TouchEvent | TouchEvent) => {
+      if (draggedColorButton) {
+        setDraggedColorButton({
+          button: draggedColorButton.button,
+          translateX: position.x,
+          translateY: position.y,
+        });
+        // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
+        // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
+        draggedColorButton.button.style.pointerEvents = 'none';
+      }
+    },
+    [draggedColorButton, position.x, position.y]
+  );
+
+  const handleMouseTouchMove = useCallback(
+    (
+      event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+    ) => {
+      throttledExecution({
+        cbShouldNotRun,
+        cb: {
+          function: {
+            forMouseEvent:
+              event.type === 'mousemove'
+                ? (e: React.MouseEvent | MouseEvent) => {
+                    executeMouseLogic(e);
+                  }
+                : undefined,
+            forTouchEvent:
+              event.type === 'touchmove'
+                ? (e: React.TouchEvent | TouchEvent) => {
+                    executeTouchLogic(e);
+                  }
+                : undefined,
+          },
+          args: {
+            mouseEvent:
+              event.type === 'mousemove'
+                ? (event as React.MouseEvent | MouseEvent)
+                : undefined,
+            touchEvent:
+              event.type === 'touchmove'
+                ? (event as React.TouchEvent | TouchEvent)
+                : undefined,
+          },
+        },
+      });
+    },
+    [cbShouldNotRun, executeMouseLogic, executeTouchLogic]
+  );
 
   // --------------------------------- RETURN ---------------------------------
 
@@ -249,8 +322,8 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
       role="row"
       tabIndex={0}
       style={{ display: 'flex', justifyContent: 'flex-start' }}
-      onMouseMove={handleMouseDragInProgress}
-      onTouchMove={handleTouchDragInProgress}
+      onMouseMove={handleMouseTouchMove}
+      onTouchMove={handleMouseTouchMove}
     >
       {palette.colors.map((color, index) => (
         <ColorButton
