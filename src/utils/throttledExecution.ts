@@ -56,4 +56,6 @@ const throttledExecution = ({
   });
 };
 
+// todo: nettoyage des setTimeout
+
 export default throttledExecution;

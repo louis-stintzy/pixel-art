@@ -12,15 +12,6 @@ interface ColorPaletteColorsProps {
 
 function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   const favoriteColors = useStore((state) => state.favoriteColors);
-  const lastRanMouseRef = useRef<number | undefined>(undefined);
-  const lastFuncMouseRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
-  const lastRanTouchRef = useRef<number | undefined>(undefined);
-  const lastFuncTouchRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
-  const COLOR_BUTTON_THROTTLE = 32;
 
   const paletteRef = useRef<HTMLDivElement | null>(null);
   const { isDragging, position, resetPosition } = useDragAndDrop(paletteRef);
@@ -133,78 +124,6 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
       });
   };
 
-  const handleMouseDragInProgress = useCallback(() => {
-    if (!isDragging) return;
-    if (draggedColorButton) {
-      requestAnimationFrame(() => {
-        if (
-          !lastRanMouseRef.current ||
-          Date.now() - lastRanMouseRef.current >= COLOR_BUTTON_THROTTLE
-        ) {
-          lastRanMouseRef.current = Date.now();
-          setDraggedColorButton({
-            button: draggedColorButton.button,
-            translateX: position.x,
-            translateY: position.y,
-          });
-          // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
-          // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
-          draggedColorButton.button.style.pointerEvents = 'none';
-        } else {
-          if (lastFuncMouseRef.current !== undefined)
-            clearTimeout(lastFuncMouseRef.current);
-          lastFuncMouseRef.current = setTimeout(() => {
-            lastRanMouseRef.current = Date.now();
-            setDraggedColorButton({
-              button: draggedColorButton.button,
-              translateX: position.x,
-              translateY: position.y,
-            });
-            // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
-            // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
-            draggedColorButton.button.style.pointerEvents = 'none';
-          }, COLOR_BUTTON_THROTTLE - (Date.now() - lastRanMouseRef.current));
-        }
-      });
-    }
-  }, [isDragging, position.x, position.y, draggedColorButton]);
-
-  const handleTouchDragInProgress = useCallback(() => {
-    if (!isDragging) return;
-    if (draggedColorButton) {
-      requestAnimationFrame(() => {
-        if (
-          !lastRanTouchRef.current ||
-          Date.now() - lastRanTouchRef.current >= COLOR_BUTTON_THROTTLE
-        ) {
-          lastRanTouchRef.current = Date.now();
-          setDraggedColorButton({
-            button: draggedColorButton.button,
-            translateX: position.x,
-            translateY: position.y,
-          });
-          // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
-          // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
-          draggedColorButton.button.style.pointerEvents = 'none';
-        } else {
-          if (lastFuncTouchRef.current !== undefined)
-            clearTimeout(lastFuncTouchRef.current);
-          lastFuncTouchRef.current = setTimeout(() => {
-            lastRanTouchRef.current = Date.now();
-            setDraggedColorButton({
-              button: draggedColorButton.button,
-              translateX: position.x,
-              translateY: position.y,
-            });
-            // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
-            // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
-            draggedColorButton.button.style.pointerEvents = 'none';
-          }, COLOR_BUTTON_THROTTLE - (Date.now() - lastRanTouchRef.current));
-        }
-      });
-    }
-  }, [isDragging, position.x, position.y, draggedColorButton]);
-
   const handleMouseDragStop = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { setFavoriteColors } = useStore.getState();
     const buttonToBeInterchanged = document.elementFromPoint(
@@ -239,6 +158,7 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   };
   // --------------------------------- NEW ---------------------------------
 
+  const throttleLimit = 32;
   const cbShouldNotRun = !isDragging;
 
   const executeMouseLogic = useCallback(
@@ -278,6 +198,7 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
       event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
     ) => {
       throttledExecution({
+        throttleLimit,
         cbShouldNotRun,
         cb: {
           function: {

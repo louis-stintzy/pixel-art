@@ -13,17 +13,8 @@ function useDragAndDrop(
 ) {
   const [isDragging, setIsDragging] = useState(false); // État pour savoir si l'utilisateur fait glisser la grille
   const lastMousePosition = useRef({ x: 0, y: 0 }); // Référence pour stocker la dernière position de la souris
-  const mouseDownRef = useRef(false); // Référence pour savoir si le bouton de la souris est enfoncé
-
-  const lastRanMouseRef = useRef<number | undefined>(undefined);
-  const lastFuncMouseRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
-  const lastRanTouchRef = useRef<number | undefined>(undefined);
-  const lastFuncTouchRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
-
+  // const mouseDownRef = useRef(false); // Référence pour savoir si le bouton de la souris est enfoncé
+  const [isMouseDown, setIsMouseDown] = useState(false); // État pour savoir si le bouton de la souris est enfoncé
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 }); // Position de la grille
   const MIN_DRAG_DISTANCE = 7; // Distance minimale de glissement pour commencer à faire glisser la grille
 
@@ -35,7 +26,8 @@ function useDragAndDrop(
   const handleMouseDown = useCallback(
     (e: MouseEvent) => {
       if (!isActivated) return;
-      mouseDownRef.current = true;
+      // mouseDownRef.current = true;
+      setIsMouseDown(true);
       lastMousePosition.current = { x: e.clientX, y: e.clientY };
     },
     [isActivated]
@@ -44,7 +36,8 @@ function useDragAndDrop(
   const handleTouchStart = useCallback(
     (e: TouchEvent) => {
       if (!isActivated) return;
-      mouseDownRef.current = true;
+      // mouseDownRef.current = true;
+      setIsMouseDown(true);
       const touch = e.touches[0];
       lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
     },
@@ -103,59 +96,13 @@ function useDragAndDrop(
     [isDragging]
   );
 
-  // const handleMouseMove = useCallback(
-  //   (e: MouseEvent) => {
-  //     // Si le bouton de la souris n'est pas enfoncé, ne rien faire
-  //     if (!mouseDownRef.current) return;
-
-  //     // requestAnimationFrame: permet de synchroniser l'exécution d'une fonction avec le rafraîchissement de l'écran
-  //     requestAnimationFrame(() => {
-  //       // Logique de throttling : voir src/utils/throttle.ts
-  //       // Si la fonction n'a jamais été exécutée ou si le délai entre deux exécutions est supérieur au délai limite,
-  //       if (
-  //         !lastRanMouseRef.current ||
-  //         Date.now() - lastRanMouseRef.current >= throttleLimit
-  //       ) {
-  //         lastRanMouseRef.current = Date.now();
-  //         executeMouseLogic(e);
-  //       } else {
-  //         // Sinon (si le délai entre deux exécutions est inférieur au délai limite),
-  //         // Efface le dernier setTimeout
-  //         if (lastFuncMouseRef.current !== undefined)
-  //           clearTimeout(lastFuncMouseRef.current);
-  //         // Définit un nouveau timer pour exécuter la fonction après un certain délai
-  //         lastFuncMouseRef.current = setTimeout(() => {
-  //           lastRanMouseRef.current = Date.now();
-  //           executeMouseLogic(e);
-  //         }, throttleLimit - (Date.now() - lastRanMouseRef.current));
-  //         // Fin de la logique de throttling
-  //       }
-  //     });
-  //   },
-  //   [executeMouseLogic, throttleLimit]
-  // );
-
-  // const handleTouchMove = useCallback(
-  //   (event: TouchEvent) => {
-  //     throttledExecution({
-  //       cbShouldNotRun: !mouseDownRef.current,
-  //       cb: {
-  //         function: {
-  //           forTouchEvent: (e: React.TouchEvent | TouchEvent) => {
-  //             executeTouchLogic(e);
-  //           },
-  //         },
-  //         args: { touchEvent: event },
-  //       },
-  //     });
-  //   },
-  //   [executeTouchLogic]
-  // );
+  const cbShouldNotRun = !isMouseDown;
 
   const handleMouseTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
       throttledExecution({
-        cbShouldNotRun: !mouseDownRef.current,
+        throttleLimit,
+        cbShouldNotRun,
         cb: {
           function: {
             forMouseEvent:
@@ -184,32 +131,8 @@ function useDragAndDrop(
         },
       });
     },
-    [executeMouseLogic, executeTouchLogic]
+    [cbShouldNotRun, executeMouseLogic, executeTouchLogic, throttleLimit]
   );
-
-  // const handleTouchMove = useCallback(
-  //   (e: TouchEvent) => {
-  //     if (!mouseDownRef.current) return;
-
-  //     requestAnimationFrame(() => {
-  //       if (
-  //         !lastRanTouchRef.current ||
-  //         Date.now() - lastRanTouchRef.current >= throttleLimit
-  //       ) {
-  //         lastRanTouchRef.current = Date.now();
-  //         executeTouchLogic(e);
-  //       } else {
-  //         if (lastFuncTouchRef.current !== undefined)
-  //           clearTimeout(lastFuncTouchRef.current);
-  //         lastFuncTouchRef.current = setTimeout(() => {
-  //           lastRanTouchRef.current = Date.now();
-  //           executeTouchLogic(e);
-  //         }, throttleLimit - (Date.now() - lastRanTouchRef.current));
-  //       }
-  //     });
-  //   },
-  //   [executeTouchLogic, throttleLimit]
-  // );
 
   // L'utilisateur relâche le bouton de la souris ou quitte la zone de la grille :
   // met à jour l'état de isDragging et de userDragsGrid après un court délai
@@ -221,7 +144,8 @@ function useDragAndDrop(
         setIsDragging(false);
       }, 50);
     }
-    mouseDownRef.current = false;
+    // mouseDownRef.current = false;
+    setIsMouseDown(false);
   }, [isDragging]);
 
   const handleTouchEnd = useCallback(() => {
@@ -230,7 +154,8 @@ function useDragAndDrop(
         setIsDragging(false);
       }, 50);
     }
-    mouseDownRef.current = false;
+    // mouseDownRef.current = false;
+    setIsMouseDown(false);
   }, [isDragging]);
 
   // Les fonctions déclarées à l'intérieur d'un composant React sont recréées à chaque rendu.

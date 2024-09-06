@@ -22,6 +22,7 @@ function Grid() {
     coloring(pixelIds, color);
   };
 
+  const throttleLimit = 32;
   const cbShouldNotRun = !isColoring;
 
   const executeMouseLogic = useCallback((e: React.MouseEvent | MouseEvent) => {
@@ -42,6 +43,7 @@ function Grid() {
       event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
     ) => {
       throttledExecution({
+        throttleLimit,
         cbShouldNotRun,
         cb: {
           function: {
@@ -71,51 +73,8 @@ function Grid() {
         },
       });
     },
-    [cbShouldNotRun, executeMouseLogic, executeTouchLogic]
+    [cbShouldNotRun, executeMouseLogic, executeTouchLogic, throttleLimit]
   );
-
-  // const handleMouseMove = useCallback(
-  //   (event: React.MouseEvent<HTMLDivElement>) => {
-  //     throttledExecution({
-  //       cbShouldNotRun: !isColoring,
-  //       cb: {
-  //         function: {
-  //           forMouseEvent: (e: React.MouseEvent | MouseEvent) => {
-  //             const pixel = e.target as HTMLDivElement;
-  //             if (pixel) applyToolOnPixel(pixel);
-  //           },
-  //         },
-  //         args: {
-  //           mouseEvent: event,
-  //         },
-  //       },
-  //     });
-  //   },
-  //   [isColoring]
-  // );
-
-  // const handleTouchMove = useCallback(
-  //   (event: React.TouchEvent<HTMLDivElement>) => {
-  //     throttledExecution({
-  //       cbShouldNotRun: !isColoring,
-  //       cb: {
-  //         function: {
-  //           forTouchEvent: (e: React.TouchEvent | TouchEvent) => {
-  //             const pixel = document.elementFromPoint(
-  //               e.touches[0].clientX,
-  //               e.touches[0].clientY
-  //             ) as HTMLDivElement;
-  //             if (pixel) applyToolOnPixel(pixel);
-  //           },
-  //         },
-  //         args: {
-  //           touchEvent: event,
-  //         },
-  //       },
-  //     });
-  //   },
-  //   [isColoring]
-  // );
 
   const gridStyle: React.CSSProperties = {
     display: 'grid',
