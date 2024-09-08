@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import throttledExecution from '../utils/throttledExecution';
+import useThrottledExecution from './useThrottledExecution';
 
 interface Position {
   x: number;
@@ -98,6 +98,8 @@ function useDragAndDrop(
 
   const cbShouldNotRun = !isMouseDown;
 
+  const { throttledExecution } = useThrottledExecution();
+
   const handleMouseTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
       throttledExecution({
@@ -131,7 +133,13 @@ function useDragAndDrop(
         },
       });
     },
-    [cbShouldNotRun, executeMouseLogic, executeTouchLogic, throttleLimit]
+    [
+      cbShouldNotRun,
+      executeMouseLogic,
+      executeTouchLogic,
+      throttleLimit,
+      throttledExecution,
+    ]
   );
 
   // L'utilisateur relâche le bouton de la souris ou quitte la zone de la grille :

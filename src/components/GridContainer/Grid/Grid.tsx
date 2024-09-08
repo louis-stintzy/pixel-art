@@ -1,11 +1,12 @@
 import { useCallback, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDrop';
+import useThrottledExecution from '../../../hooks/useThrottledExecution';
+import useActionFollowingMove from '../../../hooks/useActionFollowingMove';
 import { coloring } from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import gridColor from '../../../constants/gridColor';
-import throttledExecution from '../../../utils/throttledExecution';
 
 function Grid() {
   const gridRef = useRef<HTMLDivElement | null>(null);
@@ -37,6 +38,19 @@ function Grid() {
     ) as HTMLDivElement;
     if (pixel) applyToolOnPixel(pixel);
   }, []);
+
+  const handleDragProgress = (
+    event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) =>
+    useActionFollowingMove(
+      event,
+      throttleLimit,
+      cbShouldNotRun,
+      executeMouseLogic,
+      executeTouchLogic
+    );
+
+  const { throttledExecution } = useThrottledExecution();
 
   const handleMouseTouchMove = useCallback(
     (
@@ -73,7 +87,7 @@ function Grid() {
         },
       });
     },
-    [cbShouldNotRun, executeMouseLogic, executeTouchLogic, throttleLimit]
+    [cbShouldNotRun, executeMouseLogic, executeTouchLogic, throttledExecution]
   );
 
   const gridStyle: React.CSSProperties = {
@@ -91,8 +105,10 @@ function Grid() {
       tabIndex={0} // role et tabIndex pour pouvoir utiliser onMouseDown et onTouchStart
       ref={gridRef}
       style={gridStyle}
-      onMouseMove={handleMouseTouchMove}
-      onTouchMove={handleMouseTouchMove}
+      // onMouseMove={handleMouseTouchMove}
+      // onTouchMove={handleMouseTouchMove}
+      onMouseMove={handleDragProgress}
+      onTouchMove={handleDragProgress}
     >
       {Array.from({ length: gridSize.width * gridSize.height }).map(
         (_, index) => {
