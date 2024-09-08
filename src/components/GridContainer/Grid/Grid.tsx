@@ -23,6 +23,9 @@ function Grid() {
     coloring(pixelIds, color);
   };
 
+  const token = useRef<string>(
+    `Grid-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+  );
   const throttleLimit = 32;
   const cbShouldNotRun = !isColoring;
 
@@ -39,17 +42,13 @@ function Grid() {
     if (pixel) applyToolOnPixel(pixel);
   }, []);
 
-  const handleDragProgress = (
-    event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-  ) =>
-    useActionFollowingMove(
-      event,
-      throttleLimit,
-      cbShouldNotRun,
-      executeMouseLogic,
-      executeTouchLogic
-    );
-
+  const handleDragProgress = useActionFollowingMove(
+    token.current,
+    throttleLimit,
+    cbShouldNotRun,
+    executeMouseLogic,
+    executeTouchLogic
+  );
   const { throttledExecution } = useThrottledExecution();
 
   const handleMouseTouchMove = useCallback(
@@ -57,6 +56,7 @@ function Grid() {
       event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
     ) => {
       throttledExecution({
+        token: token.current,
         throttleLimit,
         cbShouldNotRun,
         cb: {

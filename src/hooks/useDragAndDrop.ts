@@ -96,6 +96,9 @@ function useDragAndDrop(
     [isDragging]
   );
 
+  const token = useRef<string>(
+    `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+  );
   const cbShouldNotRun = !isMouseDown;
 
   const { throttledExecution } = useThrottledExecution();
@@ -103,6 +106,7 @@ function useDragAndDrop(
   const handleMouseTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
       throttledExecution({
+        token: token.current,
         throttleLimit,
         cbShouldNotRun,
         cb: {
