@@ -26,10 +26,9 @@ function useActionFollowingMove(
   executeMouseLogic: (e: React.MouseEvent | MouseEvent) => void,
   executeTouchLogic: (e: React.TouchEvent | TouchEvent) => void
 ) {
-  const { throttledExecution, clearThrottledExecution } =
-    useThrottledExecution();
+  const { throttledExecution } = useThrottledExecution();
 
-  console.log('useActionFollowingMove');
+  // console.log('useActionFollowingMove');
   // defineFunction(executeMouseLogic);
 
   // useEffect(() => {

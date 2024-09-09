@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useThrottledExecution from './useThrottledExecution';
+import useActionFollowingMove from './useActionFollowingMove';
 
 interface Position {
   x: number;
@@ -9,7 +10,7 @@ interface Position {
 function useDragAndDrop(
   ref: React.RefObject<HTMLElement>,
   isActivated = true,
-  throttleLimit = 32
+  throttleLimit = 1000
 ) {
   const [isDragging, setIsDragging] = useState(false); // État pour savoir si l'utilisateur fait glisser la grille
   const lastMousePosition = useRef({ x: 0, y: 0 }); // Référence pour stocker la dernière position de la souris
@@ -47,6 +48,11 @@ function useDragAndDrop(
   // L'utilisateur déplace la souris :
   // - si pas encore de drag : vérifie si la distance de glissement est suffisante pour commencer à faire glisser la grille
   // - si drag en cours : met à jour la position de la grille en fonction du mouvement de la souris
+
+  const token = useRef<string>(
+    `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+  );
+  const cbShouldNotRun = !isMouseDown;
 
   const updatePosition = (deltaX: number, deltaY: number) => {
     setPosition((prev) => ({
@@ -96,10 +102,13 @@ function useDragAndDrop(
     [isDragging]
   );
 
-  const token = useRef<string>(
-    `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
-  );
-  const cbShouldNotRun = !isMouseDown;
+  // const handleDragProgress = useActionFollowingMove(
+  //   token.current,
+  //   throttleLimit,
+  //   cbShouldNotRun,
+  //   executeMouseLogic,
+  //   executeTouchLogic
+  // );
 
   const { throttledExecution } = useThrottledExecution();
 
