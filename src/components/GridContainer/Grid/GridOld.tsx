@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import useStore from '../../../store/store';
-import useDragAndDrop from '../../../hooks/useDragAndDrop';
+import useDragAndDrop from '../../../hooks/useDragAndDropOld';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import gridColor from '../../../constants/gridColor';
@@ -21,10 +21,10 @@ function Grid() {
   const isReadyToDraw = useStore((state) => state.isReadyToDraw);
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
 
-  const PIXEL_COLOR_THROTTLE = 1000;
+  const PIXEL_COLOR_THROTTLE = 32;
 
   const applyToolOnPixel = (pixel: HTMLDivElement) => {
-    console.log('applyToolOnPixel, date.now() : ', Date.now());
+    console.log('-OLD-applyToolOnPixel, date.now() : ', Date.now());
     const { isBigTool, isEraser } = useStore.getState();
     const pixelIds = isBigTool
       ? [pixel.id, ...getNeighboringPixels(pixel.id)]

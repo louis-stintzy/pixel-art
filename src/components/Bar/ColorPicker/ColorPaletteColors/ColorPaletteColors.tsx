@@ -161,7 +161,7 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
-  const throttleLimit = 1000;
+  const throttleLimit = 32;
   const cbShouldNotRun = !isDragging;
 
   const executeLogic = useCallback(() => {
@@ -179,7 +179,7 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
 
   const executeMouseLogic = useCallback(
     (e: React.MouseEvent | MouseEvent) => {
-      console.log('executeMouseLogic dans CPC, date.now() : ', Date.now());
+      // console.log('executeMouseLogic dans CPC, date.now() : ', Date.now());
       executeLogic();
     },
     [executeLogic]

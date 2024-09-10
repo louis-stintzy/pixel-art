@@ -27,14 +27,14 @@ function Grid() {
     undefined
   );
 
-  const throttleLimit = 1000;
+  const throttleLimit = 32;
   const cbShouldNotRun = !isColoring;
 
   const executeMouseLogic = useCallback((e: React.MouseEvent | MouseEvent) => {
-    console.log(
-      'executeMouseLogic dans Grid pour coloriage, date.now() : ',
-      Date.now()
-    );
+    // console.log(
+    //   'executeMouseLogic dans Grid pour coloriage, date.now() : ',
+    //   Date.now()
+    // );
     const pixel = e.target as HTMLDivElement;
     if (pixel) applyToolOnPixel(pixel);
   }, []);
