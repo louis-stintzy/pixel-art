@@ -6,15 +6,13 @@ function useActionFollowingMove(
   timeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | undefined>,
   throttleLimit: number,
   cbShouldNotRun: boolean,
-  executeMouseLogic: (e: React.MouseEvent | MouseEvent) => void,
-  executeTouchLogic: (e: React.TouchEvent | TouchEvent) => void
+  executeMouseLogic: (e: MouseEvent) => void,
+  executeTouchLogic: (e: TouchEvent) => void
 ) {
   const { throttledExecution } = useThrottledExecution();
 
   return useCallback(
-    (
-      event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-    ) => {
+    (event: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
       throttledExecution({
         lastRanRef,
         timeoutRef,
@@ -24,26 +22,32 @@ function useActionFollowingMove(
           function: {
             forMouseEvent:
               event.type === 'mousemove'
-                ? (e: React.MouseEvent | MouseEvent) => {
+                ? (e: MouseEvent) => {
                     executeMouseLogic(e);
                   }
                 : undefined,
             forTouchEvent:
               event.type === 'touchmove'
-                ? (e: React.TouchEvent | TouchEvent) => {
+                ? (e: TouchEvent) => {
                     executeTouchLogic(e);
                   }
                 : undefined,
           },
+          // args: {
+          //   mouseEvent:
+          //     event.type === 'mousemove'
+          //       ? (event as React.MouseEvent | MouseEvent)
+          //       : undefined,
+          //   touchEvent:
+          //     event.type === 'touchmove'
+          //       ? (event as React.TouchEvent | TouchEvent)
+          //       : undefined,
+          // },
           args: {
             mouseEvent:
-              event.type === 'mousemove'
-                ? (event as React.MouseEvent | MouseEvent)
-                : undefined,
+              event.type === 'mousemove' ? (event as MouseEvent) : undefined,
             touchEvent:
-              event.type === 'touchmove'
-                ? (event as React.TouchEvent | TouchEvent)
-                : undefined,
+              event.type === 'touchmove' ? (event as TouchEvent) : undefined,
           },
         },
       });

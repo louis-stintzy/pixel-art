@@ -64,7 +64,7 @@ function useDragAndDrop(
   };
 
   const executeMouseLogic = useCallback(
-    (e: React.MouseEvent | MouseEvent) => {
+    (e: MouseEvent | MouseEvent) => {
       // console.log('executeMouseLogic dans useDAD, date.now() : ', Date.now());
       const deltaX = e.clientX - lastMousePosition.current.x;
       const deltaY = e.clientY - lastMousePosition.current.y;
@@ -85,7 +85,7 @@ function useDragAndDrop(
   );
 
   const executeTouchLogic = useCallback(
-    (e: React.TouchEvent | TouchEvent) => {
+    (e: TouchEvent | TouchEvent) => {
       const touch = e.touches[0];
       const deltaX = touch.clientX - lastMousePosition.current.x;
       const deltaY = touch.clientY - lastMousePosition.current.y;
@@ -105,60 +105,56 @@ function useDragAndDrop(
     [isDragging]
   );
 
-  // const handleDragProgress = useActionFollowingMove(
-  //   lastRanRef,
-  //   timeoutRef,
-  //   throttleLimit,
-  //   cbShouldNotRun,
-  //   executeMouseLogic,
-  //   executeTouchLogic
-  // );
-
-  const { throttledExecution } = useThrottledExecution();
-
-  const handleMouseTouchMove = useCallback(
-    (event: MouseEvent | TouchEvent) => {
-      throttledExecution({
-        lastRanRef,
-        timeoutRef,
-        throttleLimit,
-        cbShouldNotRun,
-        cb: {
-          function: {
-            forMouseEvent:
-              event.type === 'mousemove'
-                ? (e: React.MouseEvent | MouseEvent) => {
-                    executeMouseLogic(e);
-                  }
-                : undefined,
-            forTouchEvent:
-              event.type === 'touchmove'
-                ? (e: React.TouchEvent | TouchEvent) => {
-                    executeTouchLogic(e);
-                  }
-                : undefined,
-          },
-          args: {
-            mouseEvent:
-              event.type === 'mousemove'
-                ? (event as React.MouseEvent | MouseEvent)
-                : undefined,
-            touchEvent:
-              event.type === 'touchmove'
-                ? (event as React.TouchEvent | TouchEvent)
-                : undefined,
-          },
-        },
-      });
-    },
-    [
-      cbShouldNotRun,
-      executeMouseLogic,
-      executeTouchLogic,
-      throttleLimit,
-      throttledExecution,
-    ]
+  const handleDragProgress = useActionFollowingMove(
+    lastRanRef,
+    timeoutRef,
+    throttleLimit,
+    cbShouldNotRun,
+    executeMouseLogic,
+    executeTouchLogic
   );
+
+  // const { throttledExecution } = useThrottledExecution();
+
+  // const handleMouseTouchMove = useCallback(
+  //   (event: MouseEvent | TouchEvent) => {
+  //     throttledExecution({
+  //       lastRanRef,
+  //       timeoutRef,
+  //       throttleLimit,
+  //       cbShouldNotRun,
+  //       cb: {
+  //         function: {
+  //           forMouseEvent:
+  //             event.type === 'mousemove'
+  //               ? (e: MouseEvent) => {
+  //                   executeMouseLogic(e);
+  //                 }
+  //               : undefined,
+  //           forTouchEvent:
+  //             event.type === 'touchmove'
+  //               ? (e: TouchEvent) => {
+  //                   executeTouchLogic(e);
+  //                 }
+  //               : undefined,
+  //         },
+  //         args: {
+  //           mouseEvent:
+  //             event.type === 'mousemove' ? (event as MouseEvent) : undefined,
+  //           touchEvent:
+  //             event.type === 'touchmove' ? (event as TouchEvent) : undefined,
+  //         },
+  //       },
+  //     });
+  //   },
+  //   [
+  //     cbShouldNotRun,
+  //     executeMouseLogic,
+  //     executeTouchLogic,
+  //     throttleLimit,
+  //     throttledExecution,
+  //   ]
+  // );
 
   // L'utilisateur relâche le bouton de la souris ou quitte la zone de la grille :
   // met à jour l'état de isDragging et de userDragsGrid après un court délai
@@ -196,20 +192,20 @@ function useDragAndDrop(
     if (!element) return undefined;
 
     element.addEventListener('mousedown', handleMouseDown);
-    element.addEventListener('mousemove', handleMouseTouchMove);
+    element.addEventListener('mousemove', handleDragProgress);
     element.addEventListener('mouseup', handleMouseUpOrLeave);
     element.addEventListener('mouseleave', handleMouseUpOrLeave);
     element.addEventListener('touchstart', handleTouchStart);
-    element.addEventListener('touchmove', handleMouseTouchMove);
+    element.addEventListener('touchmove', handleDragProgress);
     element.addEventListener('touchend', handleTouchEnd);
 
     return () => {
       element.removeEventListener('mousedown', handleMouseDown);
-      element.removeEventListener('mousemove', handleMouseTouchMove);
+      element.removeEventListener('mousemove', handleDragProgress);
       element.removeEventListener('mouseup', handleMouseUpOrLeave);
       element.removeEventListener('mouseleave', handleMouseUpOrLeave);
       element.removeEventListener('touchstart', handleTouchStart);
-      element.removeEventListener('touchmove', handleMouseTouchMove);
+      element.removeEventListener('touchmove', handleDragProgress);
       element.removeEventListener('touchend', handleTouchEnd);
     };
   }, [
@@ -217,7 +213,7 @@ function useDragAndDrop(
     handleMouseDown,
     handleMouseUpOrLeave,
     handleTouchEnd,
-    handleMouseTouchMove,
+    handleDragProgress,
     handleTouchStart,
   ]);
 

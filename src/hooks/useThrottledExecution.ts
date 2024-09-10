@@ -10,14 +10,14 @@ type ThrottledExecutionOptions = {
   cbShouldNotRun: boolean;
   cb: {
     function: {
-      forMouseEvent?: (e: React.MouseEvent | MouseEvent, args?: any[]) => void;
-      forTouchEvent?: (e: React.TouchEvent | TouchEvent, args?: any[]) => void;
+      forMouseEvent?: (e: MouseEvent, args?: any[]) => void;
+      forTouchEvent?: (e: TouchEvent, args?: any[]) => void;
       forNoEvent?: (args?: any[]) => void;
     };
     args: {
       array?: any[];
-      mouseEvent?: React.MouseEvent | MouseEvent;
-      touchEvent?: React.TouchEvent | TouchEvent;
+      mouseEvent?: MouseEvent;
+      touchEvent?: TouchEvent;
     };
   };
 };
