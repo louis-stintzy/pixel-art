@@ -49,11 +49,6 @@ function useDragAndDrop(
   // - si pas encore de drag : vérifie si la distance de glissement est suffisante pour commencer à faire glisser la grille
   // - si drag en cours : met à jour la position de la grille en fonction du mouvement de la souris
 
-  const token = useRef<string>(
-    // `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
-    'Plus besoin de token useDAD'
-  );
-
   const lastRanRef = useRef<number | undefined>(undefined);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
@@ -111,7 +106,8 @@ function useDragAndDrop(
   );
 
   // const handleDragProgress = useActionFollowingMove(
-  //   token.current,
+  //   lastRanRef,
+  //   timeoutRef,
   //   throttleLimit,
   //   cbShouldNotRun,
   //   executeMouseLogic,
@@ -123,7 +119,6 @@ function useDragAndDrop(
   const handleMouseTouchMove = useCallback(
     (event: MouseEvent | TouchEvent) => {
       throttledExecution({
-        token: token.current,
         lastRanRef,
         timeoutRef,
         throttleLimit,

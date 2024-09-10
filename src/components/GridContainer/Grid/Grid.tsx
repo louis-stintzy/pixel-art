@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDrop';
-import useThrottledExecution from '../../../hooks/useThrottledExecution';
 import useActionFollowingMove from '../../../hooks/useActionFollowingMove';
 import { coloring } from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
@@ -23,10 +22,6 @@ function Grid() {
     coloring(pixelIds, color);
   };
 
-  const token = useRef<string>(
-    // `ColorGrid-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
-    'Plus besoin de token ColorGrid'
-  );
   const lastRanRef = useRef<number | undefined>(undefined);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
@@ -53,7 +48,6 @@ function Grid() {
   }, []);
 
   const handleDragProgress = useActionFollowingMove(
-    token.current,
     lastRanRef,
     timeoutRef,
     throttleLimit,
@@ -61,46 +55,6 @@ function Grid() {
     executeMouseLogic,
     executeTouchLogic
   );
-  // const { throttledExecution } = useThrottledExecution();
-
-  // const handleMouseTouchMove = useCallback(
-  //   (
-  //     event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-  //   ) => {
-  //     throttledExecution({
-  //       token: token.current,
-  //       throttleLimit,
-  //       cbShouldNotRun,
-  //       cb: {
-  //         function: {
-  //           forMouseEvent:
-  //             event.type === 'mousemove'
-  //               ? (e: React.MouseEvent | MouseEvent) => {
-  //                   executeMouseLogic(e);
-  //                 }
-  //               : undefined,
-  //           forTouchEvent:
-  //             event.type === 'touchmove'
-  //               ? (e: React.TouchEvent | TouchEvent) => {
-  //                   executeTouchLogic(e);
-  //                 }
-  //               : undefined,
-  //         },
-  //         args: {
-  //           mouseEvent:
-  //             event.type === 'mousemove'
-  //               ? (event as React.MouseEvent | MouseEvent)
-  //               : undefined,
-  //           touchEvent:
-  //             event.type === 'touchmove'
-  //               ? (event as React.TouchEvent | TouchEvent)
-  //               : undefined,
-  //         },
-  //       },
-  //     });
-  //   },
-  //   [cbShouldNotRun, executeMouseLogic, executeTouchLogic, throttledExecution]
-  // );
 
   const gridStyle: React.CSSProperties = {
     display: 'grid',

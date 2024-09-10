@@ -6,7 +6,6 @@ import ImageUnderTheGrid from './ImageUnderTheGrid/ImageUnderTheGrid';
 import './GridContainer.scss';
 import Loader from './Loader/Loader';
 import ColorReplacementToast from '../Toasts/ColorReplacementToast';
-import GridOld from './Grid/GridOld';
 
 function GridContainer() {
   const isReadyToDraw = useStore((state) => state.isReadyToDraw); // État pour savoir si l'utilisateur est en train de colorier (etat global)

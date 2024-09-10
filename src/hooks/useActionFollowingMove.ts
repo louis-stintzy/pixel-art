@@ -1,26 +1,7 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import useThrottledExecution from './useThrottledExecution';
 
-// type ThrottledExecutionOptions = {
-//   throttleLimit?: number;
-//   cbShouldNotRun: boolean;
-//   cb: {
-//     function: {
-//       forMouseEvent?: (e: React.MouseEvent | MouseEvent, args?: any[]) => void;
-//       forTouchEvent?: (e: React.TouchEvent | TouchEvent, args?: any[]) => void;
-//       forNoEvent?: (args?: any[]) => void;
-//     };
-//     args: {
-//       array?: any[];
-//       mouseEvent?: React.MouseEvent | MouseEvent;
-//       touchEvent?: React.TouchEvent | TouchEvent;
-//     };
-//   };
-// };
-
 function useActionFollowingMove(
-  // ev: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
-  token: string,
   lastRanRef: React.MutableRefObject<number | undefined>,
   timeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | undefined>,
   throttleLimit: number,
@@ -30,61 +11,11 @@ function useActionFollowingMove(
 ) {
   const { throttledExecution } = useThrottledExecution();
 
-  // console.log('useActionFollowingMove');
-  // defineFunction(executeMouseLogic);
-
-  // useEffect(() => {
-  //   const TEO: ThrottledExecutionOptions = {
-  //     throttleLimit,
-  //     cbShouldNotRun,
-  //     cb: {
-  //       function: {
-  //         forMouseEvent:
-  //           ev.type === 'mousemove'
-  //             ? (e: React.MouseEvent | MouseEvent) => {
-  //                 executeMouseLogic(e);
-  //               }
-  //             : undefined,
-  //         forTouchEvent:
-  //           ev.type === 'touchmove'
-  //             ? (e: React.TouchEvent | TouchEvent) => {
-  //                 executeTouchLogic(e);
-  //               }
-  //             : undefined,
-  //       },
-  //       args: {
-  //         mouseEvent:
-  //           ev.type === 'mousemove'
-  //             ? (ev as React.MouseEvent | MouseEvent)
-  //             : undefined,
-  //         touchEvent:
-  //           ev.type === 'touchmove'
-  //             ? (ev as React.TouchEvent | TouchEvent)
-  //             : undefined,
-  //       },
-  //     },
-  //   };
-  //   console.log('define');
-  //   // defineFunction(TEO);
-  //   return () => {
-  //     console.log('clear');
-  //     clearThrottledExecution(TEO);
-  //   };
-  // }, [
-  //   cbShouldNotRun,
-  //   clearThrottledExecution,
-  //   ev,
-  //   executeMouseLogic,
-  //   executeTouchLogic,
-  //   throttleLimit,
-  // ]);
-
   return useCallback(
     (
       event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
     ) => {
       throttledExecution({
-        token,
         lastRanRef,
         timeoutRef,
         throttleLimit,
@@ -125,7 +56,6 @@ function useActionFollowingMove(
       throttleLimit,
       throttledExecution,
       timeoutRef,
-      token,
     ]
   );
 }

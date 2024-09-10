@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Color } from '../../../../@types/colorPalette';
 import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
 import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 import useStore from '../../../../store/store';
-import throttledExecution from '../../../../utils/throttledExecution';
 import useActionFollowingMove from '../../../../hooks/useActionFollowingMove';
 
 interface ColorPaletteColorsProps {
@@ -18,7 +17,6 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   const { isDragging, position, resetPosition } = useDragAndDrop(paletteRef);
   const [draggedColorButton, setDraggedColorButton] = useState<{
     button: HTMLButtonElement;
-    // index: number;
     translateX: number;
     translateY: number;
   } | null>(null);
@@ -166,86 +164,41 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   const throttleLimit = 1000;
   const cbShouldNotRun = !isDragging;
 
+  const executeLogic = useCallback(() => {
+    if (draggedColorButton) {
+      setDraggedColorButton({
+        button: draggedColorButton.button,
+        translateX: position.x,
+        translateY: position.y,
+      });
+      // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
+      // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
+      draggedColorButton.button.style.pointerEvents = 'none';
+    }
+  }, [draggedColorButton, position.x, position.y]);
+
   const executeMouseLogic = useCallback(
     (e: React.MouseEvent | MouseEvent) => {
-      if (draggedColorButton) {
-        setDraggedColorButton({
-          button: draggedColorButton.button,
-          translateX: position.x,
-          translateY: position.y,
-        });
-        // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
-        // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
-        draggedColorButton.button.style.pointerEvents = 'none';
-      }
+      console.log('executeMouseLogic dans CPC, date.now() : ', Date.now());
+      executeLogic();
     },
-    [draggedColorButton, position.x, position.y]
+    [executeLogic]
   );
 
   const executeTouchLogic = useCallback(
     (e: React.TouchEvent | TouchEvent) => {
-      if (draggedColorButton) {
-        setDraggedColorButton({
-          button: draggedColorButton.button,
-          translateX: position.x,
-          translateY: position.y,
-        });
-        // Désactiver les événements du pointeur pour permettre l'interaction avec les éléments en dessous.
-        // Sinon nous ne pourrions pas déplacer le bouton, dans handleMouseDragStop buttonToBeInterchanged serait le draggedColorButton
-        draggedColorButton.button.style.pointerEvents = 'none';
-      }
+      executeLogic();
     },
-    [draggedColorButton, position.x, position.y]
+    [executeLogic]
   );
 
-  const token = useRef<string>('Plus besoin de token');
-
   const handleDragProgress = useActionFollowingMove(
-    token.current,
     lastRanRef,
     timeoutRef,
     throttleLimit,
     cbShouldNotRun,
     executeMouseLogic,
     executeTouchLogic
-  );
-
-  const handleMouseTouchMove = useCallback(
-    (
-      event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-    ) => {
-      throttledExecution({
-        throttleLimit,
-        cbShouldNotRun,
-        cb: {
-          function: {
-            forMouseEvent:
-              event.type === 'mousemove'
-                ? (e: React.MouseEvent | MouseEvent) => {
-                    executeMouseLogic(e);
-                  }
-                : undefined,
-            forTouchEvent:
-              event.type === 'touchmove'
-                ? (e: React.TouchEvent | TouchEvent) => {
-                    executeTouchLogic(e);
-                  }
-                : undefined,
-          },
-          args: {
-            mouseEvent:
-              event.type === 'mousemove'
-                ? (event as React.MouseEvent | MouseEvent)
-                : undefined,
-            touchEvent:
-              event.type === 'touchmove'
-                ? (event as React.TouchEvent | TouchEvent)
-                : undefined,
-          },
-        },
-      });
-    },
-    [cbShouldNotRun, executeMouseLogic, executeTouchLogic]
   );
 
   // --------------------------------- RETURN ---------------------------------
