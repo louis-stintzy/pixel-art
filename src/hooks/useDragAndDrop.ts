@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useActionFollowingMove from './useActionFollowingMove';
+import timeoutCleanup from '../utils/timeoutCleanup';
 
 interface Position {
   x: number;
@@ -52,6 +53,12 @@ function useDragAndDrop(
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
+
+  useEffect(() => {
+    return () => {
+      timeoutCleanup(timeoutRef);
+    };
+  }, []);
 
   const cbShouldNotRun = !isMouseDown;
 

@@ -1,10 +1,11 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Color } from '../../../../@types/colorPalette';
 import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
 import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 import useStore from '../../../../store/store';
 import useActionFollowingMove from '../../../../hooks/useActionFollowingMove';
+import timeoutCleanup from '../../../../utils/timeoutCleanup';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
@@ -161,6 +162,13 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
+
+  useEffect(() => {
+    return () => {
+      timeoutCleanup(timeoutRef);
+    };
+  }, []);
+
   const throttleLimit = 32;
   const cbShouldNotRun = !isDragging;
 

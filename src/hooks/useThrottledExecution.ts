@@ -72,11 +72,11 @@ function useThrottledExecution() {
   );
 
   // Cleanup des timeouts
-  useEffect(() => {
-    return () => {
-      console.log('CLEANUP');
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     console.log('CLEANUP');
+  //   };
+  // }, []);
 
   return { throttledExecution };
 }

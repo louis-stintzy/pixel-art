@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDrop';
 import useActionFollowingMove from '../../../hooks/useActionFollowingMove';
@@ -6,6 +6,7 @@ import { coloring } from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import gridColor from '../../../constants/gridColor';
+import timeoutCleanup from '../../../utils/timeoutCleanup';
 
 function Grid() {
   const gridRef = useRef<HTMLDivElement | null>(null);
@@ -26,6 +27,12 @@ function Grid() {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
+
+  useEffect(() => {
+    return () => {
+      timeoutCleanup(timeoutRef);
+    };
+  }, []);
 
   const throttleLimit = 32;
   const cbShouldNotRun = !isColoring;
