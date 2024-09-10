@@ -42,7 +42,7 @@ function GridContainer() {
     >
       {colorReplacementIsLoading && <Loader />}
       <div id="grid-wrapper" style={gridWrapperStyle}>
-        <GridOld />
+        <Grid />
         {!isImageHidden && <ImageUnderTheGrid />}
       </div>
       {colorReplacementToastVisible && <ColorReplacementToast />}

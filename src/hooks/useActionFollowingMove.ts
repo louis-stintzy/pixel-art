@@ -21,6 +21,8 @@ import useThrottledExecution from './useThrottledExecution';
 function useActionFollowingMove(
   // ev: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
   token: string,
+  lastRanRef: React.MutableRefObject<number | undefined>,
+  timeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | undefined>,
   throttleLimit: number,
   cbShouldNotRun: boolean,
   executeMouseLogic: (e: React.MouseEvent | MouseEvent) => void,
@@ -83,6 +85,8 @@ function useActionFollowingMove(
     ) => {
       throttledExecution({
         token,
+        lastRanRef,
+        timeoutRef,
         throttleLimit,
         cbShouldNotRun,
         cb: {
@@ -117,8 +121,10 @@ function useActionFollowingMove(
       cbShouldNotRun,
       executeMouseLogic,
       executeTouchLogic,
+      lastRanRef,
       throttleLimit,
       throttledExecution,
+      timeoutRef,
       token,
     ]
   );

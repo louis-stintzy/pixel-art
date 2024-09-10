@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+// désactive la règle ESLint no-param-reassign pour permettre la modification de la propriété current de la référence
+
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   addToken,
@@ -9,6 +12,8 @@ import {
 
 type ThrottledExecutionOptions = {
   token: string;
+  lastRanRef: React.MutableRefObject<number | undefined>;
+  timeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | undefined>;
   throttleLimit?: number;
   cbShouldNotRun: boolean;
   cb: {
@@ -60,14 +65,17 @@ function useThrottledExecution() {
   const throttledExecution = useCallback(
     ({
       token,
+      lastRanRef,
+      timeoutRef,
       throttleLimit = 32,
       cbShouldNotRun,
       cb,
     }: ThrottledExecutionOptions) => {
       if (cbShouldNotRun || !cb.function) return; // Si la fonction ne doit pas être exécutée ou si la fonction n'est pas définie, ne rien faire
+
       // console.log('----UTILISATION DE : useThrottledExecution - TOKEN:', token);
       // console.log(getTokenStore());
-      addToken(token); // Ajoute le token à la Map (verif si existe déjà dans la fonction)
+      // addToken(token); // Ajoute le token à la Map (verif si existe déjà dans la fonction)
       // let lastFunc: ReturnType<typeof setTimeout>; // stocke le setTimeout => remplacé par timeoutsMap
 
       const { forMouseEvent, forTouchEvent, forNoEvent } = cb.function; // Destructuration de la fonction
@@ -99,12 +107,13 @@ function useThrottledExecution() {
       // Récupération des références pour ce token
       // const lastRanRef = refsMap.current.get(token)?.lastRanRef;
       // const timeoutRef = refsMap.current.get(token)?.timeoutRef;
-      const tokenData = getTokenData(token);
-      const lastRanRef = tokenData?.lastRanRef;
-      const timeoutRef = tokenData?.timeoutRef;
+
+      // const tokenData = getTokenData(token);
+      // const lastRanRef = tokenData?.lastRanRef;
+      // const timeoutRef = tokenData?.timeoutRef;
 
       requestAnimationFrame(() => {
-        const lastRan = lastRanRef || 0; // Enregistre le moment où la fonction a été exécutée pour la dernière fois pour ce token
+        const lastRan = lastRanRef.current || 0; // Enregistre le moment où la fonction a été exécutée pour la dernière fois pour ce token
         // requestAnimationFrame: permet de synchroniser l'exécution d'une fonction avec le rafraîchissement de l'écran
         if (!lastRan || Date.now() - lastRan >= throttleLimit) {
           // Si la fonction n'a jamais été exécutée ou si le délai entre deux exécutions est supérieur au délai limite
@@ -113,8 +122,7 @@ function useThrottledExecution() {
           //   lastRanRef: Date.now(),
           //   timeoutRef: null,
           // });
-          const now = Date.now();
-          updateTokenData(token, { lastRanRef: now, timeoutRef: null });
+          lastRanRef.current = Date.now();
           executeCallback();
         } else {
           // console.log('FONCTION THROTTLE, timeoutsMap :', refsMap.current);
@@ -123,27 +131,24 @@ function useThrottledExecution() {
           // console.log('lasFuncRef', lastFuncRef.current);
 
           // Si une autre exécution est en attente, l'annuler avant d'en créer une nouvelle
-          if (timeoutRef) {
+          if (timeoutRef.current) {
             // console.log('déjà un timeoutRef, BEFORE CLEAR :', timeoutRef);
-            clearTimeout(timeoutRef);
+            clearTimeout(timeoutRef.current);
             // console.log('timeoutsMap AFTER CLEAR', timeoutsMap.current);
           }
-          const newTimeout = setTimeout(() => {
+          timeoutRef.current = setTimeout(() => {
             // refsMap.current.set(token, {
             //   lastRanRef: Date.now(), // enregistrera le moment où la fonction sera exécutée
             //   timeoutRef: null,
             // });
-            const now = Date.now();
-            updateTokenData(token, {
-              lastRanRef: now,
-              timeoutRef: null,
-            });
+            lastRanRef.current = Date.now();
+            timeoutRef.current = undefined;
             executeCallback();
           }, remainingTime);
           // console.log(
           //   `New timeout set for token: ${token} with timeout ID: ${newTimeout} and will execute in: ${remainingTime}ms`
           // );
-          updateTokenData(token, { lastRanRef, timeoutRef: newTimeout }); // Enregistre le setTimeout lié à ce callback dans la Map, lastRan peut rester l'ancienne valeur, ce qui compte c'est Date.now() dans le setTimeout
+          // updateTokenData(token, { lastRanRef, timeoutRef: newTimeout }); // Enregistre le setTimeout lié à ce callback dans la Map, lastRan peut rester l'ancienne valeur, ce qui compte c'est Date.now() dans le setTimeout
           // console.log('timeoutsMap AFTER SET', refsMap.current);
         }
       });
@@ -155,6 +160,13 @@ function useThrottledExecution() {
     },
     []
   );
+
+  // Cleanup des timeouts
+  useEffect(() => {
+    return () => {
+      console.log('CLEANUP');
+    };
+  }, []);
 
   // on pourra faire useEffect avec clearThrottledExecution pour nettoyer les timeouts ou boucle dans Map ?
 

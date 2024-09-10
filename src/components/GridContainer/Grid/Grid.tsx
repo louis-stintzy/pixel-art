@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDrop';
 import useThrottledExecution from '../../../hooks/useThrottledExecution';
@@ -24,8 +24,14 @@ function Grid() {
   };
 
   const token = useRef<string>(
-    `ColorGrid-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+    // `ColorGrid-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+    'Plus besoin de token ColorGrid'
   );
+  const lastRanRef = useRef<number | undefined>(undefined);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+
   const throttleLimit = 1000;
   const cbShouldNotRun = !isColoring;
 
@@ -48,6 +54,8 @@ function Grid() {
 
   const handleDragProgress = useActionFollowingMove(
     token.current,
+    lastRanRef,
+    timeoutRef,
     throttleLimit,
     cbShouldNotRun,
     executeMouseLogic,

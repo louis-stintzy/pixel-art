@@ -5,6 +5,7 @@ import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 import useStore from '../../../../store/store';
 import throttledExecution from '../../../../utils/throttledExecution';
+import useActionFollowingMove from '../../../../hooks/useActionFollowingMove';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
@@ -158,7 +159,11 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   };
   // --------------------------------- NEW ---------------------------------
 
-  const throttleLimit = 32;
+  const lastRanRef = useRef<number | undefined>(undefined);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+  const throttleLimit = 1000;
   const cbShouldNotRun = !isDragging;
 
   const executeMouseLogic = useCallback(
@@ -191,6 +196,18 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
       }
     },
     [draggedColorButton, position.x, position.y]
+  );
+
+  const token = useRef<string>('Plus besoin de token');
+
+  const handleDragProgress = useActionFollowingMove(
+    token.current,
+    lastRanRef,
+    timeoutRef,
+    throttleLimit,
+    cbShouldNotRun,
+    executeMouseLogic,
+    executeTouchLogic
   );
 
   const handleMouseTouchMove = useCallback(
@@ -243,8 +260,8 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
       role="row"
       tabIndex={0}
       style={{ display: 'flex', justifyContent: 'flex-start' }}
-      onMouseMove={handleMouseTouchMove}
-      onTouchMove={handleMouseTouchMove}
+      onMouseMove={handleDragProgress}
+      onTouchMove={handleDragProgress}
     >
       {palette.colors.map((color, index) => (
         <ColorButton

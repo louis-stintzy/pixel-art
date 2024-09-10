@@ -50,8 +50,15 @@ function useDragAndDrop(
   // - si drag en cours : met à jour la position de la grille en fonction du mouvement de la souris
 
   const token = useRef<string>(
-    `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+    // `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+    'Plus besoin de token useDAD'
   );
+
+  const lastRanRef = useRef<number | undefined>(undefined);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+
   const cbShouldNotRun = !isMouseDown;
 
   const updatePosition = (deltaX: number, deltaY: number) => {
@@ -63,6 +70,7 @@ function useDragAndDrop(
 
   const executeMouseLogic = useCallback(
     (e: React.MouseEvent | MouseEvent) => {
+      console.log('executeMouseLogic dans useDAD, date.now() : ', Date.now());
       const deltaX = e.clientX - lastMousePosition.current.x;
       const deltaY = e.clientY - lastMousePosition.current.y;
 
@@ -116,6 +124,8 @@ function useDragAndDrop(
     (event: MouseEvent | TouchEvent) => {
       throttledExecution({
         token: token.current,
+        lastRanRef,
+        timeoutRef,
         throttleLimit,
         cbShouldNotRun,
         cb: {
