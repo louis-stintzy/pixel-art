@@ -33,16 +33,6 @@ function useActionFollowingMove(
                   }
                 : undefined,
           },
-          // args: {
-          //   mouseEvent:
-          //     event.type === 'mousemove'
-          //       ? (event as React.MouseEvent | MouseEvent)
-          //       : undefined,
-          //   touchEvent:
-          //     event.type === 'touchmove'
-          //       ? (event as React.TouchEvent | TouchEvent)
-          //       : undefined,
-          // },
           args: {
             mouseEvent:
               event.type === 'mousemove' ? (event as MouseEvent) : undefined,

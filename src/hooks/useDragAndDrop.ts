@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import useThrottledExecution from './useThrottledExecution';
 import useActionFollowingMove from './useActionFollowingMove';
 
 interface Position {
@@ -113,48 +112,6 @@ function useDragAndDrop(
     executeMouseLogic,
     executeTouchLogic
   );
-
-  // const { throttledExecution } = useThrottledExecution();
-
-  // const handleMouseTouchMove = useCallback(
-  //   (event: MouseEvent | TouchEvent) => {
-  //     throttledExecution({
-  //       lastRanRef,
-  //       timeoutRef,
-  //       throttleLimit,
-  //       cbShouldNotRun,
-  //       cb: {
-  //         function: {
-  //           forMouseEvent:
-  //             event.type === 'mousemove'
-  //               ? (e: MouseEvent) => {
-  //                   executeMouseLogic(e);
-  //                 }
-  //               : undefined,
-  //           forTouchEvent:
-  //             event.type === 'touchmove'
-  //               ? (e: TouchEvent) => {
-  //                   executeTouchLogic(e);
-  //                 }
-  //               : undefined,
-  //         },
-  //         args: {
-  //           mouseEvent:
-  //             event.type === 'mousemove' ? (event as MouseEvent) : undefined,
-  //           touchEvent:
-  //             event.type === 'touchmove' ? (event as TouchEvent) : undefined,
-  //         },
-  //       },
-  //     });
-  //   },
-  //   [
-  //     cbShouldNotRun,
-  //     executeMouseLogic,
-  //     executeTouchLogic,
-  //     throttleLimit,
-  //     throttledExecution,
-  //   ]
-  // );
 
   // L'utilisateur relâche le bouton de la souris ou quitte la zone de la grille :
   // met à jour l'état de isDragging et de userDragsGrid après un court délai
