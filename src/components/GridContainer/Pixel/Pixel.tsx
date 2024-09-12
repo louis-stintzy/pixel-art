@@ -87,7 +87,9 @@ const Pixel = React.memo(({ id }: PixelProps) => {
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
       aria-label={`Pixel ${id} - ${
-        pixelColor === gridColor.background ? 'uncolored' : 'colored'
+        pixelColor && pixelColor !== gridColor.background
+          ? 'colored'
+          : 'uncolored'
       }`}
     />
   );

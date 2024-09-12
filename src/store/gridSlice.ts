@@ -17,6 +17,7 @@ export interface GridSlice {
     pixelSize: number;
   }) => void;
   setPixelColors: (newPixelColors: Record<string, string>) => void;
+  setPixelColorsBackup: (newPixelColors: Record<string, string>) => void;
 }
 
 const createGridSlice: StateCreator<GridSlice> = (set) => ({
@@ -31,8 +32,13 @@ const createGridSlice: StateCreator<GridSlice> = (set) => ({
   setGridSize: (gridSize) => set({ gridSize }),
   setPixelColors: (newPixelColors: Record<string, string>) =>
     set((state) => ({
-      pixelColors: { ...state.pixelColors, ...newPixelColors },
+      pixelColors: { ...state.pixelColors, ...newPixelColors }, // Ajoute les nouvelles couleurs à pixelColors
     })),
+  setPixelColorsBackup: (newPixelColors: Record<string, string>) => {
+    set(() => ({
+      pixelColors: { ...newPixelColors }, // Remplace entièrement pixelColors par les nouvelles couleurs
+    }));
+  },
 });
 
 export default createGridSlice;

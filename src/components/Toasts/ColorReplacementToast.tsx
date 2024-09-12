@@ -4,7 +4,8 @@ import Toast from './Toast';
 function ColorReplacementToast() {
   const undoColorReplacement = () => {
     const { savedPixelColors } = useStore.getState().colorReplacement;
-    if (savedPixelColors) useStore.getState().setPixelColors(savedPixelColors);
+    if (savedPixelColors)
+      useStore.getState().setPixelColorsBackup(savedPixelColors);
     useStore.getState().setColorReplacement({ toastVisible: false });
   };
   return (
