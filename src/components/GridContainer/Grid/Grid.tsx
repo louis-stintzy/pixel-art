@@ -23,9 +23,14 @@ function Grid() {
     coloring(pixelIds, color);
   };
 
-  const tokenRef = useRef<string>(
+  const storeKey = useRef<string>(
     `ColorGrid-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
-  );
+  ).current;
+  // const createStore = useStore((state) => state.createStore);
+  // const addTimeout = useStore((state) => state.addGridTimeout);
+  // const removeTimeout = useStore((state) => state.removeGridTimeout);
+  // const clearTimeouts = useStore((state) => state.clearGridTimeouts);
+  // const deleteStore = useStore((state) => state.deleteStore);
   const lastRanRef = useRef<number | undefined>(undefined);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
@@ -34,11 +39,17 @@ function Grid() {
   const throttleLimit = 32;
   const cbShouldNotRun = !isColoring;
 
+  // useEffect(() => {
+  //   return () => {
+  //     clearTimeouts();
+  //   };
+  // }, [clearTimeouts]);
+
   const executeMouseLogic = useCallback((e: React.MouseEvent | MouseEvent) => {
-    // console.log(
-    //   'executeMouseLogic dans Grid pour coloriage, date.now() : ',
-    //   Date.now()
-    // );
+    console.log(
+      'executeMouseLogic dans Grid pour coloriage, date.now() : ',
+      Date.now()
+    );
     const pixel = e.target as HTMLDivElement;
     if (pixel) applyToolOnPixel(pixel);
   }, []);
@@ -52,7 +63,9 @@ function Grid() {
   }, []);
 
   const handleDragProgress = useActionFollowingMove(
-    tokenRef.current,
+    // storeKey,
+    // addTimeout,
+    // removeTimeout,
     lastRanRef,
     timeoutRef,
     throttleLimit,

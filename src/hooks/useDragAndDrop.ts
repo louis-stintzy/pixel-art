@@ -56,20 +56,23 @@ function useDragAndDrop(
   const storeKey = useRef<string>(
     `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
   ).current;
-  const createStore = useStore((state) => state.createStore);
-  const clearStore = useStore((state) => state.clearStore);
-  const timeoutStore = createStore(storeKey);
+  // const createStore = useStore((state) => state.createStore);
+  // const addTimeout = useStore((state) => state.addUseDADTimeout);
+  // const removeTimeout = useStore((state) => state.removeUseDADTimeout);
+  // const clearTimeouts = useStore((state) => state.clearUseDADTimeouts);
+  // const deleteStore = useStore((state) => state.deleteStore);
   const lastRanRef = useRef<number | undefined>(undefined);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(998);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
 
   const cbShouldNotRun = !isMouseDown;
 
-  useEffect(() => {
-    return () => {
-      console.log('cleanup useDragAndDrop, timeoutStore : ', timeoutStore);
-      clearStore(storeKey);
-    };
-  }, [clearStore, storeKey, timeoutStore]);
+  // useEffect(() => {
+  //   return () => {
+  //     clearTimeouts();
+  //   };
+  // }, [clearTimeouts]);
 
   const updatePosition = (deltaX: number, deltaY: number) => {
     setPosition((prev) => ({
@@ -80,7 +83,7 @@ function useDragAndDrop(
 
   const executeMouseLogic = useCallback(
     (e: MouseEvent | MouseEvent) => {
-      // console.log('executeMouseLogic dans useDAD, date.now() : ', Date.now());
+      console.log('executeMouseLogic dans useDAD, date.now() : ', Date.now());
       const deltaX = e.clientX - lastMousePosition.current.x;
       const deltaY = e.clientY - lastMousePosition.current.y;
 
@@ -121,8 +124,9 @@ function useDragAndDrop(
   );
 
   const handleDragProgress = useActionFollowingMove(
-    storeKey,
-    timeoutStore,
+    // storeKey,
+    // addTimeout,
+    // removeTimeout,
     lastRanRef,
     timeoutRef,
     throttleLimit,

@@ -5,7 +5,9 @@ import { useCallback, useEffect, useRef } from 'react';
 import TimeoutStore from '../store/TimeoutStore';
 
 type ThrottledExecutionOptions = {
-  token: string;
+  // token: string;
+  // addTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
+  // removeTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
   lastRanRef: React.MutableRefObject<number | undefined>;
   timeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | undefined>;
   throttleLimit?: number;
@@ -24,11 +26,13 @@ type ThrottledExecutionOptions = {
   };
 };
 
-function useThrottledExecution(timeoutStore: TimeoutStore) {
+function useThrottledExecution() {
   // throttledExecution est une fonction qui permet de limiter le nombre d'appels à une fonction
   const throttledExecution = useCallback(
     ({
-      token,
+      // token,
+      // addTimeout,
+      // removeTimeout,
       lastRanRef,
       timeoutRef,
       throttleLimit = 32,
@@ -64,27 +68,23 @@ function useThrottledExecution(timeoutStore: TimeoutStore) {
           // Si une autre exécution est en attente, l'annuler avant d'en créer une nouvelle
           const oldTimeout = timeoutRef.current;
           if (oldTimeout) {
-            console.log(token, 'OT to clear: ', oldTimeout);
+            // console.log(token, 'OT to clear: ', oldTimeout);
             clearTimeout(timeoutRef.current);
-            timeoutStore.removeTimeout(oldTimeout);
+            // removeTimeout(oldTimeout);
           }
           const newTimeout = setTimeout(() => {
             lastRanRef.current = Date.now(); // Enregistre le moment où la fonction va être exécutée
-            timeoutRef.current = 999; // Réinitialise le timeout (puisque la fonction a été exécutée)
-            timeoutStore.removeTimeout(newTimeout); // Supprime le timeout de la liste des timeouts actifs
+            timeoutRef.current = undefined; // Réinitialise le timeout (puisque la fonction a été exécutée)
+            // removeTimeout(newTimeout); // Supprime le timeout de la liste des timeouts actifs
             executeCallback();
           }, remainingTime);
           timeoutRef.current = newTimeout; // Enregistre le timeout
-          timeoutStore.addTimeout(newTimeout); // Ajoute le timeout à la liste des timeouts actifs
-          console.log(
-            token,
-            'AT after pushing NT: ',
-            timeoutStore.activeTimeouts
-          );
+          // console.log(token, 'NT to add: ', newTimeout);
+          // addTimeout(newTimeout); // Ajoute le timeout à la liste des timeouts actifs
         }
       });
     },
-    [timeoutStore]
+    []
   );
 
   // Cleanup des timeouts

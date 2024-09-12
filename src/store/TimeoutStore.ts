@@ -7,7 +7,7 @@ class TimeoutStore {
 
   addTimeout(timeout: ReturnType<typeof setTimeout>) {
     this.timeouts.push(timeout);
-    console.log('timeouts : ', this.timeouts);
+    console.log('addTimeout, timeouts : ', this.timeouts);
   }
 
   removeTimeout(timeout: ReturnType<typeof setTimeout>) {
