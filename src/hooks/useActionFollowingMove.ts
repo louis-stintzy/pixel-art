@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import useThrottledExecution from './useThrottledExecution';
-import TimeoutStore from '../store/TimeoutStore';
 
 function useActionFollowingMove(
   // token: string,

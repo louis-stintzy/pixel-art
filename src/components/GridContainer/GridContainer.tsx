@@ -27,9 +27,10 @@ function GridContainer() {
     setUserDragsGrid(isDragging);
   }, [isDragging, setUserDragsGrid]);
 
-  useEffect(() => {
-    console.log(Date.now(), ' - position : ', position);
-  }, [position]);
+  // Observe un décalage entre les premiers executeMouseLogic dans useDAD et le premier déplacement de la grille (voir MIN_DRAG_DISTANCE ?)
+  // useEffect(() => {
+  //   console.log(Date.now(), ' - position : ', position);
+  // }, [position]);
 
   const gridWrapperStyle: React.CSSProperties = {
     transform: `translate(${position.x}px, ${position.y}px)`,

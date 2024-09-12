@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Color } from '../../../../@types/colorPalette';
 import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
 import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 import useStore from '../../../../store/store';
 import useActionFollowingMove from '../../../../hooks/useActionFollowingMove';
-import timeoutCleanup from '../../../../utils/timeoutCleanup';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
@@ -156,21 +155,13 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     // Réactiver les événements du pointeur après avoir terminé le drag-and-drop
     draggedColorButton.button.style.pointerEvents = 'auto';
   };
-  // --------------------------------- NEW ---------------------------------
+
+  // ----- handleDragProgress
 
   const lastRanRef = useRef<number | undefined>(undefined);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
-
-  // NE FONCTIONNE PAS
-  // useEffect(() => {
-  //   return () => {
-  //     // console.log('cleanup ColorPaletteColors');
-  //     timeoutCleanup(timeoutRef);
-  //   };
-  // }, []);
-
   const throttleLimit = 32;
   const cbShouldNotRun = !isDragging;
 
@@ -197,6 +188,7 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
 
   const executeTouchLogic = useCallback(
     (e: React.TouchEvent | TouchEvent) => {
+      // console.log('executeTouchLogic dans CPC, date.now() : ', Date.now());
       executeLogic();
     },
     [executeLogic]
@@ -211,7 +203,7 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     executeTouchLogic
   );
 
-  // --------------------------------- RETURN ---------------------------------
+  // ----------
 
   const colorKeys: string[] = [];
   for (let i = 0; i < 20; i += 1) {

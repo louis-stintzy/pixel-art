@@ -1,13 +1,10 @@
 /* eslint-disable no-param-reassign */
-// désactive la règle ESLint no-param-reassign pour permettre la modification de la propriété current de la référence
+// note : désactive la règle ESLint no-param-reassign pour permettre la modification de la propriété current de la référence
 
-import { useCallback, useEffect, useRef } from 'react';
-import TimeoutStore from '../store/TimeoutStore';
+import { useCallback } from 'react';
 
 type ThrottledExecutionOptions = {
   // token: string;
-  // addTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
-  // removeTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
   lastRanRef: React.MutableRefObject<number | undefined>;
   timeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | undefined>;
   throttleLimit?: number;
@@ -31,8 +28,6 @@ function useThrottledExecution() {
   const throttledExecution = useCallback(
     ({
       // token,
-      // addTimeout,
-      // removeTimeout,
       lastRanRef,
       timeoutRef,
       throttleLimit = 32,
@@ -66,36 +61,19 @@ function useThrottledExecution() {
           // Sinon (si le délai entre deux exécutions est inférieur au délai limite)
           const remainingTime = throttleLimit - (Date.now() - lastRan); // Calcule le temps restant avant l'exécution de la fonction
           // Si une autre exécution est en attente, l'annuler avant d'en créer une nouvelle
-          const oldTimeout = timeoutRef.current;
-          if (oldTimeout) {
-            // console.log(token, 'OT to clear: ', oldTimeout);
-            clearTimeout(timeoutRef.current);
-            // removeTimeout(oldTimeout);
-          }
+          if (timeoutRef.current) clearTimeout(timeoutRef.current); // +removeTimeout(oldTimeout) si gestion des timeouts actifs;
           const newTimeout = setTimeout(() => {
             lastRanRef.current = Date.now(); // Enregistre le moment où la fonction va être exécutée
             timeoutRef.current = undefined; // Réinitialise le timeout (puisque la fonction a été exécutée)
             // removeTimeout(newTimeout); // Supprime le timeout de la liste des timeouts actifs
             executeCallback();
           }, remainingTime);
-          timeoutRef.current = newTimeout; // Enregistre le timeout
-          // console.log(token, 'NT to add: ', newTimeout);
-          // addTimeout(newTimeout); // Ajoute le timeout à la liste des timeouts actifs
+          timeoutRef.current = newTimeout; // Enregistre le timeout // +addTimeout(newTimeout) si gestion des timeouts actifs;
         }
       });
     },
     []
   );
-
-  // Cleanup des timeouts
-  // useEffect(() => {
-  //   return () => {
-  //     console.log('---- CLEANUP SESSION ----');
-  //     console.log(timeoutStore.timeouts);
-  //     timeoutStore.clearTimeouts();
-  //     console.log('---- END OF CLEANING ----');
-  //   };
-  // }, []);
 
   return { throttledExecution };
 }

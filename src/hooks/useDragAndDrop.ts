@@ -1,10 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useActionFollowingMove from './useActionFollowingMove';
-import TimeoutStore from '../store/TimeoutStore';
-import timeoutCleanup from '../utils/timeoutCleanup';
-import timeoutManager from '../store/TimeoutManager';
-import createTimeoutSlice from '../store/timeoutSlice';
-import useStore from '../store/store';
 
 interface Position {
   x: number;
@@ -18,20 +13,18 @@ function useDragAndDrop(
 ) {
   const [isDragging, setIsDragging] = useState(false); // État pour savoir si l'utilisateur fait glisser la grille
   const lastMousePosition = useRef({ x: 0, y: 0 }); // Référence pour stocker la dernière position de la souris
-  // const mouseDownRef = useRef(false); // Référence pour savoir si le bouton de la souris est enfoncé
   const [isMouseDown, setIsMouseDown] = useState(false); // État pour savoir si le bouton de la souris est enfoncé
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 }); // Position de la grille
-  const MIN_DRAG_DISTANCE = 7; // Distance minimale de glissement pour commencer à faire glisser la grille
+  const MIN_DRAG_DISTANCE = 3; // Distance minimale de glissement pour commencer à faire glisser la grille
 
   const resetPosition = () => {
     setPosition({ x: 0, y: 0 });
   };
 
-  // L'utilisateur clique : met à jour l'état de mouseDownRef et enregistre la position de la souris
+  // L'utilisateur clique : enregistre la position de la souris
   const handleMouseDown = useCallback(
     (e: MouseEvent) => {
       if (!isActivated) return;
-      // mouseDownRef.current = true;
       setIsMouseDown(true);
       lastMousePosition.current = { x: e.clientX, y: e.clientY };
     },
@@ -41,7 +34,6 @@ function useDragAndDrop(
   const handleTouchStart = useCallback(
     (e: TouchEvent) => {
       if (!isActivated) return;
-      // mouseDownRef.current = true;
       setIsMouseDown(true);
       const touch = e.touches[0];
       lastMousePosition.current = { x: touch.clientX, y: touch.clientY };
@@ -53,26 +45,17 @@ function useDragAndDrop(
   // - si pas encore de drag : vérifie si la distance de glissement est suffisante pour commencer à faire glisser la grille
   // - si drag en cours : met à jour la position de la grille en fonction du mouvement de la souris
 
-  const storeKey = useRef<string>(
-    `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
-  ).current;
-  // const createStore = useStore((state) => state.createStore);
-  // const addTimeout = useStore((state) => state.addUseDADTimeout);
-  // const removeTimeout = useStore((state) => state.removeUseDADTimeout);
-  // const clearTimeouts = useStore((state) => state.clearUseDADTimeouts);
-  // const deleteStore = useStore((state) => state.deleteStore);
+  // ----- handleDragProgress
+
+  // const token = useRef<string>(
+  //   `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+  // ).current;
+
   const lastRanRef = useRef<number | undefined>(undefined);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
-
   const cbShouldNotRun = !isMouseDown;
-
-  // useEffect(() => {
-  //   return () => {
-  //     clearTimeouts();
-  //   };
-  // }, [clearTimeouts]);
 
   const updatePosition = (deltaX: number, deltaY: number) => {
     setPosition((prev) => ({
@@ -83,7 +66,7 @@ function useDragAndDrop(
 
   const executeMouseLogic = useCallback(
     (e: MouseEvent | MouseEvent) => {
-      console.log('executeMouseLogic dans useDAD, date.now() : ', Date.now());
+      // console.log('executeMouseLogic dans useDAD, date.now() : ', Date.now());
       const deltaX = e.clientX - lastMousePosition.current.x;
       const deltaY = e.clientY - lastMousePosition.current.y;
 
@@ -104,6 +87,7 @@ function useDragAndDrop(
 
   const executeTouchLogic = useCallback(
     (e: TouchEvent | TouchEvent) => {
+      // console.log('executeTouchLogic dans useDAD, date.now() : ', Date.now());
       const touch = e.touches[0];
       const deltaX = touch.clientX - lastMousePosition.current.x;
       const deltaY = touch.clientY - lastMousePosition.current.y;
@@ -124,9 +108,7 @@ function useDragAndDrop(
   );
 
   const handleDragProgress = useActionFollowingMove(
-    // storeKey,
-    // addTimeout,
-    // removeTimeout,
+    // token,
     lastRanRef,
     timeoutRef,
     throttleLimit,
@@ -134,6 +116,15 @@ function useDragAndDrop(
     executeMouseLogic,
     executeTouchLogic
   );
+
+  // Je n'ai pas réussi à faire fonctionner le cleanup des timeouts restants (le dernier timeout s'il n'est pas clear via useThrottledExecution). Le throttle est de 32ms, "peu de risque" que le timeout ne soit pas clear
+  // useEffect(() => {
+  //   return () => {
+  //     clearTimeouts();
+  //   };
+  // }, [clearTimeouts]);
+
+  // ----------
 
   // L'utilisateur relâche le bouton de la souris ou quitte la zone de la grille :
   // met à jour l'état de isDragging et de userDragsGrid après un court délai
@@ -145,7 +136,6 @@ function useDragAndDrop(
         setIsDragging(false);
       }, 50);
     }
-    // mouseDownRef.current = false;
     setIsMouseDown(false);
   }, [isDragging]);
 
@@ -155,7 +145,6 @@ function useDragAndDrop(
         setIsDragging(false);
       }, 50);
     }
-    // mouseDownRef.current = false;
     setIsMouseDown(false);
   }, [isDragging]);
 

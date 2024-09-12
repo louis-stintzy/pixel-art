@@ -1,21 +1,24 @@
 import { StateCreator } from 'zustand';
-import TimeoutStore from './TimeoutStore';
+// import TimeoutStore from './TimeoutStore';
 
 export interface TimeoutSlice {
   // timeoutStores: { [key: string]: ReturnType<typeof setTimeout>[] };
   // createStore: (key: string) => void;
+
   useDADTimeouts: ReturnType<typeof setTimeout>[];
   gridTimeouts: ReturnType<typeof setTimeout>[];
   CPCTimeouts: ReturnType<typeof setTimeout>[];
-  addUseDADTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
-  addGridTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
-  addCPCTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
-  removeUseDADTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
-  removeGridTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
-  removeCPCTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
-  clearUseDADTimeouts: () => void;
-  clearGridTimeouts: () => void;
-  clearCPCTimeouts: () => void;
+
+  // addUseDADTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
+  // addGridTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
+  // addCPCTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
+  // removeUseDADTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
+  // removeGridTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
+  // removeCPCTimeout: (timeout: ReturnType<typeof setTimeout>) => void;
+  // clearUseDADTimeouts: () => void;
+  // clearGridTimeouts: () => void;
+  // clearCPCTimeouts: () => void;
+
   // addTimeout: (key: string, timeout: ReturnType<typeof setTimeout>) => void;
   // removeTimeout: (key: string, timeout: ReturnType<typeof setTimeout>) => void;
   // deleteStore: (key: string) => void;
@@ -36,63 +39,66 @@ const createTimeoutSlice: StateCreator<TimeoutSlice> = (set) => ({
   //     }
   //     return { timeoutStores: state.timeoutStores };
   //   }),
+
   useDADTimeouts: [],
   gridTimeouts: [],
   CPCTimeouts: [],
-  addUseDADTimeout: (timeout) =>
-    set((state) => {
-      console.log('addUseDADTimeout : ', timeout);
-      state.useDADTimeouts.push(timeout);
-      return { useDADTimeouts: state.useDADTimeouts };
-    }),
-  addGridTimeout: (timeout) =>
-    set((state) => {
-      console.log('addGridTimeout : ', timeout);
-      state.gridTimeouts.push(timeout);
-      return { gridTimeouts: state.gridTimeouts };
-    }),
-  addCPCTimeout: (timeout) =>
-    set((state) => {
-      console.log('addCPCTimeout : ', timeout);
-      state.CPCTimeouts.push(timeout);
-      return { CPCTimeouts: state.CPCTimeouts };
-    }),
-  removeUseDADTimeout: (timeout) =>
-    set((state) => {
-      console.log('removeUseDADTimeout : ', timeout);
-      state.useDADTimeouts = state.useDADTimeouts.filter((t) => t !== timeout);
-      return { useDADTimeouts: state.useDADTimeouts };
-    }),
-  removeGridTimeout: (timeout) =>
-    set((state) => {
-      console.log('removeGridTimeout : ', timeout);
-      state.gridTimeouts = state.gridTimeouts.filter((t) => t !== timeout);
-      return { gridTimeouts: state.gridTimeouts };
-    }),
-  removeCPCTimeout: (timeout) =>
-    set((state) => {
-      console.log('removeCPCTimeout : ', timeout);
-      state.CPCTimeouts = state.CPCTimeouts.filter((t) => t !== timeout);
-      return { CPCTimeouts: state.CPCTimeouts };
-    }),
-  clearUseDADTimeouts: () =>
-    set((state) => {
-      console.log('clearUseDADTimeouts : ', state.useDADTimeouts);
-      state.useDADTimeouts.forEach((timeout) => clearTimeout(timeout));
-      return { useDADTimeouts: [] };
-    }),
-  clearGridTimeouts: () =>
-    set((state) => {
-      console.log('clearGridTimeouts : ', state.gridTimeouts);
-      state.gridTimeouts.forEach((timeout) => clearTimeout(timeout));
-      return { gridTimeouts: [] };
-    }),
-  clearCPCTimeouts: () =>
-    set((state) => {
-      console.log('clearCPCTimeouts : ', state.CPCTimeouts);
-      state.CPCTimeouts.forEach((timeout) => clearTimeout(timeout));
-      return { CPCTimeouts: [] };
-    }),
+
+  // addUseDADTimeout: (timeout) =>
+  //   set((state) => {
+  //     console.log('addUseDADTimeout : ', timeout);
+  //     state.useDADTimeouts.push(timeout);
+  //     return { useDADTimeouts: state.useDADTimeouts };
+  //   }),
+  // addGridTimeout: (timeout) =>
+  //   set((state) => {
+  //     console.log('addGridTimeout : ', timeout);
+  //     state.gridTimeouts.push(timeout);
+  //     return { gridTimeouts: state.gridTimeouts };
+  //   }),
+  // addCPCTimeout: (timeout) =>
+  //   set((state) => {
+  //     console.log('addCPCTimeout : ', timeout);
+  //     state.CPCTimeouts.push(timeout);
+  //     return { CPCTimeouts: state.CPCTimeouts };
+  //   }),
+  // removeUseDADTimeout: (timeout) =>
+  //   set((state) => {
+  //     console.log('removeUseDADTimeout : ', timeout);
+  //     state.useDADTimeouts = state.useDADTimeouts.filter((t) => t !== timeout);
+  //     return { useDADTimeouts: state.useDADTimeouts };
+  //   }),
+  // removeGridTimeout: (timeout) =>
+  //   set((state) => {
+  //     console.log('removeGridTimeout : ', timeout);
+  //     state.gridTimeouts = state.gridTimeouts.filter((t) => t !== timeout);
+  //     return { gridTimeouts: state.gridTimeouts };
+  //   }),
+  // removeCPCTimeout: (timeout) =>
+  //   set((state) => {
+  //     console.log('removeCPCTimeout : ', timeout);
+  //     state.CPCTimeouts = state.CPCTimeouts.filter((t) => t !== timeout);
+  //     return { CPCTimeouts: state.CPCTimeouts };
+  //   }),
+  // clearUseDADTimeouts: () =>
+  //   set((state) => {
+  //     console.log('clearUseDADTimeouts : ', state.useDADTimeouts);
+  //     state.useDADTimeouts.forEach((timeout) => clearTimeout(timeout));
+  //     return { useDADTimeouts: [] };
+  //   }),
+  // clearGridTimeouts: () =>
+  //   set((state) => {
+  //     console.log('clearGridTimeouts : ', state.gridTimeouts);
+  //     state.gridTimeouts.forEach((timeout) => clearTimeout(timeout));
+  //     return { gridTimeouts: [] };
+  //   }),
+  // clearCPCTimeouts: () =>
+  //   set((state) => {
+  //     console.log('clearCPCTimeouts : ', state.CPCTimeouts);
+  //     state.CPCTimeouts.forEach((timeout) => clearTimeout(timeout));
+  //     return { CPCTimeouts: [] };
+  //   }),
+
   // addTimeout: (key, timeout) =>
   //   set((state) => {
   //     if (state.timeoutStores[key]) {
