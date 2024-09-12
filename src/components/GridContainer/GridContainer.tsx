@@ -20,7 +20,11 @@ function GridContainer() {
   // useRef est idéal pour conserver des références à des éléments DOM ou des valeurs qui ne nécessitent pas de re-render de composant lorsqu'elles sont modifiées.
   // C'est particulièrement utile pour suivre l'état d'interactions utilisateur comme le drag-and-drop.
   const gridRef = useRef<HTMLDivElement | null>(null); // Référence pour le conteneur de la grille
-  const { position, isDragging } = useDragAndDrop(gridRef, !isReadyToDraw); // Position de la grille et état de glissement (custom hook)
+  const { position, isDragging } = useDragAndDrop(
+    gridRef,
+    !isReadyToDraw,
+    4000 // ! 32 à remettre, 4000 ou + à tester pour le coloriage et pour la palette de couleur car pas besoin de position juste savoir si on est en train de drag
+  ); // Position de la grille et état de glissement (custom hook)
   const setUserDragsGrid = useStore((state) => state.setUserDragsGrid); // Fonction pour définir si l'utilisateur fait glisser la grille (etat global)
 
   useEffect(() => {

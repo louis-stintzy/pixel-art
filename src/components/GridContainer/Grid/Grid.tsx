@@ -23,16 +23,13 @@ function Grid() {
     coloring(pixelIds, color);
   };
 
+  const tokenRef = useRef<string>(
+    `ColorGrid-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+  );
   const lastRanRef = useRef<number | undefined>(undefined);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
-
-  useEffect(() => {
-    return () => {
-      timeoutCleanup(timeoutRef);
-    };
-  }, []);
 
   const throttleLimit = 32;
   const cbShouldNotRun = !isColoring;
@@ -55,6 +52,7 @@ function Grid() {
   }, []);
 
   const handleDragProgress = useActionFollowingMove(
+    tokenRef.current,
     lastRanRef,
     timeoutRef,
     throttleLimit,

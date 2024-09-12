@@ -1,6 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useActionFollowingMove from './useActionFollowingMove';
+import TimeoutStore from '../store/TimeoutStore';
 import timeoutCleanup from '../utils/timeoutCleanup';
+import timeoutManager from '../store/TimeoutManager';
+import createTimeoutSlice from '../store/timeoutSlice';
+import useStore from '../store/store';
 
 interface Position {
   x: number;
@@ -49,18 +53,23 @@ function useDragAndDrop(
   // - si pas encore de drag : vérifie si la distance de glissement est suffisante pour commencer à faire glisser la grille
   // - si drag en cours : met à jour la position de la grille en fonction du mouvement de la souris
 
+  const storeKey = useRef<string>(
+    `useDAD-T${Date.now().toString()}-R${Math.floor(Math.random() * 1000)}`
+  ).current;
+  const createStore = useStore((state) => state.createStore);
+  const clearStore = useStore((state) => state.clearStore);
+  const timeoutStore = createStore(storeKey);
   const lastRanRef = useRef<number | undefined>(undefined);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(998);
+
+  const cbShouldNotRun = !isMouseDown;
 
   useEffect(() => {
     return () => {
-      timeoutCleanup(timeoutRef);
+      console.log('cleanup useDragAndDrop, timeoutStore : ', timeoutStore);
+      clearStore(storeKey);
     };
-  }, []);
-
-  const cbShouldNotRun = !isMouseDown;
+  }, [clearStore, storeKey, timeoutStore]);
 
   const updatePosition = (deltaX: number, deltaY: number) => {
     setPosition((prev) => ({
@@ -112,6 +121,8 @@ function useDragAndDrop(
   );
 
   const handleDragProgress = useActionFollowingMove(
+    storeKey,
+    timeoutStore,
     lastRanRef,
     timeoutRef,
     throttleLimit,

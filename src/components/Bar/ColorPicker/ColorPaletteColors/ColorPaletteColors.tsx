@@ -163,11 +163,13 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     undefined
   );
 
-  useEffect(() => {
-    return () => {
-      timeoutCleanup(timeoutRef);
-    };
-  }, []);
+  // NE FONCTIONNE PAS
+  // useEffect(() => {
+  //   return () => {
+  //     // console.log('cleanup ColorPaletteColors');
+  //     timeoutCleanup(timeoutRef);
+  //   };
+  // }, []);
 
   const throttleLimit = 32;
   const cbShouldNotRun = !isDragging;

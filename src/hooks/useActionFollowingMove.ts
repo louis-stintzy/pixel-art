@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 import useThrottledExecution from './useThrottledExecution';
+import TimeoutStore from '../store/TimeoutStore';
 
 function useActionFollowingMove(
+  token: string,
+  timeoutStore: TimeoutStore,
   lastRanRef: React.MutableRefObject<number | undefined>,
   timeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | undefined>,
   throttleLimit: number,
@@ -9,11 +12,12 @@ function useActionFollowingMove(
   executeMouseLogic: (e: MouseEvent) => void,
   executeTouchLogic: (e: TouchEvent) => void
 ) {
-  const { throttledExecution } = useThrottledExecution();
+  const { throttledExecution } = useThrottledExecution(timeoutStore);
 
   return useCallback(
     (event: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
       throttledExecution({
+        token,
         lastRanRef,
         timeoutRef,
         throttleLimit,
@@ -50,6 +54,7 @@ function useActionFollowingMove(
       throttleLimit,
       throttledExecution,
       timeoutRef,
+      token,
     ]
   );
 }
