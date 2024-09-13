@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import useStore from '../../../store/store';
 import { coloring, replaceColor2 } from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
-import gridColor from '../../../constants/gridColor';
 import { pipetteIcon } from '../../../constants/icons';
 
 interface PixelProps {
@@ -14,6 +13,7 @@ interface PixelProps {
 // L'optimisation est renforcée par le fait que l'on récupère uniquement la couleur du pixel actuel,
 // ce qui évite de provoquer un re-render de tous les pixels lorsque la couleur d'un seul change.
 const Pixel = React.memo(({ id }: PixelProps) => {
+  const gridColor = useStore((state) => state.gridColor);
   const pixelSize = useStore((state) => state.gridSize.pixelSize);
   const pixelColor = useStore((state) => state.pixelColors[id]);
   const isSelectingColorToChange = useStore(

@@ -5,11 +5,11 @@ import useActionFollowingMove from '../../../hooks/useActionFollowingMove';
 import { coloring } from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
-import gridColor from '../../../constants/gridColor';
 
 function Grid() {
   const gridRef = useRef<HTMLDivElement | null>(null);
   const gridSize = useStore((state) => state.gridSize);
+  const gridColor = useStore((state) => state.gridColor);
   const isReadyToDraw = useStore((state) => state.isReadyToDraw);
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
 
@@ -26,35 +26,44 @@ function Grid() {
   const throttleLimit = 32;
   const cbShouldNotRun = !isColoring;
 
-  const applyToolOnPixel = (pixel: HTMLDivElement) => {
-    const { isBigTool, isEraser } = useStore.getState();
-    const pixelIds = isBigTool
-      ? [pixel.id, ...getNeighboringPixels(pixel.id)]
-      : [pixel.id];
-    const color = isEraser ? gridColor.background : undefined;
-    coloring(pixelIds, color);
-  };
+  const applyToolOnPixel = useCallback(
+    (pixel: HTMLDivElement) => {
+      const { isBigTool, isEraser } = useStore.getState();
+      const pixelIds = isBigTool
+        ? [pixel.id, ...getNeighboringPixels(pixel.id)]
+        : [pixel.id];
+      const color = isEraser ? gridColor.background : undefined;
+      coloring(pixelIds, color);
+    },
+    [gridColor.background]
+  );
 
-  const executeMouseLogic = useCallback((e: React.MouseEvent | MouseEvent) => {
-    // console.log(
-    //   'executeMouseLogic dans Grid pour coloriage, date.now() : ',
-    //   Date.now()
-    // );
-    const pixel = e.target as HTMLDivElement;
-    if (pixel) applyToolOnPixel(pixel);
-  }, []);
+  const executeMouseLogic = useCallback(
+    (e: React.MouseEvent | MouseEvent) => {
+      // console.log(
+      //   'executeMouseLogic dans Grid pour coloriage, date.now() : ',
+      //   Date.now()
+      // );
+      const pixel = e.target as HTMLDivElement;
+      if (pixel) applyToolOnPixel(pixel);
+    },
+    [applyToolOnPixel]
+  );
 
-  const executeTouchLogic = useCallback((e: React.TouchEvent | TouchEvent) => {
-    // console.log(
-    //   'executeTouchLogic dans Grid pour coloriage, date.now() : ',
-    //   Date.now()
-    // );
-    const pixel = document.elementFromPoint(
-      e.touches[0].clientX,
-      e.touches[0].clientY
-    ) as HTMLDivElement;
-    if (pixel) applyToolOnPixel(pixel);
-  }, []);
+  const executeTouchLogic = useCallback(
+    (e: React.TouchEvent | TouchEvent) => {
+      // console.log(
+      //   'executeTouchLogic dans Grid pour coloriage, date.now() : ',
+      //   Date.now()
+      // );
+      const pixel = document.elementFromPoint(
+        e.touches[0].clientX,
+        e.touches[0].clientY
+      ) as HTMLDivElement;
+      if (pixel) applyToolOnPixel(pixel);
+    },
+    [applyToolOnPixel]
+  );
 
   const handleDragProgress = useActionFollowingMove(
     // token

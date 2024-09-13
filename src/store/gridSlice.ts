@@ -7,6 +7,10 @@ export interface GridSlice {
   aspectRatio: AspectRatio;
   format: Format;
   gridSize: { width: number; height: number; pixelSize: number };
+  gridColor: {
+    background: string;
+    line: string;
+  };
   pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
   setUserDragsGrid: (userDragsGrid: boolean) => void;
   setAspectRatio: (aspectRatio: AspectRatio) => void;
@@ -16,6 +20,7 @@ export interface GridSlice {
     height: number;
     pixelSize: number;
   }) => void;
+  setGridColor: (gridColor: { background: string; line: string }) => void;
   setPixelColors: (newPixelColors: Record<string, string>) => void;
   setPixelColorsBackup: (newPixelColors: Record<string, string>) => void;
 }
@@ -24,12 +29,17 @@ const createGridSlice: StateCreator<GridSlice> = (set) => ({
   userDragsGrid: false,
   aspectRatio: resetAspectRatio,
   format: resetAspectRatio.formats[0],
-  gridSize: { width: 40, height: 30, pixelSize: 20 }, // Default grid size, 800x600, 20px
+  gridSize: { width: 40, height: 30, pixelSize: 25 }, // Default grid size, 800x600, 25px
+  gridColor: {
+    background: '#FFFEFF',
+    line: '#ccc',
+  },
   pixelColors: {},
   setUserDragsGrid: (userDragsGrid) => set({ userDragsGrid }),
   setAspectRatio: (aspectRatio) => set({ aspectRatio }),
   setFormat: (format) => set({ format }),
   setGridSize: (gridSize) => set({ gridSize }),
+  setGridColor: (gridColor) => set({ gridColor }),
   setPixelColors: (newPixelColors: Record<string, string>) =>
     set((state) => ({
       pixelColors: { ...state.pixelColors, ...newPixelColors }, // Ajoute les nouvelles couleurs à pixelColors

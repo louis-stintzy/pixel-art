@@ -3,7 +3,6 @@ import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDropOld';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
-import gridColor from '../../../constants/gridColor';
 import { coloring } from '../../../utils/coloring';
 
 function Grid() {
@@ -18,20 +17,24 @@ function Grid() {
 
   const gridRef = useRef<HTMLDivElement | null>(null);
   const gridSize = useStore((state) => state.gridSize);
+  const gridColor = useStore((state) => state.gridColor);
   const isReadyToDraw = useStore((state) => state.isReadyToDraw);
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
 
   const PIXEL_COLOR_THROTTLE = 32;
 
-  const applyToolOnPixel = (pixel: HTMLDivElement) => {
-    console.log('-OLD-applyToolOnPixel, date.now() : ', Date.now());
-    const { isBigTool, isEraser } = useStore.getState();
-    const pixelIds = isBigTool
-      ? [pixel.id, ...getNeighboringPixels(pixel.id)]
-      : [pixel.id];
-    const color = isEraser ? gridColor.background : undefined;
-    coloring(pixelIds, color);
-  };
+  const applyToolOnPixel = useCallback(
+    (pixel: HTMLDivElement) => {
+      console.log('-OLD-applyToolOnPixel, date.now() : ', Date.now());
+      const { isBigTool, isEraser } = useStore.getState();
+      const pixelIds = isBigTool
+        ? [pixel.id, ...getNeighboringPixels(pixel.id)]
+        : [pixel.id];
+      const color = isEraser ? gridColor.background : undefined;
+      coloring(pixelIds, color);
+    },
+    [gridColor.background]
+  );
 
   const handleMouseMove = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
@@ -55,7 +58,7 @@ function Grid() {
         }
       });
     },
-    [isColoring]
+    [applyToolOnPixel, isColoring]
   );
 
   const handleTouchMove = useCallback(
@@ -86,7 +89,7 @@ function Grid() {
         }
       });
     },
-    [isColoring]
+    [applyToolOnPixel, isColoring]
   );
 
   const gridStyle: React.CSSProperties = {

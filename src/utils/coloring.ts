@@ -1,4 +1,3 @@
-import gridColor from '../constants/gridColor';
 import useStore from '../store/store';
 
 //----------------------------------
@@ -30,7 +29,7 @@ export const coloring = (pixelIds: string[], color?: string) => {
  */
 
 export const replaceColor2 = async (oldColor: string, newColor?: string) => {
-  const { pixelColors, selectedColor } = useStore.getState();
+  const { gridColor, pixelColors, selectedColor } = useStore.getState();
 
   // Démarage du chargement
   useStore.getState().setColorReplacement({
