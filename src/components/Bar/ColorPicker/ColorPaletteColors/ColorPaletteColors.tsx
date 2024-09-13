@@ -35,6 +35,10 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     setTouchStartTime(Date.now());
     // Pour Drag and Drop
     const selectedColorButton = event.target as HTMLButtonElement;
+    const isFavoriteColor = favoriteColors.some(
+      (color) => color.code === selectedColorButton.id.split('-')[2]
+    );
+    if (!isFavoriteColor) return;
     if (selectedColorButton)
       setDraggedColorButton({
         button: selectedColorButton,
@@ -115,6 +119,10 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
 
   const handleMouseDragStart = (event: React.MouseEvent<HTMLButtonElement>) => {
     const selectedColorButton = event.target as HTMLButtonElement;
+    const isFavoriteColor = favoriteColors.some(
+      (color) => color.code === selectedColorButton.id.split('-')[2]
+    );
+    if (!isFavoriteColor) return;
     if (selectedColorButton)
       setDraggedColorButton({
         button: selectedColorButton,
