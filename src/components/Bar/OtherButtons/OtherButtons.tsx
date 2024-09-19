@@ -15,7 +15,6 @@ function OtherButtons() {
       setContactToastVisible(true);
     } catch (error) {
       console.error('Failed to copy email:', error);
-      alert('Failed to copy email. Please try again.');
     }
   };
   const otherButtonsStyle = {
@@ -25,18 +24,38 @@ function OtherButtons() {
   };
   return (
     <div id="other-buttons" style={otherButtonsStyle}>
-      <button type="button" id="other-buttons__clear" disabled>
+      <button
+        type="button"
+        id="other-buttons__clear"
+        aria-label="Clear the canvas"
+        title="Clear the canvas"
+        disabled
+      >
         <img src={trashIcon} alt="Trash icon" />
       </button>
-      <button type="button" id="other-buttons__save" disabled>
+      <button
+        type="button"
+        id="other-buttons__save"
+        aria-label="Save your pixel art"
+        title="Save your pixel art"
+        disabled
+      >
         <img src={saveIcon} alt="Save icon" />
       </button>
-      <button type="button" id="other-buttons__publish" disabled>
+      <button
+        type="button"
+        id="other-buttons__publish"
+        aria-label="Publish your pixel art"
+        title="Publish your pixel art"
+        disabled
+      >
         <img src={publishIcon} alt="Publish icon" />
       </button>
       <button
         type="button"
         id="other-buttons__contact"
+        aria-label="Contact the developer"
+        title="Contact the developer"
         onClick={handleClickContactButton}
       >
         <img src={contactIcon} alt="Contact icon" />
