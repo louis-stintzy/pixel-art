@@ -4,6 +4,7 @@ import GridSizeSelector2 from './GridSizeSelector/GridSizeSelector2';
 
 import './Bar.scss';
 import ControlPanel from './ControlPanel/ControlPanel';
+import OtherButtons from './OtherButtons/OtherButtons';
 
 function Bar() {
   return (
@@ -15,6 +16,7 @@ function Bar() {
           <ColorPaletteSelector />
           <ControlPanel />
         </div>
+        <OtherButtons />
         <ColorPicker />
       </div>
     </div>

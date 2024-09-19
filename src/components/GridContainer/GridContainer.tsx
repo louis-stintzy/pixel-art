@@ -6,6 +6,7 @@ import ImageUnderTheGrid from './ImageUnderTheGrid/ImageUnderTheGrid';
 import './GridContainer.scss';
 import Loader from './Loader/Loader';
 import ColorReplacementToast from '../Toasts/ColorReplacementToast';
+import ContactToast from '../Toasts/ContactToast';
 
 function GridContainer() {
   const isReadyToDraw = useStore((state) => state.isReadyToDraw); // État pour savoir si l'utilisateur est en train de colorier (etat global)
@@ -14,6 +15,7 @@ function GridContainer() {
     isLoading: colorReplacementIsLoading,
     toastVisible: colorReplacementToastVisible,
   } = useStore((state) => state.colorReplacement); // État pour savoir si le remplacement de couleur est en cours (etat global)
+  const { contactToastVisible } = useStore((state) => state); // État pour savoir si le toast de contact est visible (etat global)
 
   // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
   // useRef renvoie un objet avec une propriété current qui est mutable.
@@ -50,6 +52,7 @@ function GridContainer() {
         {!isImageHidden && <ImageUnderTheGrid />}
       </div>
       {colorReplacementToastVisible && <ColorReplacementToast />}
+      {contactToastVisible && <ContactToast />}
     </div>
   );
 }
