@@ -10,8 +10,8 @@ function ColorReplacementToast() {
   };
   return (
     <Toast
-      message="Color change applied. Do you want to undo?"
-      onUndo={undoColorReplacement}
+      message="Color change applied. Do you want to undo ?"
+      optionalButton={{ text: 'Undo', onClick: undoColorReplacement }}
       onClose={() =>
         useStore.getState().setColorReplacement({ toastVisible: false })
       }
