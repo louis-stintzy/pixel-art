@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import createUserSlice, { UserSlice } from './userSlice';
 import createGridSlice, { GridSlice } from './gridSlice';
 import createImageSlice, { ImageSlice } from './imageSlice';
 import createPaletteSlice, { PaletteSlice } from './paletteSlice';
@@ -9,13 +10,15 @@ import createOtherButtonsSlice, {
   OtherButtonsSlice,
 } from './otherButtonsSlice';
 
-type StoreState = GridSlice &
+type StoreState = UserSlice &
+  GridSlice &
   ImageSlice &
   PaletteSlice &
   ActionButtonsSlice &
   OtherButtonsSlice;
 
 const useStore = create<StoreState>()((...a) => ({
+  ...createUserSlice(...a),
   ...createGridSlice(...a),
   ...createImageSlice(...a),
   ...createPaletteSlice(...a),

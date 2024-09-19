@@ -4,6 +4,15 @@ import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 
 const buttonStyle = {};
 
+const handleClickSaveBbutton = () => {
+  const { isLogged } = useStore.getState();
+  if (!isLogged) {
+    console.log('Please log in to save your pixel art');
+    return;
+  }
+  useStore.getState().setDescriptionModalIsOpen(true);
+};
+
 const handleClickContactButton = async () => {
   const { setContactToastVisible } = useStore.getState();
   try {
@@ -38,10 +47,7 @@ const otherButtons = [
       src: saveIcon,
       alt: 'Save icon',
     },
-    disabled: true,
-    onClickButton: () => {
-      console.log('Save your pixel art');
-    },
+    onClickButton: handleClickSaveBbutton,
   },
   // ----- Publish your pixel art -----
   {
