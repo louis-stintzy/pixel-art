@@ -21,8 +21,22 @@ function DescriptionModal() {
   };
 
   const handleSave = () => {
-    exportData();
-    useStore.getState().setDescriptionModalIsOpen(false);
+    try {
+      const { isLogged } = useStore.getState();
+      if (!isLogged || !user) {
+        throw new Error('Please log in to save');
+      }
+      exportData();
+      useStore.getState().setDescriptionModalIsOpen(false);
+      useStore
+        .getState()
+        .setSavingToastVisible({ success: true, error: false });
+    } catch (error) {
+      console.error('Failed to save pixel art:', error);
+      useStore
+        .getState()
+        .setSavingToastVisible({ success: false, error: true });
+    }
   };
 
   useEffect(() => {

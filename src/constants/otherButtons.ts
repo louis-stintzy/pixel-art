@@ -5,8 +5,8 @@ import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 const buttonStyle = {};
 
 const handleClickSaveBbutton = () => {
-  const { isLogged } = useStore.getState();
-  if (!isLogged) {
+  const { isLogged, user } = useStore.getState();
+  if (!isLogged || !user) {
     console.log('Please log in to save your pixel art');
     return;
   }

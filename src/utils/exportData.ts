@@ -5,6 +5,7 @@ const exportData = () => {
   try {
     const {
       user,
+      isLogged,
       pixelArtDescription,
       gridSize,
       gridColor,
@@ -12,9 +13,8 @@ const exportData = () => {
       imageUrl,
     } = useStore.getState();
 
-    if (!user) {
-      console.log('Please log in to save your pixel art');
-      return;
+    if (!isLogged || !user) {
+      throw new Error('Please log in to export');
     }
 
     const pixelArtToken = `T${Date.now().toString()}-U${user.id}-R${Math.floor(
@@ -34,9 +34,11 @@ const exportData = () => {
       date,
       version,
     };
-    console.log('data:', data);
+    const dataJsonStr = JSON.stringify(data, null, 2);
+    console.log('data:', dataJsonStr);
   } catch (error) {
     console.error('Failed to export data:', error);
+    throw new Error('Failed to export data');
   }
 };
 
