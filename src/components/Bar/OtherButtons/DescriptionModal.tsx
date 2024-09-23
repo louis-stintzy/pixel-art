@@ -36,6 +36,7 @@ function DescriptionModal() {
       useStore
         .getState()
         .setSavingToastVisible({ success: false, error: true });
+      useStore.getState().setDescriptionModalIsOpen(false);
     }
   };
 

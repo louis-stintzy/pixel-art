@@ -13,6 +13,7 @@ interface ToastProps {
     | undefined;
   onClose: () => void;
   duration?: number;
+  backgroundColor?: string;
 }
 
 function Toast({
@@ -20,14 +21,19 @@ function Toast({
   optionalButton,
   onClose,
   duration = 5000,
+  backgroundColor = '#333',
 }: ToastProps) {
   useEffect(() => {
     const timeoutId = setTimeout(onClose, duration);
     return () => clearTimeout(timeoutId);
   }, [duration, onClose]);
 
+  const toastContainerBackgroundColor: React.CSSProperties = {
+    backgroundColor,
+  };
+
   return (
-    <div id="toast-container">
+    <div id="toast-container" style={toastContainerBackgroundColor}>
       <div id="toast-message">{message}</div>
       {optionalButton && (
         <button
@@ -48,6 +54,7 @@ function Toast({
 Toast.defaultProps = {
   optionalButton: undefined,
   duration: 5000,
+  backgroundColor: '#333',
 };
 
 export default Toast;

@@ -3,14 +3,19 @@ import contactMail from './contactMail';
 import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 
 const buttonStyle = {};
+const { isLogged } = useStore.getState();
 
 const handleClickSaveBbutton = () => {
-  const { isLogged, user } = useStore.getState();
-  if (!isLogged || !user) {
-    console.log('Please log in to save your pixel art');
-    return;
+  try {
+    const { user } = useStore.getState();
+    if (!isLogged || !user) {
+      throw new Error('Please log in to save');
+    }
+    useStore.getState().setDescriptionModalIsOpen(true);
+  } catch (error) {
+    console.error('Failed to save pixel art:', error);
+    useStore.getState().setSavingToastVisible({ success: false, error: true });
   }
-  useStore.getState().setDescriptionModalIsOpen(true);
 };
 
 const handleClickContactButton = async () => {
@@ -47,6 +52,7 @@ const otherButtons = [
       src: saveIcon,
       alt: 'Save icon',
     },
+    disabled: !isLogged,
     onClickButton: handleClickSaveBbutton,
   },
   // ----- Publish your pixel art -----

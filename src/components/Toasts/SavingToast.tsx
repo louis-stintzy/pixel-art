@@ -15,7 +15,7 @@ function SavingToast() {
           ? 'Pixel art saved successfully !'
           : 'Failed to save pixel art'
       }
-      // backgroundColor={savingToastVisible.success ? 'green' : 'red'}
+      backgroundColor={savingToastVisible.success ? 'green' : 'red'}
       onClose={() => setSavingToastVisible({ success: false, error: false })}
       duration={3000}
     />
