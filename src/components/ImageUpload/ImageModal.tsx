@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import ImageCropper from './ImageCropper';
 import useStore from '../../store/store';
 import { handleCancel } from '../../utils/imageHandlers';
+import Modal from '../common/Modal';
 
 function ImageModal() {
   const croppingModalIsOpen = useStore((state) => state.croppingModalIsOpen);
@@ -25,9 +26,13 @@ function ImageModal() {
   if (!fileUrl) return null;
 
   return (
-    <dialog ref={modalRef} style={imageModalStyle} onCancel={handleCancel}>
+    <Modal
+      isOpen={croppingModalIsOpen}
+      modalStyle={imageModalStyle}
+      onClose={handleCancel}
+    >
       <ImageCropper />
-    </dialog>
+    </Modal>
   );
 }
 

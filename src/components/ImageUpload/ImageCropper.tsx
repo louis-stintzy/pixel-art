@@ -80,7 +80,7 @@ function ImageCropper() {
   };
 
   return (
-    <div>
+    <>
       <h1>ImageCropper</h1>
       <ImageFormatSetting />
       <div id="cropper-container" style={cropperContainerStyle}>
@@ -108,7 +108,7 @@ function ImageCropper() {
       <button type="button" onClick={handleCropImage}>
         Crop Image
       </button>
-    </div>
+    </>
   );
 }
 
