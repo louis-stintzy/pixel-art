@@ -1,4 +1,4 @@
-import Button from './Button';
+import Button from '../../common/Button';
 import otherButtons from '../../../constants/otherButtons';
 
 function OtherButtons() {

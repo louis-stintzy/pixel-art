@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import useStore from '../../../store/store';
+import useStore from '../../store/store';
 
 interface ActionButtonProps {
   id: string;

@@ -1,4 +1,4 @@
-import ActionButton from './ActionButton';
+import ActionButton from '../../common/ActionButton';
 import actionButtons from '../../../constants/actionButtons';
 
 function ControlPanel() {

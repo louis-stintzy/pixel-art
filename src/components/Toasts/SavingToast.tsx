@@ -1,5 +1,5 @@
 import useStore from '../../store/store';
-import Toast from './Toast';
+import Toast from '../common/Toast';
 
 function SavingToast() {
   const { savingToastVisible, setSavingToastVisible } = useStore(
