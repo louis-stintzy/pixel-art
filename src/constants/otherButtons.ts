@@ -5,6 +5,10 @@ import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 const buttonStyle = {};
 const { isLogged } = useStore.getState();
 
+const handleClickClearButton = () => {
+  useStore.getState().setClearCanvasToastVisible(true);
+};
+
 const handleClickSaveBbutton = () => {
   try {
     const { user } = useStore.getState();
@@ -38,10 +42,7 @@ const otherButtons = [
       src: trashIcon,
       alt: 'Trash icon',
     },
-    disabled: true,
-    onClickButton: () => {
-      console.log('Clear the canvas');
-    },
+    onClickButton: handleClickClearButton,
   },
   // ----- Save your pixel art -----
   {

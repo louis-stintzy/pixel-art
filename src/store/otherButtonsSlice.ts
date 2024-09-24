@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand';
 
 export interface OtherButtonsSlice {
+  clearCanvasToastVisible: boolean;
   contactToastVisible: boolean;
   descriptionModalIsOpen: boolean;
   pixelArtDescription: string;
@@ -8,6 +9,7 @@ export interface OtherButtonsSlice {
     success: boolean;
     error: boolean;
   };
+  setClearCanvasToastVisible: (clearCanvasToastVisible: boolean) => void;
   setContactToastVisible: (contactToastVisible: boolean) => void;
   setDescriptionModalIsOpen: (descriptionModalIsOpen: boolean) => void;
   setPixelArtDescription: (pixelartDescription: string) => void;
@@ -18,6 +20,7 @@ export interface OtherButtonsSlice {
 }
 
 const createOtherButtonsSlice: StateCreator<OtherButtonsSlice> = (set) => ({
+  clearCanvasToastVisible: false,
   contactToastVisible: false,
   descriptionModalIsOpen: false,
   pixelArtDescription: '',
@@ -25,6 +28,8 @@ const createOtherButtonsSlice: StateCreator<OtherButtonsSlice> = (set) => ({
     success: false,
     error: false,
   },
+  setClearCanvasToastVisible: (clearCanvasToastVisible) =>
+    set({ clearCanvasToastVisible }),
   setContactToastVisible: (contactToastVisible) => set({ contactToastVisible }),
   setDescriptionModalIsOpen: (descriptionModalIsOpen) =>
     set({ descriptionModalIsOpen }),
