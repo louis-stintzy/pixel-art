@@ -9,6 +9,7 @@ import ColorReplacementToast from '../Toasts/ColorReplacementToast';
 import ContactToast from '../Toasts/ContactToast';
 import SavingToast from '../Toasts/SavingToast';
 import ClearCanvasToast from '../Toasts/ClearCanvasToast';
+import ToastsContainer from './ToastsContainer/ToastsContainer';
 
 function GridContainer() {
   const isReadyToDraw = useStore((state) => state.isReadyToDraw); // État pour savoir si l'utilisateur est en train de colorier (etat global)
@@ -54,10 +55,7 @@ function GridContainer() {
         <Grid />
         {!isImageHidden && <ImageUnderTheGrid />}
       </div>
-      {clearCanvasToastVisible && <ClearCanvasToast />}
-      {colorReplacementToastVisible && <ColorReplacementToast />}
-      {savingToastVisible && <SavingToast />}
-      {contactToastVisible && <ContactToast />}
+      <ToastsContainer />
     </div>
   );
 }
