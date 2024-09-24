@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { closeIcon } from '../../constants/icons';
+import toastConfig from '../../constants/toastConfig';
 
 import './Toast.scss';
 
 interface ToastProps {
+  type: 'success' | 'error' | 'info' | 'warning' | 'default';
   message: string;
   optionalButton?:
     | {
@@ -13,32 +15,33 @@ interface ToastProps {
     | undefined;
   onClose: () => void;
   duration?: number;
-  backgroundColor?: string;
 }
 
 function Toast({
+  type,
   message,
   optionalButton,
   onClose,
   duration = 5000,
-  backgroundColor = '#333',
 }: ToastProps) {
   useEffect(() => {
     const timeoutId = setTimeout(onClose, duration);
     return () => clearTimeout(timeoutId);
   }, [duration, onClose]);
 
-  const toastContainerBackgroundColor: React.CSSProperties = {
-    backgroundColor,
+  const toastContainerStyle: React.CSSProperties = {
+    border: `1px solid ${toastConfig[type].borderColor}`,
+    backgroundColor: toastConfig[type].backgroundColor,
   };
 
   return (
-    <div id="toast-container" style={toastContainerBackgroundColor}>
+    <div id="toast-container" style={toastContainerStyle}>
+      <img id="toast-icon" src={toastConfig[type].icon} alt={`${type} icon`} />
       <div id="toast-message">{message}</div>
       {optionalButton && (
         <button
           type="button"
-          id="toast-undo-button"
+          id="toast-optional-button"
           onClick={optionalButton.onClick}
         >
           {optionalButton.text}
@@ -54,7 +57,6 @@ function Toast({
 Toast.defaultProps = {
   optionalButton: undefined,
   duration: 5000,
-  backgroundColor: '#333',
 };
 
 export default Toast;

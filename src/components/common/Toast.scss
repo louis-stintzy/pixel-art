@@ -1,7 +1,9 @@
 #toast-container {
   position: fixed;
+  height: 60px;
   bottom: 20px;
   right: 20px;
+  opacity: 0.9;
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
@@ -10,6 +12,22 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+#toast-icon {
+  filter: brightness(0) invert(1); // Invert the color of the icon
+  width: 24px;
+  height: 24px;
+}
+
+#toast-optional-button {
+  background-color: rgba(255, 255, 255, 0.01);
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 13px;
+  border: 1px solid white;
 }
 
 #toast-close-button {

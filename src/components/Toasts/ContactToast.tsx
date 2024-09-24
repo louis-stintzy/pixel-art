@@ -9,6 +9,7 @@ function ContactToast() {
   };
   return (
     <Toast
+      type="info"
       message="Email copied to clipboard or click to open your email client..."
       optionalButton={{ text: 'Open', onClick: openMailClient }}
       onClose={() => useStore.getState().setContactToastVisible(false)}

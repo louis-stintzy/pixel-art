@@ -9,12 +9,12 @@ function ClearCanvasToast() {
 
   return (
     <Toast
+      type="warning"
       message="Are you sure you want to clear the canvas ?"
       optionalButton={{
         text: 'Yes',
         onClick: clearCanvas,
       }}
-      backgroundColor="yellow"
       onClose={() => useStore.getState().setClearCanvasToastVisible(false)}
       duration={5000}
     />
