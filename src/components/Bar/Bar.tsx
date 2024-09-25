@@ -5,11 +5,11 @@ import GridSizeSelector2 from './GridSizeSelector/GridSizeSelector2';
 import './Bar.scss';
 import ControlPanel from './ControlPanel/ControlPanel';
 import OtherButtons from './OtherButtons/OtherButtons';
-import useStore from '../../store/store';
 import DescriptionModal from './OtherButtons/DescriptionModal';
+import { useIsDescriptionModalOpen } from '../../store/selector';
 
 function Bar() {
-  const { descriptionModalIsOpen } = useStore((state) => state);
+  const isDescriptionModalOpen = useIsDescriptionModalOpen();
   return (
     <div id="bar">
       <h2>Pixel Art Maker</h2>
@@ -22,7 +22,7 @@ function Bar() {
         <OtherButtons />
         <ColorPicker />
       </div>
-      {descriptionModalIsOpen && <DescriptionModal />}
+      {isDescriptionModalOpen && <DescriptionModal />}
     </div>
   );
 }

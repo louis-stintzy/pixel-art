@@ -17,7 +17,7 @@ function DescriptionModalContent() {
         throw new Error('Please log in to save');
       }
       exportData();
-      useStore.getState().setDescriptionModalIsOpen(false);
+      useStore.getState().setIsDescriptionModalOpen(false);
       useStore
         .getState()
         .setIsSavingToastVisible({ success: true, error: false });
@@ -26,12 +26,12 @@ function DescriptionModalContent() {
       useStore
         .getState()
         .setIsSavingToastVisible({ success: false, error: true });
-      useStore.getState().setDescriptionModalIsOpen(false);
+      useStore.getState().setIsDescriptionModalOpen(false);
     }
   };
 
   const handleCancel = () => {
-    useStore.getState().setDescriptionModalIsOpen(false);
+    useStore.getState().setIsDescriptionModalOpen(false);
   };
 
   const inputContainerStyle: React.CSSProperties = {

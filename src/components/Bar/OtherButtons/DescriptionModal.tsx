@@ -1,12 +1,13 @@
 import useStore from '../../../store/store';
 import Modal from '../../common/Modal';
 import DescriptionModalContent from './DescriptionModalContent';
+import { useIsDescriptionModalOpen } from '../../../store/selector';
 
 function DescriptionModal() {
-  const { descriptionModalIsOpen } = useStore((state) => state);
+  const isDescriptionModalOpen = useIsDescriptionModalOpen();
 
   const handleClose = () => {
-    useStore.getState().setDescriptionModalIsOpen(false);
+    useStore.getState().setIsDescriptionModalOpen(false);
   };
 
   const descriptionModalStyle: React.CSSProperties = {
@@ -17,7 +18,7 @@ function DescriptionModal() {
 
   return (
     <Modal
-      isOpen={descriptionModalIsOpen}
+      isOpen={isDescriptionModalOpen}
       modalStyle={descriptionModalStyle}
       onClose={handleClose}
     >

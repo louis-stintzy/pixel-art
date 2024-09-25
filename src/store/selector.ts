@@ -13,3 +13,5 @@ export const useIsContactToastVisible = () =>
 // ----- Modals Opening -----
 export const useIsCroppingModalOpen = () =>
   useStore((state) => state.isCroppingModalOpen);
+export const useIsDescriptionModalOpen = () =>
+  useStore((state) => state.isDescriptionModalOpen);

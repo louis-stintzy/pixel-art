@@ -1,17 +1,17 @@
 import { StateCreator } from 'zustand';
 
 export interface OtherButtonsSlice {
-  descriptionModalIsOpen: boolean;
+  isDescriptionModalOpen: boolean;
   pixelArtDescription: string;
-  setDescriptionModalIsOpen: (descriptionModalIsOpen: boolean) => void;
+  setIsDescriptionModalOpen: (isOpen: boolean) => void;
   setPixelArtDescription: (pixelartDescription: string) => void;
 }
 
 const createOtherButtonsSlice: StateCreator<OtherButtonsSlice> = (set) => ({
-  descriptionModalIsOpen: false,
+  isDescriptionModalOpen: false,
   pixelArtDescription: '',
-  setDescriptionModalIsOpen: (descriptionModalIsOpen) =>
-    set({ descriptionModalIsOpen }),
+  setIsDescriptionModalOpen: (isOpen) =>
+    set({ isDescriptionModalOpen: isOpen }),
   setPixelArtDescription: (pixelArtDescription) => set({ pixelArtDescription }),
 });
 

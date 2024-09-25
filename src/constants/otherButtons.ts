@@ -15,7 +15,7 @@ const handleClickSaveBbutton = () => {
     if (!isLogged || !user) {
       throw new Error('Please log in to save');
     }
-    useStore.getState().setDescriptionModalIsOpen(true);
+    useStore.getState().setIsDescriptionModalOpen(true);
   } catch (error) {
     console.error('Failed to save pixel art:', error);
     useStore
