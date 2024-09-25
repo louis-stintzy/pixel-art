@@ -3,7 +3,7 @@ import Toast from '../common/Toast';
 
 function ClearCanvasToast() {
   const clearCanvas = () => {
-    useStore.getState().setClearCanvasToastVisible(false);
+    useStore.getState().setIsClearCanvasToastVisible(false);
     useStore.getState().resetPixelColors();
   };
 
@@ -15,7 +15,7 @@ function ClearCanvasToast() {
         text: 'Yes',
         onClick: clearCanvas,
       }}
-      onClose={() => useStore.getState().setClearCanvasToastVisible(false)}
+      onClose={() => useStore.getState().setIsClearCanvasToastVisible(false)}
       duration={5000}
     />
   );

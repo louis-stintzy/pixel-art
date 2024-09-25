@@ -6,7 +6,7 @@ const buttonStyle = {};
 const { isLogged } = useStore.getState();
 
 const handleClickClearButton = () => {
-  useStore.getState().setClearCanvasToastVisible(true);
+  useStore.getState().setIsClearCanvasToastVisible(true);
 };
 
 const handleClickSaveBbutton = () => {
