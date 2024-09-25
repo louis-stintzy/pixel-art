@@ -1,19 +1,19 @@
 import { StateCreator } from 'zustand';
 
 export interface ImageSlice {
-  croppingModalIsOpen: boolean;
+  isCroppingModalOpen: boolean;
   fileUrl: string | undefined;
   imageUrl: string | undefined;
-  setCroppingModalIsOpen: (croppingModalIsOpen: boolean) => void;
+  setIsCroppingModalOpen: (isOpen: boolean) => void;
   setFileUrl: (fileUrl: string | undefined) => void;
   setImageUrl: (imageUrl: string | undefined) => void;
 }
 
 const createImageSlice: StateCreator<ImageSlice> = (set) => ({
-  croppingModalIsOpen: false,
+  isCroppingModalOpen: false,
   fileUrl: undefined,
   imageUrl: undefined,
-  setCroppingModalIsOpen: (croppingModalIsOpen) => set({ croppingModalIsOpen }),
+  setIsCroppingModalOpen: (isOpen) => set({ isCroppingModalOpen: isOpen }),
   setFileUrl: (fileUrl) => set({ fileUrl }),
   setImageUrl: (imageUrl) => set({ imageUrl }),
 });

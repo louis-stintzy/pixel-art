@@ -6,8 +6,8 @@ import { handleCancel } from '../../utils/imageHandlers';
 function ImageInput() {
   const previousImageUrl = useStore((state) => state.imageUrl);
   const setFileUrl = useStore((state) => state.setFileUrl);
-  const setCroppingModalIsOpen = useStore(
-    (state) => state.setCroppingModalIsOpen
+  const setIsCroppingModalOpen = useStore(
+    (state) => state.setIsCroppingModalOpen
   );
 
   const onDrop = (acceptedFiles: File[]) => {
@@ -17,7 +17,7 @@ function ImageInput() {
     if (!file) return;
     const imageUrl = URL.createObjectURL(file);
     setFileUrl(imageUrl);
-    setCroppingModalIsOpen(true);
+    setIsCroppingModalOpen(true);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

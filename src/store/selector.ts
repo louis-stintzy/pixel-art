@@ -9,3 +9,7 @@ export const useIsSavingToastVisible = () =>
   useStore((state) => state.isSavingToastVisible);
 export const useIsContactToastVisible = () =>
   useStore((state) => state.isContactToastVisible);
+
+// ----- Modals Opening -----
+export const useIsCroppingModalOpen = () =>
+  useStore((state) => state.isCroppingModalOpen);

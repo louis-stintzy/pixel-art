@@ -8,9 +8,7 @@ export interface ToastSlice {
     success: boolean;
     error: boolean;
   };
-  setIsColorReplacementToastVisible: (
-    colorReplacementToastVisible: boolean
-  ) => void;
+  setIsColorReplacementToastVisible: (isVisible: boolean) => void;
   setIsClearCanvasToastVisible: (isVisible: boolean) => void;
   setIsContactToastVisible: (isVisible: boolean) => void;
   setIsSavingToastVisible: (isVisible: {

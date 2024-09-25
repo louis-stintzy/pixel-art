@@ -2,9 +2,9 @@ import { resetAspectRatio } from '../constants/aspectRatio';
 import useStore from '../store/store';
 
 export const handleCropOrCancel = () => {
-  const { fileUrl, setCroppingModalIsOpen, setFileUrl } = useStore.getState();
+  const { fileUrl, setIsCroppingModalOpen, setFileUrl } = useStore.getState();
 
-  setCroppingModalIsOpen(false);
+  setIsCroppingModalOpen(false);
   if (fileUrl) {
     URL.revokeObjectURL(fileUrl);
   }

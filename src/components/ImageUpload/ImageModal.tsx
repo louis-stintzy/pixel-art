@@ -3,19 +3,20 @@ import ImageCropper from './ImageCropper';
 import useStore from '../../store/store';
 import { handleCancel } from '../../utils/imageHandlers';
 import Modal from '../common/Modal';
+import { useIsCroppingModalOpen } from '../../store/selector';
 
 function ImageModal() {
-  const croppingModalIsOpen = useStore((state) => state.croppingModalIsOpen);
+  const isCroppingModalOpen = useIsCroppingModalOpen();
   const fileUrl = useStore((state) => state.fileUrl);
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    if (croppingModalIsOpen) {
+    if (isCroppingModalOpen) {
       modalRef.current?.showModal();
     } else {
       modalRef.current?.close();
     }
-  }, [croppingModalIsOpen]);
+  }, [isCroppingModalOpen]);
 
   const imageModalStyle: React.CSSProperties = {
     width: '400px',
@@ -27,7 +28,7 @@ function ImageModal() {
 
   return (
     <Modal
-      isOpen={croppingModalIsOpen}
+      isOpen={isCroppingModalOpen}
       modalStyle={imageModalStyle}
       onClose={handleCancel}
     >
