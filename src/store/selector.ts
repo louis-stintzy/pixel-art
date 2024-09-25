@@ -1,5 +1,13 @@
 import useStore from './store';
 
+// ----- User Data (hooks) -----
+export const useUser = () => useStore((state) => state.user);
+export const useIsLogged = () => useStore((state) => state.isLogged);
+
+// ----- User Data (non-hooks) -----
+export const getUser = () => useStore.getState().user;
+export const getIsLogged = () => useStore.getState().isLogged;
+
 // ----- Toasts Visibility -----
 export const useIsColorReplacementToastVisible = () =>
   useStore((state) => state.isColorReplacementToastVisible);
