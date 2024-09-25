@@ -9,6 +9,7 @@ import createActionButtonsSlice, {
 import createOtherButtonsSlice, {
   OtherButtonsSlice,
 } from './otherButtonsSlice';
+import createModalSlice, { ModalSlice } from './modalSlice';
 import createToastSlice, { ToastSlice } from './toastSlice';
 
 type StoreState = UserSlice &
@@ -17,6 +18,7 @@ type StoreState = UserSlice &
   PaletteSlice &
   ActionButtonsSlice &
   OtherButtonsSlice &
+  ModalSlice &
   ToastSlice;
 
 const useStore = create<StoreState>()((...a) => ({
@@ -26,6 +28,7 @@ const useStore = create<StoreState>()((...a) => ({
   ...createPaletteSlice(...a),
   ...createActionButtonsSlice(...a),
   ...createOtherButtonsSlice(...a),
+  ...createModalSlice(...a),
   ...createToastSlice(...a),
 }));
 
