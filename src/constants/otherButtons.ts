@@ -25,10 +25,9 @@ const handleClickSaveBbutton = () => {
 };
 
 const handleClickContactButton = async () => {
-  const { setContactToastVisible } = useStore.getState();
   try {
     await navigator.clipboard.writeText(contactMail);
-    setContactToastVisible(true);
+    useStore.getState().setIsContactToastVisible(true);
   } catch (error) {
     console.error('Failed to copy email:', error);
   }
