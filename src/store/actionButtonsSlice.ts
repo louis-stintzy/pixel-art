@@ -9,7 +9,6 @@ export interface ActionButtonsSlice {
     targetColor: string | undefined;
     savedPixelColors: Record<string, string> | undefined;
     isLoading: boolean;
-    toastVisible: boolean;
   };
   isImageHidden: boolean;
   setIsReadyToDraw: (isReadyToDraw: boolean) => void;
@@ -20,7 +19,6 @@ export interface ActionButtonsSlice {
     targetColor?: string | undefined;
     savedPixelColors?: Record<string, string> | undefined;
     isLoading?: boolean;
-    toastVisible?: boolean;
   }) => void;
   setIsImageHidden: (isImageHidden: boolean) => void;
 }
@@ -34,7 +32,6 @@ const createActionButtonsSlice: StateCreator<ActionButtonsSlice> = (set) => ({
     targetColor: undefined,
     savedPixelColors: undefined,
     isLoading: false,
-    toastVisible: false,
   },
   isImageHidden: false,
   setIsReadyToDraw: (isReadyToDraw) => set({ isReadyToDraw }),

@@ -6,7 +6,7 @@ function ColorReplacementToast() {
     const { savedPixelColors } = useStore.getState().colorReplacement;
     if (savedPixelColors)
       useStore.getState().setPixelColorsBackup(savedPixelColors);
-    useStore.getState().setColorReplacement({ toastVisible: false });
+    useStore.getState().setIsColorReplacementToastVisible(false);
   };
   return (
     <Toast
@@ -14,7 +14,7 @@ function ColorReplacementToast() {
       message="Color change applied. Do you want to undo ?"
       optionalButton={{ text: 'Undo', onClick: undoColorReplacement }}
       onClose={() =>
-        useStore.getState().setColorReplacement({ toastVisible: false })
+        useStore.getState().setIsColorReplacementToastVisible(false)
       }
       duration={10000}
     />
