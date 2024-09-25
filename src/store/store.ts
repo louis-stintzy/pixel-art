@@ -9,13 +9,15 @@ import createActionButtonsSlice, {
 import createOtherButtonsSlice, {
   OtherButtonsSlice,
 } from './otherButtonsSlice';
+import createToastSlice, { ToastSlice } from './toastSlice';
 
 type StoreState = UserSlice &
   GridSlice &
   ImageSlice &
   PaletteSlice &
   ActionButtonsSlice &
-  OtherButtonsSlice;
+  OtherButtonsSlice &
+  ToastSlice;
 
 const useStore = create<StoreState>()((...a) => ({
   ...createUserSlice(...a),
@@ -24,6 +26,7 @@ const useStore = create<StoreState>()((...a) => ({
   ...createPaletteSlice(...a),
   ...createActionButtonsSlice(...a),
   ...createOtherButtonsSlice(...a),
+  ...createToastSlice(...a),
 }));
 
 export default useStore;

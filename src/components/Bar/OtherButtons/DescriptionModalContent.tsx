@@ -20,12 +20,12 @@ function DescriptionModalContent() {
       useStore.getState().setDescriptionModalIsOpen(false);
       useStore
         .getState()
-        .setSavingToastVisible({ success: true, error: false });
+        .setIsSavingToastVisible({ success: true, error: false });
     } catch (error) {
       console.error('Failed to save pixel art:', error);
       useStore
         .getState()
-        .setSavingToastVisible({ success: false, error: true });
+        .setIsSavingToastVisible({ success: false, error: true });
       useStore.getState().setDescriptionModalIsOpen(false);
     }
   };

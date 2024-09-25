@@ -1,22 +1,22 @@
 import useStore from '../../store/store';
+import { useIsSavingToastVisible } from '../../store/selector';
 import Toast from '../common/Toast';
 
 function SavingToast() {
-  const { savingToastVisible, setSavingToastVisible } = useStore(
-    (state) => state
-  );
-  if (!savingToastVisible.success && !savingToastVisible.error) {
+  const { setIsSavingToastVisible } = useStore((state) => state);
+  const isSavingToastVisible = useIsSavingToastVisible();
+  if (!isSavingToastVisible.success && !isSavingToastVisible.error) {
     return null;
   }
   return (
     <Toast
-      type={savingToastVisible.success ? 'success' : 'error'}
+      type={isSavingToastVisible.success ? 'success' : 'error'}
       message={
-        savingToastVisible.success
+        isSavingToastVisible.success
           ? 'Pixel art saved successfully !'
           : 'Failed to save pixel art'
       }
-      onClose={() => setSavingToastVisible({ success: false, error: false })}
+      onClose={() => setIsSavingToastVisible({ success: false, error: false })}
       duration={3000}
     />
   );

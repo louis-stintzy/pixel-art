@@ -18,7 +18,9 @@ const handleClickSaveBbutton = () => {
     useStore.getState().setDescriptionModalIsOpen(true);
   } catch (error) {
     console.error('Failed to save pixel art:', error);
-    useStore.getState().setSavingToastVisible({ success: false, error: true });
+    useStore
+      .getState()
+      .setIsSavingToastVisible({ success: false, error: true });
   }
 };
 
