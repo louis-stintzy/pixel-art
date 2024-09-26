@@ -6,7 +6,6 @@ export interface ActionButtonsSlice {
   isBigTool: boolean;
   colorReplacement: {
     isSelectingColor: boolean;
-    targetColor: string | undefined;
     savedPixelColors: Record<string, string> | undefined;
     isLoading: boolean;
   };
@@ -16,7 +15,6 @@ export interface ActionButtonsSlice {
   setIsBigTool: (isBigTool: boolean) => void;
   setColorReplacement: (newState: {
     isSelectingColor?: boolean;
-    targetColor?: string | undefined;
     savedPixelColors?: Record<string, string> | undefined;
     isLoading?: boolean;
   }) => void;
@@ -29,7 +27,6 @@ const createActionButtonsSlice: StateCreator<ActionButtonsSlice> = (set) => ({
   isBigTool: false,
   colorReplacement: {
     isSelectingColor: false,
-    targetColor: undefined,
     savedPixelColors: undefined,
     isLoading: false,
   },

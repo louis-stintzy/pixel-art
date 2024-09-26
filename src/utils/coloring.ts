@@ -35,7 +35,6 @@ export const replaceColor2 = async (oldColor: string, newColor: string) => {
   // Démarage du chargement
   useStore.getState().setColorReplacement({
     isSelectingColor: false,
-    targetColor: oldColor,
     savedPixelColors: { ...pixelColors },
     isLoading: true,
   });

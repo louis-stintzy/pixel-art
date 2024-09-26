@@ -6,14 +6,16 @@ import ImageUnderTheGrid from './ImageUnderTheGrid/ImageUnderTheGrid';
 import './GridContainer.scss';
 import Loader from './Loader/Loader';
 import ToastsContainer from './ToastsContainer/ToastsContainer';
-import { useIsReadyToDraw, useIsImageHidden } from '../../store/selector';
+import {
+  useIsReadyToDraw,
+  useIsImageHidden,
+  useIsColorReplacementLoading,
+} from '../../store/selector';
 
 function GridContainer() {
   const isReadyToDraw = useIsReadyToDraw(); // État pour savoir si l'utilisateur est en train de colorier (etat global)
   const isImageHidden = useIsImageHidden(); // État pour savoir si l'image est visible (etat global)
-  const { isLoading: colorReplacementIsLoading } = useStore(
-    (state) => state.colorReplacement
-  ); // État pour savoir si le remplacement de couleur est en cours (etat global)
+  const isColorReplacementLoading = useIsColorReplacementLoading(); // État pour savoir si le remplacement de couleur est en cours (etat global)
 
   // useRef permet de stocker une valeur mutable qui ne déclenchera pas de nouveau rendu lorsqu'elle est modifiée.
   // useRef renvoie un objet avec une propriété current qui est mutable.
@@ -44,7 +46,7 @@ function GridContainer() {
       tabIndex={0} // Add tabIndex attribute to make the grid container focusable
       ref={gridRef}
     >
-      {colorReplacementIsLoading && <Loader />}
+      {isColorReplacementLoading && <Loader />}
       <div id="grid-wrapper" style={gridWrapperStyle}>
         <Grid />
         {!isImageHidden && <ImageUnderTheGrid />}

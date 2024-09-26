@@ -45,6 +45,10 @@ export const useIsBigTool = () => useStore((state) => state.isBigTool);
 export const useIsSelectingColorToChange = () =>
   useStore((state) => state.colorReplacement.isSelectingColor);
 export const useIsImageHidden = () => useStore((state) => state.isImageHidden);
+export const useSavedPixelColorsBeforeColorReplacement = () =>
+  useStore((state) => state.colorReplacement.savedPixelColors);
+export const useIsColorReplacementLoading = () =>
+  useStore((state) => state.colorReplacement.isLoading);
 
 // ----- Action Buttons (non-hooks) -----
 export const getIsReadyToDraw = () => useStore.getState().isReadyToDraw;
@@ -53,6 +57,9 @@ export const getIsBigTool = () => useStore.getState().isBigTool;
 export const getIsSelectingColorToChange = () =>
   useStore.getState().colorReplacement.isSelectingColor;
 export const getIsImageHidden = () => useStore.getState().isImageHidden;
+
+// ----- Other Buttons (hooks) -----
+// todo ----- Other Buttons (hooks) -----
 
 // ----- Toasts Visibility -----
 export const useIsColorReplacementToastVisible = () =>
