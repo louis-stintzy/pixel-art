@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { avaibleAspectRatios } from '../../constants/aspectRatio';
 import useStore from '../../store/store';
 import { AspectRatio, Orientation } from '../../@types/aspectRatio';
+import { useAspectRatio } from '../../store/selector';
 
 function ImageFormatSetting() {
   // Récupère aspectRatio  (état global) et setAspectRatio du store
-  const aspectRatio = useStore((state) => state.aspectRatio);
+  const aspectRatio = useAspectRatio();
   const setAspectRatio = useStore((state) => state.setAspectRatio);
   // Stocke l'orientation (inialisé à 'landscape' car aspectRatio est initialisé à '4:3' dans le store) et l'aspect ratio actuel (état local)
   const [orientation, setOrientation] = useState<Orientation>('landscape');

@@ -6,7 +6,7 @@ import ImageFormatSetting from './ImageFormatSetting';
 import { handleCancel, handleCropOrCancel } from '../../utils/imageHandlers';
 import resizeImage from '../../utils/resizeImage';
 import configureGridSize from '../../utils/configureGridSize';
-import { useFileUrl } from '../../store/selector';
+import { useAspectRatio, useFileUrl } from '../../store/selector';
 
 /**
  * The ImageCropper component manages image cropping.
@@ -17,7 +17,7 @@ import { useFileUrl } from '../../store/selector';
  */
 
 function ImageCropper() {
-  const aspectRatio = useStore((state) => state.aspectRatio);
+  const aspectRatio = useAspectRatio();
   const fileUrl = useFileUrl();
   const setImageUrl = useStore((state) => state.setImageUrl);
   const setFormat = useStore((state) => state.setFormat);
