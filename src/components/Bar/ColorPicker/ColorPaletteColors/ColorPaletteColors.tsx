@@ -5,13 +5,14 @@ import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 import useStore from '../../../../store/store';
 import useActionFollowingMove from '../../../../hooks/useActionFollowingMove';
+import { useFavoriteColors } from '../../../../store/selector';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
 }
 
 function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
-  const favoriteColors = useStore((state) => state.favoriteColors);
+  const favoriteColors = useFavoriteColors();
 
   const paletteRef = useRef<HTMLDivElement | null>(null);
   const { isDragging, position, resetPosition } = useDragAndDrop(paletteRef);
