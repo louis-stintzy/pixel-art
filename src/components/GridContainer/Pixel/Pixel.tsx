@@ -3,6 +3,7 @@ import useStore from '../../../store/store';
 import { coloring, replaceColor2 } from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import { pipetteIcon } from '../../../constants/icons';
+import { useSelectedColor } from '../../../store/selector';
 
 interface PixelProps {
   id: string;
@@ -13,6 +14,7 @@ interface PixelProps {
 // L'optimisation est renforcée par le fait que l'on récupère uniquement la couleur du pixel actuel,
 // ce qui évite de provoquer un re-render de tous les pixels lorsque la couleur d'un seul change.
 const Pixel = React.memo(({ id }: PixelProps) => {
+  const selectedColor = useSelectedColor();
   const gridColor = useStore((state) => state.gridColor);
   const pixelSize = useStore((state) => state.gridSize.pixelSize);
   const pixelColor = useStore((state) => state.pixelColors[id]);
@@ -42,7 +44,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   };
 
   const handleClick = async () => {
-    const { userDragsGrid, isReadyToDraw, isEraser, isBigTool, selectedColor } =
+    const { userDragsGrid, isReadyToDraw, isEraser, isBigTool } =
       useStore.getState();
 
     // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel :
@@ -51,13 +53,13 @@ const Pixel = React.memo(({ id }: PixelProps) => {
     // Si l'utilisateur s'apprête à remplacer une couleur :
     if (isSelectingColorToChange) {
       const targetColor = pixelColor || gridColor.background;
-      await replaceColor2(targetColor);
+      await replaceColor2(targetColor, selectedColor.code);
       return;
     }
 
     // Si le mode dessin est activé :
     if (isReadyToDraw) {
-      const color = isEraser ? gridColor.background : undefined; // Si le mode erase est activé, définir la couleur sur la couleur de fond de la grille.
+      const color = isEraser ? gridColor.background : selectedColor.code; // Si le mode erase est activé, définir la couleur sur la couleur de fond de la grille.
       if (isBigTool) {
         coloring([id, ...getNeighboringPixels(id)], color); // Si le mode big tool est activé, colorer le pixel et ses pixels voisins
         return;
@@ -75,7 +77,8 @@ const Pixel = React.memo(({ id }: PixelProps) => {
       coloring([id], gridColor.background); // Si la couleur du pixel est la même que la couleur sélectionnée, réinitialiser la couleur du pixel.
       return;
     }
-    coloring([id]); // Colorer le pixel avec la couleur sélectionnée (selectedColor récupérée dans coloring).
+
+    coloring([id], selectedColor.code); // Colorer le pixel avec la couleur sélectionnée (selectedColor récupérée dans coloring).
   };
 
   return (

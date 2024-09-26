@@ -1,11 +1,13 @@
 import { useCallback, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDropOld';
+import { useSelectedColor } from '../../../store/selector';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import { coloring } from '../../../utils/coloring';
 
 function Grid() {
+  const selectedColor = useSelectedColor();
   const lastRanMouseRef = useRef<number | undefined>(undefined);
   const lastFuncMouseRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
@@ -30,10 +32,10 @@ function Grid() {
       const pixelIds = isBigTool
         ? [pixel.id, ...getNeighboringPixels(pixel.id)]
         : [pixel.id];
-      const color = isEraser ? gridColor.background : undefined;
+      const color = isEraser ? gridColor.background : selectedColor.code;
       coloring(pixelIds, color);
     },
-    [gridColor.background]
+    [gridColor.background, selectedColor.code]
   );
 
   const handleMouseMove = useCallback(
