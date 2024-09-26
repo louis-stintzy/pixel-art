@@ -16,6 +16,14 @@ export const useRecentColors = () => useStore((state) => state.recentColors);
 export const useFavoriteColors = () =>
   useStore((state) => state.favoriteColors);
 
+// ----- Image Urls (hooks)-----
+export const useFileUrl = () => useStore((state) => state.fileUrl);
+export const useImageUrl = () => useStore((state) => state.imageUrl);
+
+// ----- Image Urls (non-hooks) -----
+export const getFileUrl = () => useStore.getState().fileUrl;
+export const getImageUrl = () => useStore.getState().imageUrl;
+
 // ----- Toasts Visibility -----
 export const useIsColorReplacementToastVisible = () =>
   useStore((state) => state.isColorReplacementToastVisible);

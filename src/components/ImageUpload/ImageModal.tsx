@@ -3,11 +3,12 @@ import ImageCropper from './ImageCropper';
 import useStore from '../../store/store';
 import { handleCancel } from '../../utils/imageHandlers';
 import Modal from '../common/Modal';
-import { useIsCroppingModalOpen } from '../../store/selector';
+import { useFileUrl, useIsCroppingModalOpen } from '../../store/selector';
 
 function ImageModal() {
+  const fileUrl = useFileUrl();
   const isCroppingModalOpen = useIsCroppingModalOpen();
-  const fileUrl = useStore((state) => state.fileUrl);
+
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
