@@ -8,6 +8,14 @@ export const useIsLogged = () => useStore((state) => state.isLogged);
 export const getUser = () => useStore.getState().user;
 export const getIsLogged = () => useStore.getState().isLogged;
 
+// ----- Palette & Color Data -----
+export const useSelectedPalette = () =>
+  useStore((state) => state.selectedPalette);
+export const useSelectedColor = () => useStore((state) => state.selectedColor);
+export const useRecentColors = () => useStore((state) => state.recentColors);
+export const useFavoriteColors = () =>
+  useStore((state) => state.favoriteColors);
+
 // ----- Toasts Visibility -----
 export const useIsColorReplacementToastVisible = () =>
   useStore((state) => state.isColorReplacementToastVisible);

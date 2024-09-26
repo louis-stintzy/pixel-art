@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import useStore from '../../../store/store';
 import ColorPaletteColors from './ColorPaletteColors/ColorPaletteColors';
 import SelectPalettesToDisplay from './SelectPalettesToDisplay/SelectPalettesToDisplay';
+import { useSelectedPalette } from '../../../store/selector';
 
 function ColorPicker() {
-  const selectedPalette = useStore((state) => state.selectedPalette);
+  const selectedPalette = useSelectedPalette();
   const recentColors = useStore((state) => state.recentColors);
   const favoriteColors = useStore((state) => state.favoriteColors);
 

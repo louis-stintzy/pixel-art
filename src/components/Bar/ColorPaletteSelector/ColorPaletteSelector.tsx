@@ -1,9 +1,10 @@
 import { PaletteNameCamelCase } from '../../../@types/colorPalette';
 import colorPalettes from '../../../constants/colors';
 import useStore from '../../../store/store';
+import { useSelectedPalette } from '../../../store/selector';
 
 function ColorPaletteSelector() {
-  const selectedPalette = useStore((state) => state.selectedPalette);
+  const selectedPalette = useSelectedPalette();
   const setSelectedPalette = useStore((state) => state.setSelectedPalette);
 
   const handleChange = (paletteName: PaletteNameCamelCase) => {
