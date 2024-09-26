@@ -3,7 +3,7 @@ import useStore from '../../../store/store';
 import { coloring, replaceColor2 } from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import { pipetteIcon } from '../../../constants/icons';
-import { useSelectedColor } from '../../../store/selector';
+import { useUserDragsGrid, useSelectedColor } from '../../../store/selector';
 
 interface PixelProps {
   id: string;
@@ -14,6 +14,7 @@ interface PixelProps {
 // L'optimisation est renforcée par le fait que l'on récupère uniquement la couleur du pixel actuel,
 // ce qui évite de provoquer un re-render de tous les pixels lorsque la couleur d'un seul change.
 const Pixel = React.memo(({ id }: PixelProps) => {
+  const userDragsGrid = useUserDragsGrid();
   const selectedColor = useSelectedColor();
   const gridColor = useStore((state) => state.gridColor);
   const pixelSize = useStore((state) => state.gridSize.pixelSize);
@@ -44,8 +45,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   };
 
   const handleClick = async () => {
-    const { userDragsGrid, isReadyToDraw, isEraser, isBigTool } =
-      useStore.getState();
+    const { isReadyToDraw, isEraser, isBigTool } = useStore.getState();
 
     // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel :
     if (userDragsGrid) return;
