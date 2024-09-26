@@ -42,11 +42,17 @@ export const getImageUrl = () => useStore.getState().imageUrl;
 export const useIsReadyToDraw = () => useStore((state) => state.isReadyToDraw);
 export const useIsEraser = () => useStore((state) => state.isEraser);
 export const useIsBigTool = () => useStore((state) => state.isBigTool);
+export const useIsSelectingColorToChange = () =>
+  useStore((state) => state.colorReplacement.isSelectingColor);
+export const useIsImageHidden = () => useStore((state) => state.isImageHidden);
 
 // ----- Action Buttons (non-hooks) -----
 export const getIsReadyToDraw = () => useStore.getState().isReadyToDraw;
 export const getIsEraser = () => useStore.getState().isEraser;
 export const getIsBigTool = () => useStore.getState().isBigTool;
+export const getIsSelectingColorToChange = () =>
+  useStore.getState().colorReplacement.isSelectingColor;
+export const getIsImageHidden = () => useStore.getState().isImageHidden;
 
 // ----- Toasts Visibility -----
 export const useIsColorReplacementToastVisible = () =>

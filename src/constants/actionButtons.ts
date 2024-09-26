@@ -5,6 +5,8 @@ import {
   getIsReadyToDraw,
   getIsEraser,
   getIsBigTool,
+  getIsSelectingColorToChange,
+  getIsImageHidden,
 } from '../store/selector';
 import {
   dragIcon,
@@ -28,9 +30,8 @@ const isReadyToDraw = () => getIsReadyToDraw();
 const isNotReadyToDraw = () => !getIsReadyToDraw();
 const isEraser = () => getIsEraser();
 const isBigTool = () => getIsBigTool();
-const isSelectingColor = () =>
-  useStore.getState().colorReplacement.isSelectingColor;
-const isImageHidden = () => useStore.getState().isImageHidden;
+const isSelectingColorToChange = () => getIsSelectingColorToChange();
+const isImageHidden = () => getIsImageHidden();
 const noImage = () => !getImageUrl();
 
 // ----- Setters -----
@@ -118,7 +119,7 @@ const actionButtons = [
     tooltipMode2: 'Return to normal mode',
     labelMode1: 'Replace a color',
     labelMode2: 'Return to normal mode',
-    isInMode2: isSelectingColor,
+    isInMode2: isSelectingColorToChange,
     switchToMode1: deactivateColorReplacement,
     switchToMode2: activateColorReplacement,
   },

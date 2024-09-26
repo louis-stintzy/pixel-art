@@ -12,6 +12,7 @@ import {
   useIsReadyToDraw,
   useIsEraser,
   useIsBigTool,
+  useIsSelectingColorToChange,
 } from '../../../store/selector';
 
 interface PixelProps {
@@ -31,9 +32,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   const isReadyToDraw = useIsReadyToDraw();
   const isEraser = useIsEraser();
   const isBigTool = useIsBigTool();
-  const isSelectingColorToChange = useStore(
-    (state) => state.colorReplacement.isSelectingColor
-  );
+  const isSelectingColorToChange = useIsSelectingColorToChange();
   const [isHovered, setIsHovered] = useState(false);
 
   const pixelBorderColor = gridColor.line;

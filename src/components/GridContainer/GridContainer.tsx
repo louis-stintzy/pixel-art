@@ -6,11 +6,11 @@ import ImageUnderTheGrid from './ImageUnderTheGrid/ImageUnderTheGrid';
 import './GridContainer.scss';
 import Loader from './Loader/Loader';
 import ToastsContainer from './ToastsContainer/ToastsContainer';
-import { useIsReadyToDraw } from '../../store/selector';
+import { useIsReadyToDraw, useIsImageHidden } from '../../store/selector';
 
 function GridContainer() {
   const isReadyToDraw = useIsReadyToDraw(); // État pour savoir si l'utilisateur est en train de colorier (etat global)
-  const isImageHidden = useStore((state) => state.isImageHidden); // État pour savoir si l'image est visible (etat global)
+  const isImageHidden = useIsImageHidden(); // État pour savoir si l'image est visible (etat global)
   const { isLoading: colorReplacementIsLoading } = useStore(
     (state) => state.colorReplacement
   ); // État pour savoir si le remplacement de couleur est en cours (etat global)
