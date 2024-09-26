@@ -5,6 +5,7 @@ import {
   useGridSize,
   useGridColor,
   useSelectedColor,
+  useIsReadyToDraw,
 } from '../../../store/selector';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
@@ -24,7 +25,7 @@ function Grid() {
   const gridRef = useRef<HTMLDivElement | null>(null);
   const gridSize = useGridSize();
   const gridColor = useGridColor();
-  const isReadyToDraw = useStore((state) => state.isReadyToDraw);
+  const isReadyToDraw = useIsReadyToDraw();
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
 
   const PIXEL_COLOR_THROTTLE = 32;

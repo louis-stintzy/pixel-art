@@ -1,6 +1,6 @@
 import useStore from '../store/store';
 
-import { getImageUrl } from '../store/selector';
+import { getImageUrl, getIsReadyToDraw } from '../store/selector';
 import {
   dragIcon,
   drawIcon,
@@ -19,8 +19,8 @@ const buttonStyle = {};
 const alwaysActive = () => false;
 
 // ----- Getters -----
-const isReadyToDraw = () => useStore.getState().isReadyToDraw;
-const isNotReadyToDraw = () => !useStore.getState().isReadyToDraw;
+const isReadyToDraw = () => getIsReadyToDraw();
+const isNotReadyToDraw = () => !getIsReadyToDraw();
 const isEraser = () => useStore.getState().isEraser;
 const isBigTool = () => useStore.getState().isBigTool;
 const isSelectingColor = () =>

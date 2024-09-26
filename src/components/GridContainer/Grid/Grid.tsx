@@ -6,6 +6,7 @@ import {
   useGridSize,
   useGridColor,
   useSelectedColor,
+  useIsReadyToDraw,
 } from '../../../store/selector';
 import { coloring } from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
@@ -16,7 +17,7 @@ function Grid() {
   const gridRef = useRef<HTMLDivElement | null>(null);
   const gridSize = useGridSize();
   const gridColor = useGridColor();
-  const isReadyToDraw = useStore((state) => state.isReadyToDraw);
+  const isReadyToDraw = useIsReadyToDraw();
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
 
   // ----- handleDragProgress

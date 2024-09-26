@@ -38,6 +38,16 @@ export const useImageUrl = () => useStore((state) => state.imageUrl);
 export const getFileUrl = () => useStore.getState().fileUrl;
 export const getImageUrl = () => useStore.getState().imageUrl;
 
+// ----- Action Buttons (hooks) -----
+export const useIsReadyToDraw = () => useStore((state) => state.isReadyToDraw);
+export const useIsEraser = () => useStore((state) => state.isEraser);
+export const useIsBigTool = () => useStore((state) => state.isBigTool);
+
+// ----- Action Buttons (non-hooks) -----
+export const getIsReadyToDraw = () => useStore.getState().isReadyToDraw;
+export const getIsEraser = () => useStore.getState().isEraser;
+export const getIsBigTool = () => useStore.getState().isBigTool;
+
 // ----- Toasts Visibility -----
 export const useIsColorReplacementToastVisible = () =>
   useStore((state) => state.isColorReplacementToastVisible);
