@@ -11,6 +11,7 @@ import {
   useSelectedColor,
   useIsReadyToDraw,
   useIsEraser,
+  useIsBigTool,
 } from '../../../store/selector';
 
 interface PixelProps {
@@ -29,6 +30,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   const pixelColor = usePixelColor(id);
   const isReadyToDraw = useIsReadyToDraw();
   const isEraser = useIsEraser();
+  const isBigTool = useIsBigTool();
   const isSelectingColorToChange = useStore(
     (state) => state.colorReplacement.isSelectingColor
   );
@@ -55,8 +57,6 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   };
 
   const handleClick = async () => {
-    const { isBigTool } = useStore.getState();
-
     // Si l'utilisateur fait glisser la grille, ne pas autoriser le clic sur un pixel :
     if (userDragsGrid) return;
 
