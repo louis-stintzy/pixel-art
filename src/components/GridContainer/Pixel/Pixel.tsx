@@ -7,6 +7,7 @@ import {
   useUserDragsGrid,
   useGridSize,
   useGridColor,
+  usePixelColor,
   useSelectedColor,
 } from '../../../store/selector';
 
@@ -23,7 +24,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   const selectedColor = useSelectedColor();
   const gridColor = useGridColor();
   const gridSize = useGridSize();
-  const pixelColor = useStore((state) => state.pixelColors[id]);
+  const pixelColor = usePixelColor(id);
   const isSelectingColorToChange = useStore(
     (state) => state.colorReplacement.isSelectingColor
   );

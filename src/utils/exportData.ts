@@ -5,6 +5,7 @@ import {
   getIsLogged,
   getGridSize,
   getGridColor,
+  getPixelColors,
   getImageUrl,
 } from '../store/selector';
 
@@ -13,10 +14,11 @@ const exportData = () => {
   const isLogged = getIsLogged();
   const gridSize = getGridSize();
   const gridColor = getGridColor();
+  const pixelColors = getPixelColors();
   const imageUrl = getImageUrl();
 
   try {
-    const { pixelArtDescription, pixelColors } = useStore.getState();
+    const { pixelArtDescription } = useStore.getState();
 
     if (!isLogged || !user) {
       throw new Error('Please log in to export');

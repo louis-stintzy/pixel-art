@@ -14,13 +14,15 @@ export const useAspectRatio = () => useStore((state) => state.aspectRatio);
 export const useFormat = () => useStore((state) => state.format);
 export const useGridSize = () => useStore((state) => state.gridSize);
 export const useGridColor = () => useStore((state) => state.gridColor);
-export const usePixelColors = () => useStore((state) => state.pixelColors);
+export const usePixelColor = (pixelId: string) =>
+  useStore((state) => state.pixelColors[pixelId]);
 
 // ----- Grid Data (non-hooks) -----
 export const getGridSize = () => useStore.getState().gridSize;
 export const getGridColor = () => useStore.getState().gridColor;
+export const getPixelColors = () => useStore.getState().pixelColors;
 
-// ----- Palette & Color Data -----
+// ----- Palette & Color Data (hooks) -----
 export const useSelectedPalette = () =>
   useStore((state) => state.selectedPalette);
 export const useSelectedColor = () => useStore((state) => state.selectedColor);
