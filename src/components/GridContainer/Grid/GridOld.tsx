@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDropOld';
-import { useSelectedColor } from '../../../store/selector';
+import { useGridSize, useSelectedColor } from '../../../store/selector';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import { coloring } from '../../../utils/coloring';
@@ -18,7 +18,7 @@ function Grid() {
   );
 
   const gridRef = useRef<HTMLDivElement | null>(null);
-  const gridSize = useStore((state) => state.gridSize);
+  const gridSize = useGridSize();
   const gridColor = useStore((state) => state.gridColor);
   const isReadyToDraw = useStore((state) => state.isReadyToDraw);
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
@@ -30,12 +30,12 @@ function Grid() {
       console.log('-OLD-applyToolOnPixel, date.now() : ', Date.now());
       const { isBigTool, isEraser } = useStore.getState();
       const pixelIds = isBigTool
-        ? [pixel.id, ...getNeighboringPixels(pixel.id)]
+        ? [pixel.id, ...getNeighboringPixels(pixel.id, gridSize)]
         : [pixel.id];
       const color = isEraser ? gridColor.background : selectedColor.code;
       coloring(pixelIds, color);
     },
-    [gridColor.background, selectedColor.code]
+    [gridColor.background, gridSize, selectedColor.code]
   );
 
   const handleMouseMove = useCallback(

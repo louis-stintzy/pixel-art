@@ -1,5 +1,7 @@
 import useStore from '../store/store';
 
+import { getGridSize } from '../store/selector';
+
 // ----- Color a pixel or a group of pixels -----
 
 /**
@@ -54,7 +56,7 @@ export const replaceColor2 = async (oldColor: string, newColor: string) => {
 
   // If the old color is the grid background color, find all uncolored pixels
   if (oldColor === gridColor.background) {
-    const { gridSize } = useStore.getState();
+    const gridSize = getGridSize();
     for (let row = 0; row < gridSize.height; row += 1) {
       for (let col = 0; col < gridSize.width; col += 1) {
         const id = `${row}-${col}`;

@@ -1,18 +1,20 @@
-import useStore from '../store/store';
-
 /**
  * Get the IDs of the neighboring pixels of the pixel with the given ID.
  *
  * @param {string} id - The ID of the pixel.
+ * @param {object} gridSize - The width and height of the grid.
  * @returns {string[]} An array of neighboring pixel IDs.
  */
 
-const getNeighboringPixels = (id: string) => {
+const getNeighboringPixels = (
+  id: string,
+  gridSize: { width: number; height: number; pixelSize: number }
+) => {
   // assign the first element of the array to row and the second element to col (destructuring assignment, splitting the id string, and converting the strings to numbers)
   const [row, col] = id.split('-').map(Number);
 
   // get grid width and height from store
-  const { width, height } = useStore.getState().gridSize;
+  const { width, height } = gridSize;
 
   // create an array of neighboring pixel IDs and filter out any neighbors that are outside the grid
   const neighbors = [

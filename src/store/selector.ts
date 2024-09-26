@@ -8,13 +8,16 @@ export const useIsLogged = () => useStore((state) => state.isLogged);
 export const getUser = () => useStore.getState().user;
 export const getIsLogged = () => useStore.getState().isLogged;
 
-// ----- Grid Data -----
+// ----- Grid Data (hooks) -----
 export const useUserDragsGrid = () => useStore((state) => state.userDragsGrid);
 export const useAspectRatio = () => useStore((state) => state.aspectRatio);
 export const useFormat = () => useStore((state) => state.format);
 export const useGridSize = () => useStore((state) => state.gridSize);
 export const useGridColor = () => useStore((state) => state.gridColor);
 export const usePixelColors = () => useStore((state) => state.pixelColors);
+
+// ----- Grid Data (non-hooks) -----
+export const getGridSize = () => useStore.getState().gridSize;
 
 // ----- Palette & Color Data -----
 export const useSelectedPalette = () =>

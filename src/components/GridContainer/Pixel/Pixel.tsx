@@ -3,7 +3,11 @@ import useStore from '../../../store/store';
 import { coloring, replaceColor2 } from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import { pipetteIcon } from '../../../constants/icons';
-import { useUserDragsGrid, useSelectedColor } from '../../../store/selector';
+import {
+  useUserDragsGrid,
+  useGridSize,
+  useSelectedColor,
+} from '../../../store/selector';
 
 interface PixelProps {
   id: string;
@@ -17,7 +21,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   const userDragsGrid = useUserDragsGrid();
   const selectedColor = useSelectedColor();
   const gridColor = useStore((state) => state.gridColor);
-  const pixelSize = useStore((state) => state.gridSize.pixelSize);
+  const gridSize = useGridSize();
   const pixelColor = useStore((state) => state.pixelColors[id]);
   const isSelectingColorToChange = useStore(
     (state) => state.colorReplacement.isSelectingColor
@@ -35,8 +39,8 @@ const Pixel = React.memo(({ id }: PixelProps) => {
   }
 
   const pixelStyle = {
-    width: pixelSize,
-    height: pixelSize,
+    width: gridSize.pixelSize,
+    height: gridSize.pixelSize,
     backgroundColor: pixelColor || gridColor.background,
     opacity: pixelOpacity,
     transition: 'opacity 0.1s ease-out, background-color 0.1s ease-out',
@@ -61,7 +65,7 @@ const Pixel = React.memo(({ id }: PixelProps) => {
     if (isReadyToDraw) {
       const color = isEraser ? gridColor.background : selectedColor.code; // Si le mode erase est activé, définir la couleur sur la couleur de fond de la grille.
       if (isBigTool) {
-        coloring([id, ...getNeighboringPixels(id)], color); // Si le mode big tool est activé, colorer le pixel et ses pixels voisins
+        coloring([id, ...getNeighboringPixels(id, gridSize)], color); // Si le mode big tool est activé, colorer le pixel et ses pixels voisins
         return;
       }
       if (pixelColor === selectedColor.code) {

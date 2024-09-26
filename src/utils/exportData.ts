@@ -1,15 +1,20 @@
 import useStore from '../store/store';
 import version from '../constants/version';
-import { getUser, getIsLogged, getImageUrl } from '../store/selector';
+import {
+  getUser,
+  getIsLogged,
+  getGridSize,
+  getImageUrl,
+} from '../store/selector';
 
 const exportData = () => {
   const user = getUser();
   const isLogged = getIsLogged();
+  const gridSize = getGridSize();
   const imageUrl = getImageUrl();
 
   try {
-    const { pixelArtDescription, gridSize, gridColor, pixelColors } =
-      useStore.getState();
+    const { pixelArtDescription, gridColor, pixelColors } = useStore.getState();
 
     if (!isLogged || !user) {
       throw new Error('Please log in to export');
