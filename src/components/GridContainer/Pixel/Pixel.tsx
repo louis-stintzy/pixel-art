@@ -6,6 +6,7 @@ import { pipetteIcon } from '../../../constants/icons';
 import {
   useUserDragsGrid,
   useGridSize,
+  useGridColor,
   useSelectedColor,
 } from '../../../store/selector';
 
@@ -20,7 +21,7 @@ interface PixelProps {
 const Pixel = React.memo(({ id }: PixelProps) => {
   const userDragsGrid = useUserDragsGrid();
   const selectedColor = useSelectedColor();
-  const gridColor = useStore((state) => state.gridColor);
+  const gridColor = useGridColor();
   const gridSize = useGridSize();
   const pixelColor = useStore((state) => state.pixelColors[id]);
   const isSelectingColorToChange = useStore(

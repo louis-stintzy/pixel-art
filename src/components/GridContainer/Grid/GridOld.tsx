@@ -1,7 +1,11 @@
 import { useCallback, useRef } from 'react';
 import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDropOld';
-import { useGridSize, useSelectedColor } from '../../../store/selector';
+import {
+  useGridSize,
+  useGridColor,
+  useSelectedColor,
+} from '../../../store/selector';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import { coloring } from '../../../utils/coloring';
@@ -19,7 +23,7 @@ function Grid() {
 
   const gridRef = useRef<HTMLDivElement | null>(null);
   const gridSize = useGridSize();
-  const gridColor = useStore((state) => state.gridColor);
+  const gridColor = useGridColor();
   const isReadyToDraw = useStore((state) => state.isReadyToDraw);
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
 

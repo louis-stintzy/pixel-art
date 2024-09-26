@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Color } from '../../../../@types/colorPalette';
 import useStore from '../../../../store/store';
-import { useFavoriteColors } from '../../../../store/selector';
+import { useGridColor, useFavoriteColors } from '../../../../store/selector';
 
 interface ContextMenuProps {
   x: number;
@@ -12,7 +12,7 @@ interface ContextMenuProps {
 
 function ColorContextMenu({ x, y, color, onClose }: ContextMenuProps) {
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const gridColor = useStore((state) => state.gridColor);
+  const gridColor = useGridColor();
   const favoriteColors = useFavoriteColors();
   const validFavoriteColors = favoriteColors.filter(
     (c) => c.code !== gridColor.background

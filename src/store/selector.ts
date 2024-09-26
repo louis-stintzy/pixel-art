@@ -18,6 +18,7 @@ export const usePixelColors = () => useStore((state) => state.pixelColors);
 
 // ----- Grid Data (non-hooks) -----
 export const getGridSize = () => useStore.getState().gridSize;
+export const getGridColor = () => useStore.getState().gridColor;
 
 // ----- Palette & Color Data -----
 export const useSelectedPalette = () =>
