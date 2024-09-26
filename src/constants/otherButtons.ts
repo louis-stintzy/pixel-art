@@ -1,9 +1,10 @@
 import useStore from '../store/store';
 import contactMail from './contactMail';
 import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
+import { getUser, getIsLogged } from '../store/selector';
 
 const buttonStyle = {};
-const { isLogged } = useStore.getState();
+const isLogged = getIsLogged();
 
 const handleClickClearButton = () => {
   useStore.getState().setIsClearCanvasToastVisible(true);
@@ -11,7 +12,7 @@ const handleClickClearButton = () => {
 
 const handleClickSaveBbutton = () => {
   try {
-    const { user } = useStore.getState();
+    const user = getUser();
     if (!isLogged || !user) {
       throw new Error('Please log in to save');
     }

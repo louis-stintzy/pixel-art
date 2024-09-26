@@ -1,8 +1,11 @@
 import useStore from '../../../store/store';
 import exportData from '../../../utils/exportData';
+import { useUser, useIsLogged } from '../../../store/selector';
 
 function DescriptionModalContent() {
-  const { user, pixelArtDescription } = useStore((state) => state);
+  const { pixelArtDescription } = useStore((state) => state);
+  const user = useUser();
+  const isLogged = useIsLogged();
 
   const handleChangeDescription = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -12,7 +15,6 @@ function DescriptionModalContent() {
 
   const handleSave = () => {
     try {
-      const { isLogged } = useStore.getState();
       if (!isLogged || !user) {
         throw new Error('Please log in to save');
       }
