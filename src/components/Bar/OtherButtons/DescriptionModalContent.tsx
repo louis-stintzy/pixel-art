@@ -1,16 +1,24 @@
 import useStore from '../../../store/store';
 import exportData from '../../../utils/exportData';
-import { useUser, useIsLogged } from '../../../store/selector';
+import {
+  useUser,
+  useIsLogged,
+  usePixelArtName,
+  usePixelArtDescription,
+} from '../../../store/selector';
 
 function DescriptionModalContent() {
-  const { pixelArtDescription } = useStore((state) => state);
   const user = useUser();
   const isLogged = useIsLogged();
+  const pixelArtName = usePixelArtName();
+  const pixelArtDescription = usePixelArtDescription();
+  const { setDescriptionFields } = useStore((state) => state);
 
-  const handleChangeDescription = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+  const handleChangeDescriptionFields = (
+    field: 'name' | 'description',
+    value: string
   ) => {
-    useStore.getState().setPixelArtDescription(e.target.value);
+    setDescriptionFields(field, value);
   };
 
   const handleSave = () => {
@@ -18,13 +26,17 @@ function DescriptionModalContent() {
       if (!isLogged || !user) {
         throw new Error('Please log in to save');
       }
+      if (pixelArtName.length < 3) {
+        throw new Error('Pixel Art name must be at least 3 characters');
+      }
       exportData();
+      useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
       useStore
         .getState()
         .setIsSavingToastVisible({ success: true, error: false });
     } catch (error) {
-      console.error('Failed to save pixel art:', error);
+      console.error('Failed to save pixel art.', error);
       useStore
         .getState()
         .setIsSavingToastVisible({ success: false, error: true });
@@ -33,6 +45,7 @@ function DescriptionModalContent() {
   };
 
   const handleCancel = () => {
+    useStore.getState().resetDescriptionFields();
     useStore.getState().setIsDescriptionModalOpen(false);
   };
 
@@ -51,14 +64,28 @@ function DescriptionModalContent() {
           <label htmlFor="creator">Creator </label>
           <input type="text" id="creator" value={user?.username} disabled />
         </div>
+        <div>
+          <label htmlFor="name">Name </label>
+          <input
+            type="text"
+            id="name"
+            value={pixelArtName}
+            onChange={(e) =>
+              handleChangeDescriptionFields('name', e.target.value)
+            }
+            placeholder="Pixel Art name (Min 3 characters)"
+          />
+        </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <label htmlFor="description">Description </label>
           <textarea
             id="description"
             name="description"
-            rows={10}
+            rows={3}
             placeholder="Description"
-            onChange={handleChangeDescription}
+            onChange={(e) =>
+              handleChangeDescriptionFields('description', e.target.value)
+            }
             value={pixelArtDescription}
           />
         </div>
@@ -66,7 +93,11 @@ function DescriptionModalContent() {
       <button type="button" onClick={handleCancel}>
         Cancel
       </button>
-      <button type="button" onClick={handleSave}>
+      <button
+        type="button"
+        onClick={handleSave}
+        disabled={pixelArtName.length < 3}
+      >
         Save
       </button>
     </>

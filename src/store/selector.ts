@@ -59,7 +59,13 @@ export const getIsSelectingColorToChange = () =>
 export const getIsImageHidden = () => useStore.getState().isImageHidden;
 
 // ----- Other Buttons (hooks) -----
-// todo ----- Other Buttons (hooks) -----
+export const usePixelArtName = () =>
+  useStore((state) => state.descriptionFields.name);
+export const usePixelArtDescription = () =>
+  useStore((state) => state.descriptionFields.description);
+
+// ----- Other Buttons (non-hooks) -----
+export const getDescriptionFields = () => useStore.getState().descriptionFields;
 
 // ----- Toasts Visibility -----
 export const useIsColorReplacementToastVisible = () =>

@@ -1,13 +1,25 @@
 import { StateCreator } from 'zustand';
 
 export interface OtherButtonsSlice {
-  pixelArtDescription: string;
-  setPixelArtDescription: (pixelartDescription: string) => void;
+  descriptionFields: {
+    name: string;
+    description: string;
+  };
+  setDescriptionFields: (field: 'name' | 'description', value: string) => void;
+  resetDescriptionFields: () => void;
 }
 
 const createOtherButtonsSlice: StateCreator<OtherButtonsSlice> = (set) => ({
-  pixelArtDescription: '',
-  setPixelArtDescription: (pixelArtDescription) => set({ pixelArtDescription }),
+  descriptionFields: {
+    name: '',
+    description: '',
+  },
+  setDescriptionFields: (field, value) =>
+    set((state) => ({
+      descriptionFields: { ...state.descriptionFields, [field]: value },
+    })),
+  resetDescriptionFields: () =>
+    set({ descriptionFields: { name: '', description: '' } }),
 });
 
 export default createOtherButtonsSlice;
