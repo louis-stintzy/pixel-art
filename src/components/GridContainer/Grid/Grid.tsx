@@ -7,6 +7,7 @@ import {
   useGridColor,
   useSelectedColor,
   useIsReadyToDraw,
+  useIsEraser,
 } from '../../../store/selector';
 import { coloring } from '../../../utils/coloring';
 import Pixel from '../Pixel/Pixel';
@@ -18,6 +19,7 @@ function Grid() {
   const gridSize = useGridSize();
   const gridColor = useGridColor();
   const isReadyToDraw = useIsReadyToDraw();
+  const isEraser = useIsEraser();
   const { isDragging: isColoring } = useDragAndDrop(gridRef, isReadyToDraw);
 
   // ----- handleDragProgress
@@ -35,14 +37,14 @@ function Grid() {
 
   const applyToolOnPixel = useCallback(
     (pixel: HTMLDivElement) => {
-      const { isBigTool, isEraser } = useStore.getState();
+      const { isBigTool } = useStore.getState();
       const pixelIds = isBigTool
         ? [pixel.id, ...getNeighboringPixels(pixel.id, gridSize)]
         : [pixel.id];
       const color = isEraser ? gridColor.background : selectedColor.code;
       coloring(pixelIds, color);
     },
-    [gridColor.background, gridSize, selectedColor.code]
+    [gridColor.background, gridSize, isEraser, selectedColor.code]
   );
 
   const executeMouseLogic = useCallback(
