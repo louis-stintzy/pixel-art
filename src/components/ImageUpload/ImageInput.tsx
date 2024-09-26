@@ -2,9 +2,10 @@ import { useDropzone } from 'react-dropzone';
 import ImageModal from './ImageModal';
 import useStore from '../../store/store';
 import { handleCancel } from '../../utils/imageHandlers';
+import { useImageUrl } from '../../store/selector';
 
 function ImageInput() {
-  const previousImageUrl = useStore((state) => state.imageUrl);
+  const previousImageUrl = useImageUrl();
   const setFileUrl = useStore((state) => state.setFileUrl);
   const setIsCroppingModalOpen = useStore(
     (state) => state.setIsCroppingModalOpen

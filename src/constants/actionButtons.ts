@@ -1,4 +1,6 @@
 import useStore from '../store/store';
+
+import { getImageUrl } from '../store/selector';
 import {
   dragIcon,
   drawIcon,
@@ -24,7 +26,7 @@ const isBigTool = () => useStore.getState().isBigTool;
 const isSelectingColor = () =>
   useStore.getState().colorReplacement.isSelectingColor;
 const isImageHidden = () => useStore.getState().isImageHidden;
-const noImage = () => !useStore.getState().imageUrl;
+const noImage = () => !getImageUrl();
 
 // ----- Setters -----
 const switchToColorMode = () => useStore.getState().setIsReadyToDraw(true);

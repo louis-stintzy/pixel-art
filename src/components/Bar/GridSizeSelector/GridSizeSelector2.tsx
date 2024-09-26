@@ -4,6 +4,7 @@ import ImageInput from '../../ImageUpload/ImageInput';
 import { Format } from '../../../@types/aspectRatio';
 import resizeImage from '../../../utils/resizeImage';
 import configureGridSize from '../../../utils/configureGridSize';
+import { useImageUrl } from '../../../store/selector';
 
 /**
  * GridSizeSelector2 component manages the grid format and pixel size.
@@ -14,7 +15,7 @@ import configureGridSize from '../../../utils/configureGridSize';
 function GridSizeSelector2() {
   const aspectRatio = useStore((state) => state.aspectRatio);
   const format = useStore((state) => state.format);
-  const imageUrl = useStore((state) => state.imageUrl);
+  const imageUrl = useImageUrl();
   const setFormat = useStore((state) => state.setFormat);
   const setGridSize = useStore((state) => state.setGridSize);
   const setImageUrl = useStore((state) => state.setImageUrl);

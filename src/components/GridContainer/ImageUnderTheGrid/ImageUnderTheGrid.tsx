@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import useStore from '../../../store/store';
+import { useImageUrl } from '../../../store/selector';
 
 function ImageUnderTheGrid() {
   const format = useStore((state) => state.format);
-  const imageUrl = useStore((state) => state.imageUrl);
+  const imageUrl = useImageUrl();
 
   const [uploadedImageDimensions, setUploadedImageDimensions] = useState<{
     width: number;

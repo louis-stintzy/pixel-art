@@ -1,12 +1,14 @@
 import useStore from '../store/store';
 import version from '../constants/version';
-import { getUser, getIsLogged } from '../store/selector';
+import { getUser, getIsLogged, getImageUrl } from '../store/selector';
 
 const exportData = () => {
   const user = getUser();
   const isLogged = getIsLogged();
+  const imageUrl = getImageUrl();
+
   try {
-    const { pixelArtDescription, gridSize, gridColor, pixelColors, imageUrl } =
+    const { pixelArtDescription, gridSize, gridColor, pixelColors } =
       useStore.getState();
 
     if (!isLogged || !user) {
