@@ -6,6 +6,7 @@ import {
   usePixelArtName,
   usePixelArtDescription,
 } from '../../../store/selector';
+import exportToPNG from '../../../utils/exportToPNG';
 
 function DescriptionModalContent() {
   const user = useUser();
@@ -21,6 +22,11 @@ function DescriptionModalContent() {
     setDescriptionFields(field, value);
   };
 
+  const handleCancel = () => {
+    useStore.getState().resetDescriptionFields();
+    useStore.getState().setIsDescriptionModalOpen(false);
+  };
+
   const handleSave = () => {
     try {
       if (!isLogged || !user) {
@@ -29,7 +35,8 @@ function DescriptionModalContent() {
       if (pixelArtName.length < 3) {
         throw new Error('Pixel Art name must be at least 3 characters');
       }
-      exportData();
+      const pixelArtData = exportData();
+      console.log('pixelArtData:', JSON.stringify(pixelArtData, null, 2));
       useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
       useStore
@@ -44,9 +51,29 @@ function DescriptionModalContent() {
     }
   };
 
-  const handleCancel = () => {
-    useStore.getState().resetDescriptionFields();
-    useStore.getState().setIsDescriptionModalOpen(false);
+  const handlePublish = () => {
+    try {
+      if (!isLogged || !user) {
+        throw new Error('Please log in to publish');
+      }
+      if (pixelArtName.length < 3) {
+        throw new Error('Pixel Art name must be at least 3 characters');
+      }
+      const pixelArtData = exportData();
+      exportToPNG(pixelArtData);
+      useStore.getState().resetDescriptionFields();
+      useStore.getState().setIsDescriptionModalOpen(false);
+      // todo : renommer SavingToast en passant des messages personnalisés
+      useStore
+        .getState()
+        .setIsSavingToastVisible({ success: true, error: false });
+    } catch (error) {
+      console.error('Failed to publish pixel art:', error);
+      useStore
+        .getState()
+        .setIsSavingToastVisible({ success: false, error: true });
+      useStore.getState().setIsDescriptionModalOpen(false);
+    }
   };
 
   const inputContainerStyle: React.CSSProperties = {
@@ -99,6 +126,13 @@ function DescriptionModalContent() {
         disabled={pixelArtName.length < 3}
       >
         Save
+      </button>
+      <button
+        type="button"
+        onClick={handlePublish}
+        disabled={pixelArtName.length < 3}
+      >
+        Publish
       </button>
     </>
   );

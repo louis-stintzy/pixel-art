@@ -3,7 +3,7 @@ import { StateCreator } from 'zustand';
 export interface UserSlice {
   user:
     | {
-        id: string;
+        id: number;
         username: string;
       }
     | undefined;
@@ -14,7 +14,7 @@ export interface UserSlice {
 
 const createUserSlice: StateCreator<UserSlice> = (set) => ({
   user: {
-    id: '1',
+    id: 1,
     username: 'Rachel Lopez',
   },
   isLogged: true,

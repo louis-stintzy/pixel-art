@@ -51,8 +51,7 @@ const exportData = () => {
       date,
       version,
     };
-    const dataJsonStr = JSON.stringify(data, null, 2);
-    console.log('data:', dataJsonStr);
+    return data;
   } catch (error) {
     console.error('Failed to export data:', error);
     throw new Error('Failed to export data');
