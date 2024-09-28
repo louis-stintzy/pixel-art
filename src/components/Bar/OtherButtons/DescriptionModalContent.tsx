@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import useStore from '../../../store/store';
 import exportData from '../../../utils/exportData';
 import {
@@ -7,6 +8,7 @@ import {
   usePixelArtDescription,
 } from '../../../store/selector';
 import exportToPNG from '../../../utils/exportToPNG';
+import exportToSVG from '../../../utils/exportToSVG';
 
 function DescriptionModalContent() {
   const user = useUser();
@@ -15,7 +17,21 @@ function DescriptionModalContent() {
   const pixelArtDescription = usePixelArtDescription();
   const { setDescriptionFields } = useStore((state) => state);
 
-  const handleChangeDescriptionFields = (
+  const [gridOptionSelected, setGridOptionSelected] = useState<
+    'none' | 'pixel' | 'full'
+  >('full');
+
+  const gridOption = {
+    none: 'No grid',
+    pixel: 'Border per Pixel',
+    full: 'Full grid',
+  };
+
+  const handleGridOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGridOptionSelected(e.target.value as 'none' | 'pixel' | 'full');
+  };
+
+  const handleDescriptionFieldsChange = (
     field: 'name' | 'description',
     value: string
   ) => {
@@ -60,7 +76,7 @@ function DescriptionModalContent() {
         throw new Error('Pixel Art name must be at least 3 characters');
       }
       const pixelArtData = exportData();
-      exportToPNG(pixelArtData);
+      exportToSVG(pixelArtData, gridOptionSelected);
       useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
       // todo : renommer SavingToast en passant des messages personnalisés
@@ -76,34 +92,39 @@ function DescriptionModalContent() {
     }
   };
 
-  const inputContainerStyle: React.CSSProperties = {
+  const flexAndColumnDirectionStyle: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    gap: '10px',
+  };
+
+  const inputContainerStyle: React.CSSProperties = {
+    ...flexAndColumnDirectionStyle,
+    justifyContent: 'space-around',
     width: '350px',
-    height: '350px',
+    height: '400px',
     position: 'relative',
   };
+
   return (
     <>
       <div id="input-container" style={inputContainerStyle}>
-        <div>
+        <div style={flexAndColumnDirectionStyle}>
           <label htmlFor="creator">Creator </label>
           <input type="text" id="creator" value={user?.username} disabled />
         </div>
-        <div>
+        <div style={flexAndColumnDirectionStyle}>
           <label htmlFor="name">Name </label>
           <input
             type="text"
             id="name"
             value={pixelArtName}
             onChange={(e) =>
-              handleChangeDescriptionFields('name', e.target.value)
+              handleDescriptionFieldsChange('name', e.target.value)
             }
             placeholder="Pixel Art name (Min 3 characters)"
           />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={flexAndColumnDirectionStyle}>
           <label htmlFor="description">Description </label>
           <textarea
             id="description"
@@ -111,10 +132,24 @@ function DescriptionModalContent() {
             rows={3}
             placeholder="Description"
             onChange={(e) =>
-              handleChangeDescriptionFields('description', e.target.value)
+              handleDescriptionFieldsChange('description', e.target.value)
             }
             value={pixelArtDescription}
           />
+        </div>
+        <div style={flexAndColumnDirectionStyle}>
+          {Object.entries(gridOption).map(([key, value]) => (
+            <label key={key}>
+              <input
+                type="radio"
+                name="gridOption"
+                value={key}
+                onChange={handleGridOptionChange}
+                checked={gridOptionSelected === key}
+              />
+              {value}
+            </label>
+          ))}
         </div>
       </div>
       <button type="button" onClick={handleCancel}>

@@ -21,6 +21,25 @@ const exportToPNG = (pixelArtData: PixelArtData) => {
       const y = row * pixelSize;
       ctx.fillStyle = color;
       ctx.fillRect(x, y, pixelSize, pixelSize);
+
+      // ctx.strokeStyle = pixelArtData.gridColor.line;
+      // ctx.strokeRect(x, y, pixelSize, pixelSize);
+      ctx.strokeStyle = pixelArtData.gridColor.line;
+      ctx.lineWidth = 1;
+      for (let r = 0; r <= height; r += 1) {
+        const positionY = r * pixelSize;
+        ctx.beginPath();
+        ctx.moveTo(0, positionY);
+        ctx.lineTo(canvas.width, positionY);
+        ctx.stroke();
+      }
+      for (let c = 0; c <= width; c += 1) {
+        const positionX = c * pixelSize;
+        ctx.beginPath();
+        ctx.moveTo(positionX, 0);
+        ctx.lineTo(positionX, canvas.height);
+        ctx.stroke();
+      }
     });
 
     canvas.toBlob((blob) => {
