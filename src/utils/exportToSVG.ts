@@ -67,11 +67,13 @@ const exportToSVG = (
   const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
   const url = URL.createObjectURL(blob);
 
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `${pixelArtData.name}.svg`;
-  link.click();
-  URL.revokeObjectURL(url);
+  return url;
+
+  // const link = document.createElement('a');
+  // link.href = url;
+  // link.download = `${pixelArtData.name}.svg`;
+  // link.click();
+  // URL.revokeObjectURL(url);
 };
 
 export default exportToSVG;

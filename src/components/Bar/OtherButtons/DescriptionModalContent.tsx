@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useStore from '../../../store/store';
 import exportData from '../../../utils/exportData';
 import {
@@ -7,7 +7,6 @@ import {
   usePixelArtName,
   usePixelArtDescription,
 } from '../../../store/selector';
-import exportToPNG from '../../../utils/exportToPNG';
 import exportToSVG from '../../../utils/exportToSVG';
 
 function DescriptionModalContent() {
@@ -20,6 +19,7 @@ function DescriptionModalContent() {
   const [gridOptionSelected, setGridOptionSelected] = useState<
     'none' | 'pixel' | 'full'
   >('full');
+  const [previewUrl, setPreviewUrl] = useState<string>('');
 
   const gridOption = {
     none: 'No grid',
@@ -29,6 +29,13 @@ function DescriptionModalContent() {
 
   const handleGridOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGridOptionSelected(e.target.value as 'none' | 'pixel' | 'full');
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    const pixelArtData = exportData();
+    const preview = exportToSVG(
+      pixelArtData,
+      e.target.value as 'none' | 'pixel' | 'full'
+    );
+    setPreviewUrl(preview);
   };
 
   const handleDescriptionFieldsChange = (
@@ -53,7 +60,10 @@ function DescriptionModalContent() {
       }
       useStore.getState().cleanPixelColors();
       const pixelArtData = exportData();
-      console.log('pixelArtData:', JSON.stringify(pixelArtData, null, 2));
+      console.log(
+        'pixelArtData after save:',
+        JSON.stringify(pixelArtData, null, 2)
+      );
       useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
       useStore
@@ -78,7 +88,10 @@ function DescriptionModalContent() {
       }
       useStore.getState().cleanPixelColors();
       const pixelArtData = exportData();
-      exportToSVG(pixelArtData, gridOptionSelected);
+      console.log(
+        'pixelArtData after publish:',
+        JSON.stringify(pixelArtData, null, 2)
+      );
       useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
       // todo : renommer SavingToast en passant des messages personnalisés
@@ -101,15 +114,34 @@ function DescriptionModalContent() {
 
   const inputContainerStyle: React.CSSProperties = {
     ...flexAndColumnDirectionStyle,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     width: '350px',
-    height: '400px',
+    height: '462px',
+    paddingBottom: '10px',
     position: 'relative',
   };
 
+  const previewLinkStyle: React.CSSProperties =
+    !isLogged || !user || pixelArtName.length < 3
+      ? {
+          color: 'gray',
+          cursor: 'not-allowed',
+        }
+      : {
+          color: 'blue',
+          cursor: 'pointer',
+        };
+
   return (
-    <>
-      <div id="input-container" style={inputContainerStyle}>
+    <div id="input-container" style={inputContainerStyle}>
+      <div
+        style={{
+          ...flexAndColumnDirectionStyle,
+          height: '100%',
+          justifyContent: 'space-around',
+          paddingBottom: '10px',
+        }}
+      >
         <div style={flexAndColumnDirectionStyle}>
           <label htmlFor="creator">Creator </label>
           <input type="text" id="creator" value={user?.username} disabled />
@@ -148,30 +180,35 @@ function DescriptionModalContent() {
                 value={key}
                 onChange={handleGridOptionChange}
                 checked={gridOptionSelected === key}
+                disabled={!isLogged || !user || pixelArtName.length < 3}
               />
               {value}
             </label>
           ))}
         </div>
+        <span style={previewLinkStyle}>Click to see a preview</span>
       </div>
-      <button type="button" onClick={handleCancel}>
-        Cancel
-      </button>
-      <button
-        type="button"
-        onClick={handleSave}
-        disabled={pixelArtName.length < 3}
-      >
-        Save
-      </button>
-      <button
-        type="button"
-        onClick={handlePublish}
-        disabled={pixelArtName.length < 3}
-      >
-        Publish
-      </button>
-    </>
+
+      <div>
+        <button type="button" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={handleSave}
+          disabled={pixelArtName.length < 3}
+        >
+          Save
+        </button>
+        <button
+          type="button"
+          onClick={handlePublish}
+          disabled={pixelArtName.length < 3}
+        >
+          Publish
+        </button>
+      </div>
+    </div>
   );
 }
 
