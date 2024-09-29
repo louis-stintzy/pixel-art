@@ -51,6 +51,7 @@ function DescriptionModalContent() {
       if (pixelArtName.length < 3) {
         throw new Error('Pixel Art name must be at least 3 characters');
       }
+      useStore.getState().cleanPixelColors();
       const pixelArtData = exportData();
       console.log('pixelArtData:', JSON.stringify(pixelArtData, null, 2));
       useStore.getState().resetDescriptionFields();
@@ -75,6 +76,7 @@ function DescriptionModalContent() {
       if (pixelArtName.length < 3) {
         throw new Error('Pixel Art name must be at least 3 characters');
       }
+      useStore.getState().cleanPixelColors();
       const pixelArtData = exportData();
       exportToSVG(pixelArtData, gridOptionSelected);
       useStore.getState().resetDescriptionFields();

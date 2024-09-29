@@ -23,6 +23,7 @@ export interface GridSlice {
   setGridColor: (gridColor: { background: string; line: string }) => void;
   setPixelColors: (newPixelColors: Record<string, string>) => void;
   setPixelColorsBackup: (newPixelColors: Record<string, string>) => void;
+  cleanPixelColors: () => void;
   resetPixelColors: () => void;
 }
 
@@ -49,6 +50,17 @@ const createGridSlice: StateCreator<GridSlice> = (set) => ({
     set(() => ({
       pixelColors: { ...newPixelColors }, // Remplace entièrement pixelColors par les nouvelles couleurs
     }));
+  },
+  cleanPixelColors: () => {
+    set((state) => {
+      const pixelsToBeCleaned = { ...state.pixelColors };
+      const cleanedPixelColors: Record<string, string> = Object.fromEntries(
+        Object.entries(pixelsToBeCleaned).filter(
+          ([pixelId, color]) => color !== state.gridColor.background
+        )
+      );
+      return { pixelColors: cleanedPixelColors };
+    });
   },
   resetPixelColors: () => set({ pixelColors: {} }),
 });
