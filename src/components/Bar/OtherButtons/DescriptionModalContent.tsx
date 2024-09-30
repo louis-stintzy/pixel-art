@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useStore from '../../../store/store';
 import exportData from '../../../utils/exportData';
 import {
@@ -30,12 +30,7 @@ function DescriptionModalContent() {
   const handleGridOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGridOptionSelected(e.target.value as 'none' | 'pixel' | 'full');
     if (previewUrl) URL.revokeObjectURL(previewUrl);
-    const pixelArtData = exportData();
-    const preview = exportToSVG(
-      pixelArtData,
-      e.target.value as 'none' | 'pixel' | 'full'
-    );
-    setPreviewUrl(preview);
+    setPreviewUrl('');
   };
 
   const handleDescriptionFieldsChange = (
@@ -50,25 +45,67 @@ function DescriptionModalContent() {
     useStore.getState().setIsDescriptionModalOpen(false);
   };
 
-  const handleSave = () => {
+  const handleClickOnPreview = () => {
     try {
+      // Pour prévisualiser, l'utilisateur doit être connecté et le nom du pixel art doit être  renseigné (au moins 3 caractères)
       if (!isLogged || !user) {
         throw new Error('Please log in to save');
       }
       if (pixelArtName.length < 3) {
         throw new Error('Pixel Art name must be at least 3 characters');
       }
+
+      // Cliquer sur le lien entraine la révocation d'une eventuelle URL de preview déjà présente et la création d'une nouvelle url de preview
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        setPreviewUrl('');
+      }
+      const pixelArtData = exportData();
+      const preview = exportToSVG(pixelArtData, gridOptionSelected);
+      setPreviewUrl(preview);
+
+      // todo : créer une nouvelle modal pour afficher la preview
+
+      // En cas d'erreur, on affiche un message d'erreur dans la console + toast
+    } catch (error) {
+      console.error('Failed to preview pixel art.', error);
+      useStore
+        .getState()
+        .setIsSavingToastVisible({ success: false, error: true });
+      useStore.getState().setIsDescriptionModalOpen(false);
+    }
+  };
+
+  const handleSave = () => {
+    try {
+      // Pour sauvegarder, l'utilisateur doit être connecté et le nom du pixel art doit être  renseigné (au moins 3 caractères)
+      if (!isLogged || !user) {
+        throw new Error('Please log in to save');
+      }
+      if (pixelArtName.length < 3) {
+        throw new Error('Pixel Art name must be at least 3 characters');
+      }
+
+      // Cliquer sur Save entraine le log des datas => par la suite : Data envoyer au backend
       useStore.getState().cleanPixelColors();
       const pixelArtData = exportData();
       console.log(
         'pixelArtData after save:',
         JSON.stringify(pixelArtData, null, 2)
       );
+
+      // Pour finir, on revoque une éventuelle url de preview présente, efface les champs, ferme la modal et affiche un message de succès (toast)
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        setPreviewUrl('');
+      }
       useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
       useStore
         .getState()
         .setIsSavingToastVisible({ success: true, error: false });
+
+      // En cas d'erreur, on affiche un message d'erreur dans la console + toast
     } catch (error) {
       console.error('Failed to save pixel art.', error);
       useStore
@@ -80,24 +117,37 @@ function DescriptionModalContent() {
 
   const handlePublish = () => {
     try {
+      // Pour publier, l'utilisateur doit être connecté et le nom du pixel art doit être  renseigné (au moins 3 caractères)
       if (!isLogged || !user) {
         throw new Error('Please log in to publish');
       }
       if (pixelArtName.length < 3) {
         throw new Error('Pixel Art name must be at least 3 characters');
       }
+
+      // Cliquer sur Publish entraine le téléchargement du fichier SVG + log des datas => par la suite : SVG + Data envoyer au backend
       useStore.getState().cleanPixelColors();
       const pixelArtData = exportData();
       console.log(
         'pixelArtData after publish:',
         JSON.stringify(pixelArtData, null, 2)
       );
+      const pixelArtSVGurl = exportToSVG(pixelArtData, gridOptionSelected);
+      const link = document.createElement('a');
+      link.href = pixelArtSVGurl;
+      link.download = `${pixelArtData.name}.svg`;
+      link.click();
+      URL.revokeObjectURL(pixelArtSVGurl); // on revoque direct une fois l'image téléchargée
+
+      // Pour finir, on efface les champs, ferme la modal et affiche un message de succès (toast)
+      // todo : renommer SavingToast en passant des messages personnalisés
       useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
-      // todo : renommer SavingToast en passant des messages personnalisés
       useStore
         .getState()
         .setIsSavingToastVisible({ success: true, error: false });
+
+      // En cas d'erreur, on affiche un message d'erreur dans la console + toast
     } catch (error) {
       console.error('Failed to publish pixel art:', error);
       useStore
@@ -126,10 +176,14 @@ function DescriptionModalContent() {
       ? {
           color: 'gray',
           cursor: 'not-allowed',
+          border: ' none',
+          backgroundColor: 'transparent',
         }
       : {
           color: 'blue',
           cursor: 'pointer',
+          border: ' none',
+          backgroundColor: 'transparent',
         };
 
   return (
@@ -186,7 +240,15 @@ function DescriptionModalContent() {
             </label>
           ))}
         </div>
-        <span style={previewLinkStyle}>Click to see a preview</span>
+        <button
+          type="button"
+          style={previewLinkStyle}
+          onClick={handleClickOnPreview}
+        >
+          {pixelArtName.length < 3
+            ? 'Please enter the name of your pixel art'
+            : 'Click to see a preview'}
+        </button>
       </div>
 
       <div>
