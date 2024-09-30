@@ -6,10 +6,15 @@ import './Bar.scss';
 import ControlPanel from './ControlPanel/ControlPanel';
 import OtherButtons from './OtherButtons/OtherButtons';
 import DescriptionModal from './OtherButtons/DescriptionModal';
-import { useIsDescriptionModalOpen } from '../../store/selector';
+import {
+  useIsDescriptionModalOpen,
+  useIsPreviewModalOpen,
+} from '../../store/selector';
+import PreviewModal from './OtherButtons/PreviewModal';
 
 function Bar() {
   const isDescriptionModalOpen = useIsDescriptionModalOpen();
+  const isPreviewModalOpen = useIsPreviewModalOpen();
   return (
     <div id="bar">
       <h2>Pixel Art Maker</h2>
@@ -23,6 +28,7 @@ function Bar() {
         <ColorPicker />
       </div>
       {isDescriptionModalOpen && <DescriptionModal />}
+      {isPreviewModalOpen && <PreviewModal />}
     </div>
   );
 }

@@ -63,6 +63,7 @@ export const usePixelArtName = () =>
   useStore((state) => state.descriptionFields.name);
 export const usePixelArtDescription = () =>
   useStore((state) => state.descriptionFields.description);
+export const usePreviewUrl = () => useStore((state) => state.previewUrl);
 
 // ----- Other Buttons (non-hooks) -----
 export const getDescriptionFields = () => useStore.getState().descriptionFields;
@@ -82,3 +83,5 @@ export const useIsCroppingModalOpen = () =>
   useStore((state) => state.isCroppingModalOpen);
 export const useIsDescriptionModalOpen = () =>
   useStore((state) => state.isDescriptionModalOpen);
+export const useIsPreviewModalOpen = () =>
+  useStore((state) => state.isPreviewModalOpen);

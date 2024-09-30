@@ -6,6 +6,7 @@ import {
   useIsLogged,
   usePixelArtName,
   usePixelArtDescription,
+  usePreviewUrl,
 } from '../../../store/selector';
 import exportToSVG from '../../../utils/exportToSVG';
 
@@ -14,12 +15,12 @@ function DescriptionModalContent() {
   const isLogged = useIsLogged();
   const pixelArtName = usePixelArtName();
   const pixelArtDescription = usePixelArtDescription();
-  const { setDescriptionFields } = useStore((state) => state);
+  const previewUrl = usePreviewUrl();
+  const { setDescriptionFields, setPreviewUrl } = useStore((state) => state);
 
   const [gridOptionSelected, setGridOptionSelected] = useState<
     'none' | 'pixel' | 'full'
   >('full');
-  const [previewUrl, setPreviewUrl] = useState<string>('');
 
   const gridOption = {
     none: 'No grid',
@@ -55,7 +56,7 @@ function DescriptionModalContent() {
         throw new Error('Pixel Art name must be at least 3 characters');
       }
 
-      // Cliquer sur le lien entraine la révocation d'une eventuelle URL de preview déjà présente et la création d'une nouvelle url de preview
+      // Cliquer sur le lien de prévisualitaion entraine la révocation d'une eventuelle URL de preview déjà présente et la création d'une nouvelle url de preview puis l'ouverture d'une nouvelle modal pour afficher la preview
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
         setPreviewUrl('');
@@ -63,6 +64,7 @@ function DescriptionModalContent() {
       const pixelArtData = exportData();
       const preview = exportToSVG(pixelArtData, gridOptionSelected);
       setPreviewUrl(preview);
+      useStore.getState().setIsPreviewModalOpen(true);
 
       // todo : créer une nouvelle modal pour afficher la preview
 
