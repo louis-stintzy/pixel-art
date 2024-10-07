@@ -1,7 +1,7 @@
-import useStore from '../../../store/store';
-import Modal from '../../common/Modal';
+import useStore from '../../../../store/store';
+import Modal from '../../../common/Modal';
 import DescriptionModalContent from './DescriptionModalContent';
-import { useIsDescriptionModalOpen } from '../../../store/selector';
+import { useIsDescriptionModalOpen } from '../../../../store/selector';
 
 function DescriptionModal() {
   const isDescriptionModalOpen = useIsDescriptionModalOpen();

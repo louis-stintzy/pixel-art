@@ -5,7 +5,7 @@ import GridSizeSelector2 from './GridSizeSelector/GridSizeSelector2';
 import './Bar.scss';
 import ControlPanel from './ControlPanel/ControlPanel';
 import OtherButtons from './OtherButtons/OtherButtons';
-import DescriptionModal from './OtherButtons/DescriptionModal';
+import DescriptionModal from './OtherButtons/SaveAndPublishButton/DescriptionModal';
 import {
   useIsDescriptionModalOpen,
   useIsPreviewModalOpen,

@@ -10,12 +10,13 @@ const handleClickClearButton = () => {
   useStore.getState().setIsClearCanvasToastVisible(true);
 };
 
-const handleClickSaveBbutton = () => {
+const handleClickSaveOrPublishButton = (buttonRole: 'save' | 'publish') => {
   try {
     const user = getUser();
     if (!isLogged || !user) {
-      throw new Error('Please log in to save');
+      throw new Error(`Please log in to ${buttonRole}`);
     }
+    useStore.getState().setClickedButton(buttonRole);
     useStore.getState().setIsDescriptionModalOpen(true);
   } catch (error) {
     console.error('Failed to save pixel art:', error);
@@ -56,7 +57,7 @@ const otherButtons = [
       alt: 'Save icon',
     },
     disabled: !isLogged,
-    onClickButton: handleClickSaveBbutton,
+    onClickButton: () => handleClickSaveOrPublishButton('save'),
   },
   // ----- Publish your pixel art -----
   {
@@ -67,10 +68,8 @@ const otherButtons = [
       src: publishIcon,
       alt: 'Publish icon',
     },
-    disabled: true,
-    onClickButton: () => {
-      console.log('Publish your pixel art');
-    },
+    disabled: !isLogged,
+    onClickButton: () => handleClickSaveOrPublishButton('publish'),
   },
   // ----- Contact the developer -----
   {

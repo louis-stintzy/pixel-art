@@ -1,18 +1,20 @@
 import { useState } from 'react';
-import useStore from '../../../store/store';
-import exportData from '../../../utils/exportData';
+import useStore from '../../../../store/store';
+import exportData from '../../../../utils/exportData';
 import {
   useUser,
   useIsLogged,
   usePixelArtName,
   usePixelArtDescription,
   usePreviewUrl,
-} from '../../../store/selector';
-import exportToSVG from '../../../utils/exportToSVG';
+  useClickedButton,
+} from '../../../../store/selector';
+import exportToSVG from '../../../../utils/exportToSVG';
 
 function DescriptionModalContent() {
   const user = useUser();
   const isLogged = useIsLogged();
+  const buttonClickedInOtherButtons = useClickedButton();
   const pixelArtName = usePixelArtName();
   const pixelArtDescription = usePixelArtDescription();
   const previewUrl = usePreviewUrl();
@@ -27,6 +29,12 @@ function DescriptionModalContent() {
     pixel: 'Border per Pixel',
     full: 'Full grid',
   };
+
+  let confirmationButton = null;
+  if (isLogged && user) {
+    confirmationButton =
+      buttonClickedInOtherButtons === 'save' ? 'Save' : 'Publish';
+  }
 
   const handleGridOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGridOptionSelected(e.target.value as 'none' | 'pixel' | 'full');
@@ -61,12 +69,11 @@ function DescriptionModalContent() {
         URL.revokeObjectURL(previewUrl);
         setPreviewUrl('');
       }
+      useStore.getState().cleanPixelColors();
       const pixelArtData = exportData();
       const preview = exportToSVG(pixelArtData, gridOptionSelected);
       setPreviewUrl(preview);
       useStore.getState().setIsPreviewModalOpen(true);
-
-      // todo : créer une nouvelle modal pour afficher la preview
 
       // En cas d'erreur, on affiche un message d'erreur dans la console + toast
     } catch (error) {
@@ -257,20 +264,15 @@ function DescriptionModalContent() {
         <button type="button" onClick={handleCancel}>
           Cancel
         </button>
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={pixelArtName.length < 3}
-        >
-          Save
-        </button>
-        <button
-          type="button"
-          onClick={handlePublish}
-          disabled={pixelArtName.length < 3}
-        >
-          Publish
-        </button>
+        {confirmationButton && (
+          <button
+            type="button"
+            onClick={confirmationButton === 'Save' ? handleSave : handlePublish}
+            disabled={pixelArtName.length < 3}
+          >
+            {confirmationButton}
+          </button>
+        )}
       </div>
     </div>
   );
