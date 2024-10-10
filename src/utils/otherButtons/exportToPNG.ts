@@ -1,4 +1,4 @@
-import { PixelArtData } from '../@types/pixelArtData';
+import { PixelArtData } from '../../@types/pixelArtData';
 /**
  * Export the pixel art data to a PNG file
  *

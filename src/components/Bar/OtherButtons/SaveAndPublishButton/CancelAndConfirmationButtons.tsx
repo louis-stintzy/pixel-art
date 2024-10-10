@@ -6,8 +6,9 @@ import {
   useUser,
 } from '../../../../store/selector';
 import useStore from '../../../../store/store';
-import exportData from '../../../../utils/exportData';
-import exportToSVG from '../../../../utils/exportToSVG';
+import checkBeforeSavingPublishPreview from '../../../../utils/otherButtons/checkBeforeSavingPublishPreview';
+import exportData from '../../../../utils/otherButtons/exportData';
+import exportToSVG from '../../../../utils/otherButtons/exportToSVG';
 
 interface CancelAndConfirmationButtonsProps {
   gridOptionSelected: 'none' | 'pixel' | 'full';
@@ -37,12 +38,7 @@ function CancelAndConfirmationButtons({
   const handleSave = () => {
     try {
       // Pour sauvegarder, l'utilisateur doit être connecté et le nom du pixel art doit être  renseigné (au moins 3 caractères)
-      if (!isLogged || !user) {
-        throw new Error('Please log in to save');
-      }
-      if (pixelArtName.length < 3) {
-        throw new Error('Pixel Art name must be at least 3 characters');
-      }
+      checkBeforeSavingPublishPreview();
 
       // Cliquer sur Save entraine le log des datas => par la suite : Data envoyer au backend
       useStore.getState().cleanPixelColors();
@@ -76,12 +72,7 @@ function CancelAndConfirmationButtons({
   const handlePublish = () => {
     try {
       // Pour publier, l'utilisateur doit être connecté et le nom du pixel art doit être  renseigné (au moins 3 caractères)
-      if (!isLogged || !user) {
-        throw new Error('Please log in to publish');
-      }
-      if (pixelArtName.length < 3) {
-        throw new Error('Pixel Art name must be at least 3 characters');
-      }
+      checkBeforeSavingPublishPreview();
 
       // Cliquer sur Publish entraine le téléchargement du fichier SVG + log des datas => par la suite : SVG + Data envoyer au backend
       useStore.getState().cleanPixelColors();

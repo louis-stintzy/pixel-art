@@ -5,8 +5,9 @@ import {
   useUser,
 } from '../../../../store/selector';
 import useStore from '../../../../store/store';
-import exportData from '../../../../utils/exportData';
-import exportToSVG from '../../../../utils/exportToSVG';
+import checkBeforeSavingPublishPreview from '../../../../utils/otherButtons/checkBeforeSavingPublishPreview';
+import exportData from '../../../../utils/otherButtons/exportData';
+import exportToSVG from '../../../../utils/otherButtons/exportToSVG';
 
 interface PreviewButtonProps {
   gridOptionSelected: 'none' | 'pixel' | 'full';
@@ -22,12 +23,7 @@ function PreviewButton({ gridOptionSelected }: PreviewButtonProps) {
   const handleClickOnPreview = () => {
     try {
       // Pour prévisualiser, l'utilisateur doit être connecté et le nom du pixel art doit être  renseigné (au moins 3 caractères)
-      if (!isLogged || !user) {
-        throw new Error('Please log in to save');
-      }
-      if (pixelArtName.length < 3) {
-        throw new Error('Pixel Art name must be at least 3 characters');
-      }
+      checkBeforeSavingPublishPreview();
 
       // Cliquer sur le lien de prévisualitaion entraine la révocation d'une eventuelle URL de preview déjà présente et la création d'une nouvelle url de preview puis l'ouverture d'une nouvelle modal pour afficher la preview
       if (previewUrl) {

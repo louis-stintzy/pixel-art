@@ -1,4 +1,4 @@
-import version from '../constants/version';
+import version from '../../constants/version';
 import {
   getUser,
   getIsLogged,
@@ -7,7 +7,7 @@ import {
   getPixelColors,
   getImageUrl,
   getDescriptionFields,
-} from '../store/selector';
+} from '../../store/selector';
 
 const exportData = () => {
   const user = getUser();
