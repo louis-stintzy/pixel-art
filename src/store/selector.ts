@@ -64,6 +64,8 @@ export const usePixelArtName = () =>
   useStore((state) => state.descriptionFields.name);
 export const usePixelArtDescription = () =>
   useStore((state) => state.descriptionFields.description);
+export const useGridOptionSelected = () =>
+  useStore((state) => state.gridOptionSelected);
 export const usePreviewUrl = () => useStore((state) => state.previewUrl);
 
 // ----- Other Buttons (non-hooks) -----
