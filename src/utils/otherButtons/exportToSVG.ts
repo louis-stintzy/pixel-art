@@ -33,14 +33,14 @@ const exportToSVG = (
     rect.setAttribute('width', `${pixelSize}`);
     rect.setAttribute('height', `${pixelSize}`);
     rect.setAttribute('fill', color);
-    if (gridOption === 'pixel') {
+    if (pixelArtData.gridPrinting === 'pixel') {
       rect.setAttribute('stroke', pixelArtData.gridColor.line);
       // rect.setAttribute('stroke-width', '1'); // todo : rendre parametreable ?
     }
     svgElement.appendChild(rect);
   });
 
-  if (gridOption === 'full') {
+  if (pixelArtData.gridPrinting === 'full') {
     for (let row = 0; row <= height; row += 1) {
       const y = row * pixelSize;
       const line = document.createElementNS(svgNamespace, 'line');

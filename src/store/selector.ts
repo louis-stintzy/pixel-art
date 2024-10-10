@@ -70,6 +70,8 @@ export const usePreviewUrl = () => useStore((state) => state.previewUrl);
 
 // ----- Other Buttons (non-hooks) -----
 export const getDescriptionFields = () => useStore.getState().descriptionFields;
+export const getGridOptionSelected = () =>
+  useStore.getState().gridOptionSelected;
 
 // ----- Toasts Visibility -----
 export const useIsColorReplacementToastVisible = () =>

@@ -7,6 +7,7 @@ import {
   getPixelColors,
   getImageUrl,
   getDescriptionFields,
+  getGridOptionSelected,
 } from '../../store/selector';
 
 const exportData = () => {
@@ -17,6 +18,7 @@ const exportData = () => {
   const pixelColors = getPixelColors();
   const imageUrl = getImageUrl();
   const { name, description } = getDescriptionFields();
+  const gridOptionSelected = getGridOptionSelected();
 
   try {
     if (!isLogged || !user) {
@@ -46,6 +48,7 @@ const exportData = () => {
       description,
       gridSize,
       gridColor,
+      gridPrinting: gridOptionSelected,
       pixelColors,
       imageUrl,
       date,

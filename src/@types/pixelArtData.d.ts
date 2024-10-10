@@ -17,6 +17,7 @@ export type PixelArtData = {
     background: string;
     line: string;
   };
+  gridPrinting: 'none' | 'pixel' | 'full';
   pixelColors: Record<string, string>;
   imageUrl: string | undefined;
   date: string;
