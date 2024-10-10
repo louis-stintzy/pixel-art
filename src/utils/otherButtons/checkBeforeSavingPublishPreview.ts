@@ -10,7 +10,7 @@ const checkBeforeSavingPublishPreview = () => {
   const pixelArtName = getDescriptionFields().name;
 
   if (!isLogged || !user) {
-    throw new Error('Please log in to save');
+    throw new Error('You must be logged in to proceed');
   }
   if (pixelArtName.length < 3) {
     throw new Error('Pixel Art name must be at least 3 characters');

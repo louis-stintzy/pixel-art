@@ -11,6 +11,8 @@ import {
 } from '../../store/selector';
 
 const exportData = () => {
+  // todo : est ce qu'on peut placer useStore.getState().cleanPixelColors() direct ici et récupérer pixelColors "cleané" ? car avant chaque export on clean les pixelColors
+
   const user = getUser();
   const isLogged = getIsLogged();
   const gridSize = getGridSize();
@@ -21,6 +23,7 @@ const exportData = () => {
   const gridOptionSelected = getGridOptionSelected();
 
   try {
+    // todo: Remplacer par checkBeforeSavingPublishPreview avec un paramètre save | publish | preview afin de personnaliser l'erreur (à voir avec la centralisation des erreurs)
     if (!isLogged || !user) {
       throw new Error('Please log in to export');
     }
