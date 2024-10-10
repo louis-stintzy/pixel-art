@@ -1,4 +1,4 @@
-import usePreviewUrlManagement from '../../../../hooks/usePreviewUrlManagement';
+import useSavePublishPreview from '../../../../hooks/useSavePublishPreview';
 import { useGridOptionSelected } from '../../../../store/selector';
 import useStore from '../../../../store/store';
 import './DescriptionModalContent.scss';
@@ -12,7 +12,7 @@ function GridOption() {
 
   const gridOptionSelected = useGridOptionSelected();
   const { setGridOptionSelected } = useStore((state) => state);
-  const { revokePreviewUrl } = usePreviewUrlManagement();
+  const { revokePreviewUrl } = useSavePublishPreview();
 
   const handleGridOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGridOptionSelected(e.target.value as 'none' | 'pixel' | 'full');

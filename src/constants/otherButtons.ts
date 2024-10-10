@@ -2,6 +2,7 @@ import useStore from '../store/store';
 import contactMail from './contactMail';
 import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 import { getUser, getIsLogged } from '../store/selector';
+import errorMessages from './errorMessages';
 
 const buttonStyle = {};
 const isLogged = getIsLogged();
@@ -14,12 +15,17 @@ const handleClickSaveOrPublishButton = (buttonRole: 'save' | 'publish') => {
   try {
     const user = getUser();
     if (!isLogged || !user) {
-      throw new Error(`Please log in to ${buttonRole}`);
+      throw new Error(errorMessages.mustBeLoggedIn);
     }
     useStore.getState().setClickedButton(buttonRole);
     useStore.getState().setIsDescriptionModalOpen(true);
   } catch (error) {
-    console.error('Failed to save pixel art:', error);
+    console.error(
+      buttonRole === 'save'
+        ? errorMessages.savingModalOpeningError
+        : errorMessages.publishingModalOpeningError,
+      error
+    );
     useStore
       .getState()
       .setIsSavingToastVisible({ success: false, error: true });
@@ -31,7 +37,7 @@ const handleClickContactButton = async () => {
     await navigator.clipboard.writeText(contactMail);
     useStore.getState().setIsContactToastVisible(true);
   } catch (error) {
-    console.error('Failed to copy email:', error);
+    console.error(errorMessages.emailCopyError, error);
   }
 };
 

@@ -1,4 +1,3 @@
-import usePreviewUrlManagement from '../../../../hooks/usePreviewUrlManagement';
 import {
   useClickedButton,
   useIsLogged,
@@ -6,18 +5,14 @@ import {
   useUser,
 } from '../../../../store/selector';
 import useStore from '../../../../store/store';
-import useSavePublish from '../../../../hooks/useSavePublish';
-import checkBeforeSavingPublishPreview from '../../../../utils/otherButtons/checkBeforeSavingPublishPreview';
-import exportData from '../../../../utils/otherButtons/exportData';
-import exportToSVG from '../../../../utils/otherButtons/exportToSVG';
+import useSavePublishPreview from '../../../../hooks/useSavePublishPreview';
 
 function CancelAndConfirmationButtons() {
   const user = useUser();
   const isLogged = useIsLogged();
   const pixelArtName = usePixelArtName();
   const buttonClickedInOtherButtons = useClickedButton();
-  const { handleSaveOrPublish } = useSavePublish();
-  const { revokePreviewUrl } = usePreviewUrlManagement();
+  const { handleSaveOrPublishOrPreview } = useSavePublishPreview();
 
   let confirmationButton = null;
   if (isLogged && user) {
@@ -31,7 +26,7 @@ function CancelAndConfirmationButtons() {
   };
 
   const handleSavePublish = (action: 'save' | 'publish') => () => {
-    handleSaveOrPublish(action);
+    handleSaveOrPublishOrPreview(action);
   };
 
   return (

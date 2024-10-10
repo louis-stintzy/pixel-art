@@ -1,3 +1,4 @@
+import errorMessages from '../../constants/errorMessages';
 import {
   getUser,
   getIsLogged,
@@ -10,11 +11,12 @@ const checkBeforeSavingPublishPreview = () => {
   const pixelArtName = getDescriptionFields().name;
 
   if (!isLogged || !user) {
-    throw new Error('You must be logged in to proceed');
+    throw new Error(errorMessages.mustBeLoggedIn);
   }
   if (pixelArtName.length < 3) {
-    throw new Error('Pixel Art name must be at least 3 characters');
+    throw new Error(errorMessages.pixelArtNameTooShort);
   }
+  return user;
 };
 
 export default checkBeforeSavingPublishPreview;
