@@ -1,9 +1,8 @@
+import usePreviewUrlManagement from '../../../../hooks/usePreviewUrlManagement';
 import {
   useClickedButton,
-  useGridOptionSelected,
   useIsLogged,
   usePixelArtName,
-  usePreviewUrl,
   useUser,
 } from '../../../../store/selector';
 import useStore from '../../../../store/store';
@@ -15,10 +14,8 @@ function CancelAndConfirmationButtons() {
   const user = useUser();
   const isLogged = useIsLogged();
   const pixelArtName = usePixelArtName();
-  const gridOptionSelected = useGridOptionSelected();
   const buttonClickedInOtherButtons = useClickedButton();
-  const previewUrl = usePreviewUrl();
-  const { setPreviewUrl } = useStore((state) => state);
+  const { revokePreviewUrl } = usePreviewUrlManagement();
 
   let confirmationButton = null;
   if (isLogged && user) {
@@ -45,10 +42,7 @@ function CancelAndConfirmationButtons() {
       );
 
       // Pour finir, on revoque une éventuelle url de preview présente, efface les champs, ferme la modal et affiche un message de succès (toast)
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-        setPreviewUrl('');
-      }
+      revokePreviewUrl();
       useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
       useStore
@@ -77,15 +71,16 @@ function CancelAndConfirmationButtons() {
         'pixelArtData after publish:',
         JSON.stringify(pixelArtData, null, 2)
       );
-      const pixelArtSVGurl = exportToSVG(pixelArtData, gridOptionSelected);
+      const pixelArtSVGurl = exportToSVG(pixelArtData);
       const link = document.createElement('a');
       link.href = pixelArtSVGurl;
       link.download = `${pixelArtData.name}.svg`;
       link.click();
-      URL.revokeObjectURL(pixelArtSVGurl); // on revoque direct une fois l'image téléchargée
+      // URL.revokeObjectURL(pixelArtSVGurl); // on revoque direct une fois l'image téléchargée --> on utilise maintenant revokePreviewUrl
 
       // Pour finir, on efface les champs, ferme la modal et affiche un message de succès (toast)
       // todo : renommer SavingToast en passant des messages personnalisés
+      revokePreviewUrl();
       useStore.getState().resetDescriptionFields();
       useStore.getState().setIsDescriptionModalOpen(false);
       useStore

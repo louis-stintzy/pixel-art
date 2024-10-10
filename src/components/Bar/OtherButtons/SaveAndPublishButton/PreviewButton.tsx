@@ -1,22 +1,17 @@
+import usePreviewUrlManagement from '../../../../hooks/usePreviewUrlManagement';
 import {
-  useGridOptionSelected,
   useIsLogged,
   usePixelArtName,
-  usePreviewUrl,
   useUser,
 } from '../../../../store/selector';
 import useStore from '../../../../store/store';
 import checkBeforeSavingPublishPreview from '../../../../utils/otherButtons/checkBeforeSavingPublishPreview';
-import exportData from '../../../../utils/otherButtons/exportData';
-import exportToSVG from '../../../../utils/otherButtons/exportToSVG';
 
 function PreviewButton() {
   const user = useUser();
   const isLogged = useIsLogged();
   const pixelArtName = usePixelArtName();
-  const gridOptionSelected = useGridOptionSelected();
-  const previewUrl = usePreviewUrl();
-  const { setPreviewUrl } = useStore((state) => state);
+  const { createPreviewUrl } = usePreviewUrlManagement();
 
   const handleClickOnPreview = () => {
     try {
@@ -24,15 +19,7 @@ function PreviewButton() {
       checkBeforeSavingPublishPreview();
 
       // Cliquer sur le lien de prévisualitaion entraine la révocation d'une eventuelle URL de preview déjà présente et la création d'une nouvelle url de preview puis l'ouverture d'une nouvelle modal pour afficher la preview
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-        setPreviewUrl('');
-      }
-      useStore.getState().cleanPixelColors();
-      const pixelArtData = exportData();
-      const preview = exportToSVG(pixelArtData, gridOptionSelected);
-      setPreviewUrl(preview);
-      useStore.getState().setIsPreviewModalOpen(true);
+      createPreviewUrl();
 
       // En cas d'erreur, on affiche un message d'erreur dans la console + toast
     } catch (error) {

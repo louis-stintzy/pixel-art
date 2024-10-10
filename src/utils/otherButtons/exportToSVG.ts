@@ -3,13 +3,9 @@ import { PixelArtData } from '../../@types/pixelArtData';
  * Export the pixel art data to a PNG file
  *
  * @param pixelArtData - Pixel art data returned by the exportData function.
- * @param gridOption - Grid option selected by the user to show the grid everywhere, around pixels or not at all.
  */
 
-const exportToSVG = (
-  pixelArtData: PixelArtData,
-  gridOption: 'none' | 'pixel' | 'full'
-) => {
+const exportToSVG = (pixelArtData: PixelArtData) => {
   const { width, height, pixelSize } = pixelArtData.gridSize;
   const svgNamespace = 'http://www.w3.org/2000/svg';
   const svgElement = document.createElementNS(svgNamespace, 'svg');

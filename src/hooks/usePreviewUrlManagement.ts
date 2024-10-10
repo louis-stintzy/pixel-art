@@ -1,12 +1,12 @@
-import { useGridOptionSelected, usePreviewUrl } from '../store/selector';
+import { useIsPreviewModalOpen, usePreviewUrl } from '../store/selector';
 import useStore from '../store/store';
 import exportData from '../utils/otherButtons/exportData';
 import exportToSVG from '../utils/otherButtons/exportToSVG';
 
 function usePreviewUrlManagement() {
-  const gridOptionSelected = useGridOptionSelected();
   const previewUrl = usePreviewUrl();
-  const { setPreviewUrl } = useStore((state) => state);
+  const isPreviewModalOpen = useIsPreviewModalOpen();
+  const { setPreviewUrl, setIsPreviewModalOpen } = useStore((state) => state);
 
   const revokePreviewUrl = () => {
     if (previewUrl) {
@@ -19,8 +19,9 @@ function usePreviewUrlManagement() {
     revokePreviewUrl();
     useStore.getState().cleanPixelColors();
     const pixelArtData = exportData();
-    const preview = exportToSVG(pixelArtData, gridOptionSelected);
+    const preview = exportToSVG(pixelArtData);
     setPreviewUrl(preview);
+    if (!isPreviewModalOpen) setIsPreviewModalOpen(true);
   };
 
   return { revokePreviewUrl, createPreviewUrl };
