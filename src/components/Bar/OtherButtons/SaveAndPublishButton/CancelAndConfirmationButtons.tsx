@@ -1,5 +1,6 @@
 import {
   useClickedButton,
+  useGridOptionSelected,
   useIsLogged,
   usePixelArtName,
   usePreviewUrl,
@@ -10,16 +11,11 @@ import checkBeforeSavingPublishPreview from '../../../../utils/otherButtons/chec
 import exportData from '../../../../utils/otherButtons/exportData';
 import exportToSVG from '../../../../utils/otherButtons/exportToSVG';
 
-interface CancelAndConfirmationButtonsProps {
-  gridOptionSelected: 'none' | 'pixel' | 'full';
-}
-
-function CancelAndConfirmationButtons({
-  gridOptionSelected,
-}: CancelAndConfirmationButtonsProps) {
+function CancelAndConfirmationButtons() {
   const user = useUser();
   const isLogged = useIsLogged();
   const pixelArtName = usePixelArtName();
+  const gridOptionSelected = useGridOptionSelected();
   const buttonClickedInOtherButtons = useClickedButton();
   const previewUrl = usePreviewUrl();
   const { setPreviewUrl } = useStore((state) => state);

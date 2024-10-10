@@ -1,4 +1,5 @@
 import {
+  useGridOptionSelected,
   useIsLogged,
   usePixelArtName,
   usePreviewUrl,
@@ -9,14 +10,11 @@ import checkBeforeSavingPublishPreview from '../../../../utils/otherButtons/chec
 import exportData from '../../../../utils/otherButtons/exportData';
 import exportToSVG from '../../../../utils/otherButtons/exportToSVG';
 
-interface PreviewButtonProps {
-  gridOptionSelected: 'none' | 'pixel' | 'full';
-}
-
-function PreviewButton({ gridOptionSelected }: PreviewButtonProps) {
+function PreviewButton() {
   const user = useUser();
   const isLogged = useIsLogged();
   const pixelArtName = usePixelArtName();
+  const gridOptionSelected = useGridOptionSelected();
   const previewUrl = usePreviewUrl();
   const { setPreviewUrl } = useStore((state) => state);
 

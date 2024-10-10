@@ -1,18 +1,14 @@
-import { usePreviewUrl } from '../../../../store/selector';
+import {
+  useGridOptionSelected,
+  usePreviewUrl,
+} from '../../../../store/selector';
 import useStore from '../../../../store/store';
 import './DescriptionModalContent.scss';
 
-interface GridOptionProps {
-  gridOptionSelected: 'none' | 'pixel' | 'full';
-  setGridOptionSelected: (gridOption: 'none' | 'pixel' | 'full') => void;
-}
-
-function GridOption({
-  gridOptionSelected,
-  setGridOptionSelected,
-}: GridOptionProps) {
+function GridOption() {
+  const gridOptionSelected = useGridOptionSelected();
   const previewUrl = usePreviewUrl();
-  const { setPreviewUrl } = useStore((state) => state);
+  const { setPreviewUrl, setGridOptionSelected } = useStore((state) => state);
   const gridOption = {
     none: 'No grid',
     pixel: 'Border per Pixel',
@@ -35,7 +31,6 @@ function GridOption({
             value={key}
             onChange={handleGridOptionChange}
             checked={gridOptionSelected === key}
-            // disabled={!isLogged || !user || pixelArtName.length < 3}
           />
           {value}
         </label>
