@@ -17,7 +17,7 @@ function usePreviewUrlManagement() {
 
   const createPreviewUrl = () => {
     revokePreviewUrl();
-    useStore.getState().cleanPixelColors();
+    // useStore.getState().cleanPixelColors(); // déplacé dans exportData car opération synchrone
     const pixelArtData = exportData();
     const preview = exportToSVG(pixelArtData);
     setPreviewUrl(preview);

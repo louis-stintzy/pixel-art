@@ -9,10 +9,11 @@ import {
   getDescriptionFields,
   getGridOptionSelected,
 } from '../../store/selector';
+import useStore from '../../store/store';
 
 const exportData = () => {
-  // todo : est ce qu'on peut placer useStore.getState().cleanPixelColors() direct ici et récupérer pixelColors "cleané" ? car avant chaque export on clean les pixelColors
-
+  // Est ce qu'on peut placer useStore.getState().cleanPixelColors() direct ici et récupérer pixelColors "cleané" ? Oui (normalement), car useStore.getState().cleanPixelColors() est synchrone
+  useStore.getState().cleanPixelColors();
   const user = getUser();
   const isLogged = getIsLogged();
   const gridSize = getGridSize();

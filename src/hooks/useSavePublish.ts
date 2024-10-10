@@ -13,8 +13,7 @@ function useSavePublish() {
       checkBeforeSavingPublishPreview();
 
       // Cliquer sur Save ou Publish entraine le log des datas => par la suite : Data envoyer au backend
-      // todo : à voir pour clean les pixelColors dans exportData
-      useStore.getState().cleanPixelColors();
+      // useStore.getState().cleanPixelColors(); // déplacé dans exportData car opération synchrone
       const pixelArtData = exportData();
       console.log(JSON.stringify(pixelArtData, null, 2));
 
