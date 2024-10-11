@@ -4,16 +4,18 @@ export interface ToastSlice {
   isColorReplacementToastVisible: boolean;
   isClearCanvasToastVisible: boolean;
   isContactToastVisible: boolean;
-  isSavingToastVisible: {
+  isSavingPublishingPreviewingToastVisible: {
     success: boolean;
     error: boolean;
+    message: string;
   };
   setIsColorReplacementToastVisible: (isVisible: boolean) => void;
   setIsClearCanvasToastVisible: (isVisible: boolean) => void;
   setIsContactToastVisible: (isVisible: boolean) => void;
-  setIsSavingToastVisible: (isVisible: {
+  setIsSavingPublishingPreviewingToastVisible: (isVisible: {
     success: boolean;
     error: boolean;
+    message: string;
   }) => void;
   closeAllToasts: () => void;
 }
@@ -22,9 +24,10 @@ const createToastSlice: StateCreator<ToastSlice> = (set) => ({
   isColorReplacementToastVisible: false,
   isClearCanvasToastVisible: false,
   isContactToastVisible: false,
-  isSavingToastVisible: {
+  isSavingPublishingPreviewingToastVisible: {
     success: false,
     error: false,
+    message: '',
   },
   setIsColorReplacementToastVisible: (isVisible) =>
     set({ isColorReplacementToastVisible: isVisible }),
@@ -32,16 +35,17 @@ const createToastSlice: StateCreator<ToastSlice> = (set) => ({
     set({ isClearCanvasToastVisible: isVisible }),
   setIsContactToastVisible: (isVisible) =>
     set({ isContactToastVisible: isVisible }),
-  setIsSavingToastVisible: (isVisible) =>
-    set({ isSavingToastVisible: isVisible }),
+  setIsSavingPublishingPreviewingToastVisible: (isVisible) =>
+    set({ isSavingPublishingPreviewingToastVisible: isVisible }),
   closeAllToasts: () =>
     set({
       isColorReplacementToastVisible: false,
       isClearCanvasToastVisible: false,
       isContactToastVisible: false,
-      isSavingToastVisible: {
+      isSavingPublishingPreviewingToastVisible: {
         success: false,
         error: false,
+        message: '',
       },
     }),
 });

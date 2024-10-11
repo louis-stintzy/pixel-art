@@ -1,4 +1,7 @@
-import errorMessages from '../constants/errorMessages';
+import {
+  errorMessages,
+  successMessages,
+} from '../constants/errorAndSuccesMessages';
 import { useIsPreviewModalOpen, usePreviewUrl } from '../store/selector';
 import useStore from '../store/store';
 import checkBeforeSavingPublishPreview from '../utils/otherButtons/checkBeforeSavingPublishPreview';
@@ -45,18 +48,27 @@ function useSavePublishPreview() {
 
       if (action === 'save' || action === 'publish') {
         // Pour finir, on affiche un message de succès (toast) et ferme la modal
-        useStore
-          .getState()
-          .setIsSavingToastVisible({ success: true, error: false });
+        useStore.getState().closeAllToasts();
+        useStore.getState().setIsSavingPublishingPreviewingToastVisible({
+          success: true,
+          error: false,
+          message: successMessages[`${action}Success`],
+        });
         useStore.getState().setIsDescriptionModalOpen(false);
       }
     } catch (error) {
       // En cas d'erreur, on affiche un message d'erreur dans la console + toast et ferme la modal
-      const errorMessage = `${errorMessages[`${action}Error`]} : ${error}`;
+      const errorMessage =
+        error instanceof Error
+          ? `${errorMessages[`${action}Error`]} ${error.message}`
+          : errorMessages.unexpectedError;
       console.error(errorMessage);
-      useStore
-        .getState()
-        .setIsSavingToastVisible({ success: false, error: true });
+      useStore.getState().closeAllToasts();
+      useStore.getState().setIsSavingPublishingPreviewingToastVisible({
+        success: false,
+        error: true,
+        message: errorMessage,
+      });
       useStore.getState().setIsDescriptionModalOpen(false);
     }
   };

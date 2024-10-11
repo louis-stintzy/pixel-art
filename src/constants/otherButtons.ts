@@ -2,12 +2,13 @@ import useStore from '../store/store';
 import contactMail from './contactMail';
 import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 import { getUser, getIsLogged } from '../store/selector';
-import errorMessages from './errorMessages';
+import { errorMessages } from './errorAndSuccesMessages';
 
 const buttonStyle = {};
 const isLogged = getIsLogged();
 
 const handleClickClearButton = () => {
+  useStore.getState().closeAllToasts();
   useStore.getState().setIsClearCanvasToastVisible(true);
 };
 
@@ -26,15 +27,20 @@ const handleClickSaveOrPublishButton = (buttonRole: 'save' | 'publish') => {
         : errorMessages.publishingModalOpeningError,
       error
     );
-    useStore
-      .getState()
-      .setIsSavingToastVisible({ success: false, error: true });
+    useStore.getState().closeAllToasts();
+    useStore.getState().setIsSavingPublishingPreviewingToastVisible({
+      success: false,
+      error: true,
+      message:
+        error instanceof Error ? error.message : errorMessages.unexpectedError,
+    });
   }
 };
 
 const handleClickContactButton = async () => {
   try {
     await navigator.clipboard.writeText(contactMail);
+    useStore.getState().closeAllToasts();
     useStore.getState().setIsContactToastVisible(true);
   } catch (error) {
     console.error(errorMessages.emailCopyError, error);

@@ -78,8 +78,8 @@ export const useIsColorReplacementToastVisible = () =>
   useStore((state) => state.isColorReplacementToastVisible);
 export const useIsClearCanvasToastVisible = () =>
   useStore((state) => state.isClearCanvasToastVisible);
-export const useIsSavingToastVisible = () =>
-  useStore((state) => state.isSavingToastVisible);
+export const useIsSavingPublishingPreviewingToastVisible = () =>
+  useStore((state) => state.isSavingPublishingPreviewingToastVisible);
 export const useIsContactToastVisible = () =>
   useStore((state) => state.isContactToastVisible);
 

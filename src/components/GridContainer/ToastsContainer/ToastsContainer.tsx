@@ -1,26 +1,28 @@
-import useStore from '../../../store/store';
 import ClearCanvasToast from '../../Toasts/ClearCanvasToast';
 import ColorReplacementToast from '../../Toasts/ColorReplacementToast';
 import ContactToast from '../../Toasts/ContactToast';
-import SavingToast from '../../Toasts/SavingToast';
+import SavingPublishingPreviewingToast from '../../Toasts/SavingPublishingPreviewingToast';
 import {
   useIsColorReplacementToastVisible,
   useIsClearCanvasToastVisible,
-  useIsSavingToastVisible,
+  useIsSavingPublishingPreviewingToastVisible,
   useIsContactToastVisible,
 } from '../../../store/selector';
 
 function ToastsContainer() {
   const isColorReplacementToastVisible = useIsColorReplacementToastVisible();
   const isClearCanvasToastVisible = useIsClearCanvasToastVisible();
-  const isSavingToastVisible = useIsSavingToastVisible();
+  const isSavingPublishingPreviewingToastVisible =
+    useIsSavingPublishingPreviewingToastVisible();
   const isContactToastVisible = useIsContactToastVisible();
 
   return (
     <>
       {isColorReplacementToastVisible && <ColorReplacementToast />}
       {isClearCanvasToastVisible && <ClearCanvasToast />}
-      {isSavingToastVisible && <SavingToast />}
+      {isSavingPublishingPreviewingToastVisible && (
+        <SavingPublishingPreviewingToast />
+      )}
       {isContactToastVisible && <ContactToast />}
     </>
   );

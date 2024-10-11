@@ -1,6 +1,7 @@
 import useStore from '../../store/store';
 import Toast from '../common/Toast';
 import contactMail from '../../constants/contactMail';
+import { successMessages } from '../../constants/errorAndSuccesMessages';
 
 function ContactToast() {
   const openMailClient = () => {
@@ -10,7 +11,7 @@ function ContactToast() {
   return (
     <Toast
       type="info"
-      message="Email copied to clipboard or click to open your email client..."
+      message={successMessages.emailCopySuccess}
       optionalButton={{ text: 'Open', onClick: openMailClient }}
       onClose={() => useStore.getState().setIsContactToastVisible(false)}
       duration={5000}
