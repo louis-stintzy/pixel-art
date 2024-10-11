@@ -3,24 +3,23 @@ import {
   useGridSize,
   useIsPreviewModalOpen,
   usePreviewUrl,
-} from '../../../store/selector';
-import useStore from '../../../store/store';
-import Modal from '../../common/Modal';
-import { closeIcon } from '../../../constants/icons';
-import useDragAndDrop from '../../../hooks/useDragAndDrop';
+} from '../../../../store/selector';
+import useStore from '../../../../store/store';
+import Modal from '../../../common/Modal';
+import { closeIcon } from '../../../../constants/icons';
+import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 
 function PreviewModal() {
   const previewContainerRef = useRef<HTMLDivElement | null>(null);
+  const childOfModalRef = useRef<HTMLDivElement | null>(null);
   const { position } = useDragAndDrop(previewContainerRef);
   const isPreviewModalOpen = useIsPreviewModalOpen();
   const previewUrl = usePreviewUrl();
   const gridSize = useGridSize();
   const [zoom, setZoom] = useState(1);
 
-  // todo : calculer un initial zoom dans un useEffect pour que l'image apparaisse entièrement
   // todo : créer un bouton qui revient au zoom initial
   // todo : mettre des boutons pour changer gridOptionSelected dans la modal
-  // todo : refactoriser DescriptionModalContent, trop long et certaines fonction(alités) vont se répéter
 
   const handleClose = () => {
     useStore.getState().setIsPreviewModalOpen(false);
@@ -33,9 +32,14 @@ function PreviewModal() {
     []
   );
 
+  const childOfModalStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+  };
+
   const previewModalStyle: React.CSSProperties = {
-    width: '800px',
-    height: '500px',
+    width: `800px`,
+    height: `500px`,
     margin: 'auto',
     overflow: 'hidden',
   };
@@ -57,8 +61,27 @@ function PreviewModal() {
   const previewStyle: React.CSSProperties = {
     width: `${gridSize.width * gridSize.pixelSize * zoom}px`,
     height: `auto`,
-    pointerEvents: 'none',
+    pointerEvents: 'none', // pour que le drag and drop fonctionne sur la div parent et non sur l'image
   };
+
+  // l'initial zoom est calculé en fonction de la taille de l'image (gridSize width/height x pixelSize) et de la taille disponible soit (childOfModal width/height - height 80% de la height de la Modal)
+  // on prend le zoom le plus petit pour que l'image apparaisse entierement
+  useEffect(() => {
+    if (childOfModalRef.current) {
+      const childOfModalWidth = childOfModalRef.current.clientWidth;
+      const childOfModalHeight = childOfModalRef.current.clientHeight;
+      const initialZoom = Math.min(
+        Math.round(
+          (childOfModalWidth * 100) / (gridSize.width * gridSize.pixelSize)
+        ) / 100,
+        Math.round(
+          (childOfModalHeight * 0.8 * 100) /
+            (gridSize.height * gridSize.pixelSize)
+        ) / 100
+      );
+      setZoom(initialZoom);
+    }
+  }, [gridSize.height, gridSize.pixelSize, gridSize.width]);
 
   return (
     <Modal
@@ -66,11 +89,15 @@ function PreviewModal() {
       modalStyle={previewModalStyle}
       onClose={handleClose}
     >
-      <>
+      <div id="childOfModal" ref={childOfModalRef} style={childOfModalStyle}>
         <button type="button" onClick={handleClose}>
           <img src={closeIcon} alt="Close" />
         </button>
-        <div ref={previewContainerRef} style={previewContainerStyle}>
+        <div
+          id="previewContainer"
+          ref={previewContainerRef}
+          style={previewContainerStyle}
+        >
           <div id="previewWrapper" style={previewWrapperStyle}>
             <img src={previewUrl} alt="preview" style={previewStyle} />
           </div>
@@ -79,11 +106,11 @@ function PreviewModal() {
           type="range"
           value={zoom}
           min={0.2}
-          max={10}
-          step={0.1}
+          max={5}
+          step={0.2}
           onChange={handleZoomChange}
         />
-      </>
+      </div>
     </Modal>
   );
 }

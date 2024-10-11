@@ -10,7 +10,7 @@ import {
   useIsDescriptionModalOpen,
   useIsPreviewModalOpen,
 } from '../../store/selector';
-import PreviewModal from './OtherButtons/PreviewModal';
+import PreviewModal from './OtherButtons/SaveAndPublishButton/PreviewModal';
 
 function Bar() {
   const isDescriptionModalOpen = useIsDescriptionModalOpen();
