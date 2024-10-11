@@ -1,6 +1,7 @@
 import useStore from '../../store/store';
 import Toast from '../common/Toast';
 import { useSavedPixelColorsBeforeColorReplacement } from '../../store/selector';
+import { infoMessages } from '../../constants/messages';
 
 function ColorReplacementToast() {
   const savedPixelColors = useSavedPixelColorsBeforeColorReplacement();
@@ -12,7 +13,7 @@ function ColorReplacementToast() {
   return (
     <Toast
       type="info"
-      message="Color change applied. Do you want to undo ?"
+      message={infoMessages.colorChangeInfo}
       optionalButton={{ text: 'Undo', onClick: undoColorReplacement }}
       onClose={() =>
         useStore.getState().setIsColorReplacementToastVisible(false)

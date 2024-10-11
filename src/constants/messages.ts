@@ -1,3 +1,8 @@
+export const successMessages = {
+  saveSuccess: 'Pixel art saved successfully.',
+  publishSuccess: 'Pixel art published successfully.',
+};
+
 export const errorMessages = {
   mustBeLoggedIn: 'You must be logged in to proceed.',
   pixelArtNameTooShort: 'Pixel Art name must be at least 3 characters.',
@@ -14,9 +19,12 @@ export const errorMessages = {
   unexpectedError: 'An unexpected error occurred.',
 };
 
-export const successMessages = {
-  emailCopySuccess:
+export const infoMessages = {
+  emailCopyInfo:
     'Email copied to clipboard or click to open your email client...',
-  saveSuccess: 'Pixel art saved successfully.',
-  publishSuccess: 'Pixel art published successfully.',
+  colorChangeInfo: 'Color change applied. Do you want to undo ?',
+};
+
+export const warningMessages = {
+  clearCanvasWarning: 'Are you sure you want to clear the canvas ?',
 };

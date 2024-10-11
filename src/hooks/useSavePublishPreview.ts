@@ -1,7 +1,4 @@
-import {
-  errorMessages,
-  successMessages,
-} from '../constants/errorAndSuccesMessages';
+import { errorMessages, successMessages } from '../constants/messages';
 import { useIsPreviewModalOpen, usePreviewUrl } from '../store/selector';
 import useStore from '../store/store';
 import checkBeforeSavingPublishPreview from '../utils/otherButtons/checkBeforeSavingPublishPreview';

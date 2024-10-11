@@ -1,3 +1,4 @@
+import { warningMessages } from '../../constants/messages';
 import useStore from '../../store/store';
 import Toast from '../common/Toast';
 
@@ -10,7 +11,7 @@ function ClearCanvasToast() {
   return (
     <Toast
       type="warning"
-      message="Are you sure you want to clear the canvas ?"
+      message={warningMessages.clearCanvasWarning}
       optionalButton={{
         text: 'Yes',
         onClick: clearCanvas,

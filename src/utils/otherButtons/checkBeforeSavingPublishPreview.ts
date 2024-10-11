@@ -1,4 +1,4 @@
-import { errorMessages } from '../../constants/errorAndSuccesMessages';
+import { errorMessages } from '../../constants/messages';
 import {
   getUser,
   getIsLogged,

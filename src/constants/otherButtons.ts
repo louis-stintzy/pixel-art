@@ -2,7 +2,7 @@ import useStore from '../store/store';
 import contactMail from './contactMail';
 import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 import { getUser, getIsLogged } from '../store/selector';
-import { errorMessages } from './errorAndSuccesMessages';
+import { errorMessages } from './messages';
 
 const buttonStyle = {};
 const isLogged = getIsLogged();
