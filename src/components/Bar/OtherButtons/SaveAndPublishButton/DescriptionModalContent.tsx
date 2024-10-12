@@ -12,7 +12,7 @@ function DescriptionModalContent() {
       <div className="description-fields flexAndColumnDirectionStyle">
         <CreatorField />
         <NameAndDescriptionField />
-        <GridOption />
+        <GridOption display="radio" />
         <PreviewButton />
       </div>
       <div className="cancel-and-confirmation-buttons">

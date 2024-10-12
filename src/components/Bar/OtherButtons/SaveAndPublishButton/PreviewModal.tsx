@@ -8,6 +8,7 @@ import useStore from '../../../../store/store';
 import Modal from '../../../common/Modal';
 import { closeIcon } from '../../../../constants/icons';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
+import GridOption from './GridOption';
 
 function PreviewModal() {
   const previewContainerRef = useRef<HTMLDivElement | null>(null);
@@ -123,7 +124,11 @@ function PreviewModal() {
         </div>
         <div
           id="zoom-controller"
-          style={{ display: 'flex', justifyContent: 'center' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            margin: '10px 0 3px 0',
+          }}
         >
           <input
             id="zoom-controller__input-range"
@@ -143,6 +148,7 @@ function PreviewModal() {
             Reset
           </button>
         </div>
+        <GridOption display="button" />
       </div>
     </Modal>
   );
