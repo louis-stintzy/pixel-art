@@ -12,11 +12,12 @@ import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 function PreviewModal() {
   const previewContainerRef = useRef<HTMLDivElement | null>(null);
   const childOfModalRef = useRef<HTMLDivElement | null>(null);
-  const { position } = useDragAndDrop(previewContainerRef);
+  const { position, resetPosition } = useDragAndDrop(previewContainerRef);
   const isPreviewModalOpen = useIsPreviewModalOpen();
   const previewUrl = usePreviewUrl();
   const gridSize = useGridSize();
   const [zoom, setZoom] = useState(1);
+  const [initialZ, setInitialZ] = useState(1);
 
   // todo : créer un bouton qui revient au zoom initial
   // todo : mettre des boutons pour changer gridOptionSelected dans la modal
@@ -32,9 +33,9 @@ function PreviewModal() {
     []
   );
 
-  const childOfModalStyle: React.CSSProperties = {
-    width: '100%',
-    height: '100%',
+  const handleResetZoom = () => {
+    resetPosition();
+    setZoom(initialZ);
   };
 
   const previewModalStyle: React.CSSProperties = {
@@ -44,8 +45,25 @@ function PreviewModal() {
     overflow: 'hidden',
   };
 
+  const childOfModalStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+  };
+
+  // si il y a bien un childOfModalRef et que la largeur de l'image (redimensionnée) est plus grande que la largeur du childOfModalRef :
+  // on retourne la largeur de l'image en zoom, sinon on retourne 100% pour que l'image soit centrée et qu'il n'y ait pas de pb de container trop petit (l'image sortirait du container  tout en étant plus petit que la modal)
+  const calculatePreviewContainerWidth = () => {
+    if (childOfModalRef.current) {
+      return gridSize.width * gridSize.pixelSize * zoom >
+        childOfModalRef.current.clientWidth
+        ? gridSize.width * gridSize.pixelSize * zoom
+        : '100%';
+    }
+    return gridSize.width * gridSize.pixelSize * zoom;
+  };
+
   const previewContainerStyle: React.CSSProperties = {
-    width: `${gridSize.width * gridSize.pixelSize * zoom}px`,
+    width: calculatePreviewContainerWidth(),
     height: '80%',
     display: 'flex',
     justifyContent: 'center',
@@ -79,6 +97,7 @@ function PreviewModal() {
             (gridSize.height * gridSize.pixelSize)
         ) / 100
       );
+      setInitialZ(initialZoom);
       setZoom(initialZoom);
     }
   }, [gridSize.height, gridSize.pixelSize, gridSize.width]);
@@ -102,14 +121,28 @@ function PreviewModal() {
             <img src={previewUrl} alt="preview" style={previewStyle} />
           </div>
         </div>
-        <input
-          type="range"
-          value={zoom}
-          min={0.2}
-          max={5}
-          step={0.2}
-          onChange={handleZoomChange}
-        />
+        <div
+          id="zoom-controller"
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
+          <input
+            id="zoom-controller__input-range"
+            type="range"
+            value={zoom}
+            min={0.2}
+            max={5}
+            step={0.2}
+            onChange={handleZoomChange}
+          />
+          <button
+            id="zoom-controller__btn-reset"
+            type="button"
+            onClick={handleResetZoom}
+            style={{ margin: '0 5px' }}
+          >
+            Reset
+          </button>
+        </div>
       </div>
     </Modal>
   );
