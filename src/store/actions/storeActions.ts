@@ -1,5 +1,20 @@
 import useStore from '../store';
 
+// ----- Action Buttons -----
+export const setIsReadyToDraw = (isReady: boolean) =>
+  useStore.getState().setIsReadyToDraw(isReady);
+export const setIsEraser = (isEraser: boolean) =>
+  useStore.getState().setIsEraser(isEraser);
+export const setIsBigTool = (isBigTool: boolean) =>
+  useStore.getState().setIsBigTool(isBigTool);
+export const setColorReplacement = (newState: {
+  isSelectingColor?: boolean;
+  savedPixelColors?: Record<string, string> | undefined;
+  isLoading?: boolean;
+}) => useStore.getState().setColorReplacement(newState);
+export const setIsImageHidden = (isHidden: boolean) =>
+  useStore.getState().setIsImageHidden(isHidden);
+
 // ----- Other Buttons -----
 export const setClickedButton = (button: 'save' | 'publish' | null) =>
   useStore.getState().setClickedButton(button);

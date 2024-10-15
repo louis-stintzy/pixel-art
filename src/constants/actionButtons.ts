@@ -20,6 +20,13 @@ import {
   showIcon,
   hideIcon,
 } from './icons';
+import {
+  setColorReplacement,
+  setIsBigTool,
+  setIsEraser,
+  setIsImageHidden,
+  setIsReadyToDraw,
+} from '../store/actions/storeActions';
 
 const buttonStyle = {};
 
@@ -35,22 +42,22 @@ const isImageHidden = () => getIsImageHidden();
 const noImage = () => !getImageUrl();
 
 // ----- Setters -----
-const switchToColorMode = () => useStore.getState().setIsReadyToDraw(true);
-const switchToDragMode = () => useStore.getState().setIsReadyToDraw(false);
-const switchToEraseMode = () => useStore.getState().setIsEraser(true);
-const switchToColorMode2 = () => useStore.getState().setIsEraser(false);
-const switchToBigTool = () => useStore.getState().setIsBigTool(true);
-const switchToSmallTool = () => useStore.getState().setIsBigTool(false);
+const switchToColorMode = () => setIsReadyToDraw(true);
+const switchToDragMode = () => setIsReadyToDraw(false);
+const switchToEraseMode = () => setIsEraser(true);
+const switchToColorMode2 = () => setIsEraser(false);
+const switchToBigTool = () => setIsBigTool(true);
+const switchToSmallTool = () => setIsBigTool(false);
 const activateColorReplacement = () =>
-  useStore.getState().setColorReplacement({
+  setColorReplacement({
     isSelectingColor: true,
   });
 const deactivateColorReplacement = () =>
-  useStore.getState().setColorReplacement({
+  setColorReplacement({
     isSelectingColor: false,
   });
-const hideImage = () => useStore.getState().setIsImageHidden(true);
-const showImage = () => useStore.getState().setIsImageHidden(false);
+const hideImage = () => setIsImageHidden(true);
+const showImage = () => setIsImageHidden(false);
 
 const actionButtons = [
   // ----- toggle-drag-draw-mode -----
