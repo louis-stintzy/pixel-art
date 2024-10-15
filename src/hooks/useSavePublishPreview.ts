@@ -1,6 +1,7 @@
 import { errorMessages, successMessages } from '../constants/messages';
 import { useIsPreviewModalOpen, usePreviewUrl } from '../store/selector';
 import useStore from '../store/store';
+import { setPreviewUrl } from '../store/storeActions';
 import checkBeforeSavingPublishPreview from '../utils/otherButtons/checkBeforeSavingPublishPreview';
 import exportData from '../utils/otherButtons/exportData';
 import exportToSVG from '../utils/otherButtons/exportToSVG';
@@ -8,7 +9,7 @@ import exportToSVG from '../utils/otherButtons/exportToSVG';
 function useSavePublishPreview() {
   const previewUrl = usePreviewUrl();
   const isPreviewModalOpen = useIsPreviewModalOpen();
-  const { setPreviewUrl, setIsPreviewModalOpen } = useStore((state) => state);
+  const { setIsPreviewModalOpen } = useStore((state) => state);
 
   const revokePreviewUrl = () => {
     if (previewUrl) {

@@ -2,14 +2,12 @@ import {
   usePixelArtDescription,
   usePixelArtName,
 } from '../../../../store/selector';
-import useStore from '../../../../store/store';
+import { setDescriptionFields } from '../../../../store/storeActions';
 import './DescriptionModalContent.scss';
 
 function NameAndDescriptionFields() {
   const pixelArtName = usePixelArtName();
   const pixelArtDescription = usePixelArtDescription();
-
-  const { setDescriptionFields } = useStore((state) => state);
 
   const handleDescriptionFieldsChange = (
     field: 'name' | 'description',

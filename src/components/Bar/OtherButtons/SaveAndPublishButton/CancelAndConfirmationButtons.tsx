@@ -6,6 +6,7 @@ import {
 } from '../../../../store/selector';
 import useStore from '../../../../store/store';
 import useSavePublishPreview from '../../../../hooks/useSavePublishPreview';
+import { resetDescriptionFields } from '../../../../store/storeActions';
 
 function CancelAndConfirmationButtons() {
   const user = useUser();
@@ -21,7 +22,7 @@ function CancelAndConfirmationButtons() {
   }
 
   const handleCancel = () => {
-    useStore.getState().resetDescriptionFields();
+    resetDescriptionFields();
     useStore.getState().setIsDescriptionModalOpen(false);
   };
 

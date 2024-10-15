@@ -1,6 +1,6 @@
 import useSavePublishPreview from '../../hooks/useSavePublishPreview';
 import { useGridOptionSelected } from '../../store/selector';
-import useStore from '../../store/store';
+import { setGridOptionSelected } from '../../store/storeActions';
 
 interface GridOptionProps {
   display: 'radio' | 'button';
@@ -14,7 +14,6 @@ function GridOption({ display }: GridOptionProps) {
   };
 
   const gridOptionSelected = useGridOptionSelected();
-  const { setGridOptionSelected } = useStore((state) => state);
   const { revokePreviewUrl, handleSaveOrPublishOrPreview } =
     useSavePublishPreview();
 

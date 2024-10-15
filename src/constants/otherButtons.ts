@@ -3,6 +3,7 @@ import contactMail from './contactMail';
 import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 import { getUser, getIsLogged } from '../store/selector';
 import { errorMessages } from './messages';
+import { setClickedButton } from '../store/storeActions';
 
 const buttonStyle = {};
 const isLogged = getIsLogged();
@@ -18,7 +19,7 @@ const handleClickSaveOrPublishButton = (buttonRole: 'save' | 'publish') => {
     if (!isLogged || !user) {
       throw new Error(errorMessages.mustBeLoggedIn);
     }
-    useStore.getState().setClickedButton(buttonRole);
+    setClickedButton(buttonRole);
     useStore.getState().setIsDescriptionModalOpen(true);
   } catch (error) {
     console.error(
