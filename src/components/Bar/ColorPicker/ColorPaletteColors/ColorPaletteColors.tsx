@@ -5,7 +5,7 @@ import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 import useStore from '../../../../store/store';
 import useActionFollowingMove from '../../../../hooks/useActionFollowingMove';
-import { useFavoriteColors } from '../../../../store/selector';
+import { useFavoriteColors } from '../../../../store/selectors/selector';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };

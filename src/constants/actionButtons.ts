@@ -7,7 +7,7 @@ import {
   getIsBigTool,
   getIsSelectingColorToChange,
   getIsImageHidden,
-} from '../store/selector';
+} from '../store/selectors/selector';
 import {
   dragIcon,
   drawIcon,

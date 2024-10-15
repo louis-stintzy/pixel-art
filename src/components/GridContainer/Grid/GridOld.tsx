@@ -8,7 +8,7 @@ import {
   useIsReadyToDraw,
   useIsEraser,
   useIsBigTool,
-} from '../../../store/selector';
+} from '../../../store/selectors/selector';
 import Pixel from '../Pixel/Pixel';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import { coloring } from '../../../utils/coloring';

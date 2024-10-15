@@ -1,8 +1,8 @@
 import {
   usePixelArtDescription,
   usePixelArtName,
-} from '../../../../store/selector';
-import { setDescriptionFields } from '../../../../store/storeActions';
+} from '../../../../store/selectors/selector';
+import { setDescriptionFields } from '../../../../store/actions/storeActions';
 import './DescriptionModalContent.scss';
 
 function NameAndDescriptionFields() {

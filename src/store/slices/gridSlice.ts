@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand';
-import { AspectRatio, Format } from '../@types/aspectRatio';
-import { resetAspectRatio } from '../constants/aspectRatio';
+import { AspectRatio, Format } from '../../@types/aspectRatio';
+import { resetAspectRatio } from '../../constants/aspectRatio';
 
 export interface GridSlice {
   userDragsGrid: boolean;

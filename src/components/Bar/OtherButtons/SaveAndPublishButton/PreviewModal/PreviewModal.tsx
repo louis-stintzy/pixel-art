@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   useGridSize,
   useIsPreviewModalOpen,
-} from '../../../../../store/selector';
+} from '../../../../../store/selectors/selector';
 import useStore from '../../../../../store/store';
 import Modal from '../../../../common/Modal';
 import useDragAndDrop from '../../../../../hooks/useDragAndDrop';

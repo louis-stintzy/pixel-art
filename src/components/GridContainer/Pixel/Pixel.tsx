@@ -13,7 +13,7 @@ import {
   useIsEraser,
   useIsBigTool,
   useIsSelectingColorToChange,
-} from '../../../store/selector';
+} from '../../../store/selectors/selector';
 
 interface PixelProps {
   id: string;

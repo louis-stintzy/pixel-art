@@ -1,4 +1,7 @@
-import { useGridSize, usePreviewUrl } from '../../../../../store/selector';
+import {
+  useGridSize,
+  usePreviewUrl,
+} from '../../../../../store/selectors/selector';
 
 interface PreviewProps {
   childOfModalRef: React.RefObject<HTMLDivElement>;

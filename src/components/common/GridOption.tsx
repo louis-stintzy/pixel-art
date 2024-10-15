@@ -1,6 +1,6 @@
 import useSavePublishPreview from '../../hooks/useSavePublishPreview';
-import { useGridOptionSelected } from '../../store/selector';
-import { setGridOptionSelected } from '../../store/storeActions';
+import { useGridOptionSelected } from '../../store/selectors/selector';
+import { setGridOptionSelected } from '../../store/actions/storeActions';
 
 interface GridOptionProps {
   display: 'radio' | 'button';

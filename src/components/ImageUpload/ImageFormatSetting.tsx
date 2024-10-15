@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { avaibleAspectRatios } from '../../constants/aspectRatio';
 import useStore from '../../store/store';
 import { AspectRatio, Orientation } from '../../@types/aspectRatio';
-import { useAspectRatio } from '../../store/selector';
+import { useAspectRatio } from '../../store/selectors/selector';
 
 function ImageFormatSetting() {
   // Récupère aspectRatio  (état global) et setAspectRatio du store

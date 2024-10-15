@@ -8,7 +8,7 @@ import {
   useAspectRatio,
   useFormat,
   useImageUrl,
-} from '../../../store/selector';
+} from '../../../store/selectors/selector';
 
 /**
  * GridSizeSelector2 component manages the grid format and pixel size.

@@ -3,8 +3,8 @@ import {
   Color,
   PaletteName,
   PaletteNameCamelCase,
-} from '../@types/colorPalette';
-import colorPalettes from '../constants/colors';
+} from '../../@types/colorPalette';
+import colorPalettes from '../../constants/colors';
 
 export interface PaletteSlice {
   selectedPalette: {

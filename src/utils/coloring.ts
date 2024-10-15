@@ -1,6 +1,6 @@
 import useStore from '../store/store';
 
-import { getGridSize, getGridColor } from '../store/selector';
+import { getGridSize, getGridColor } from '../store/selectors/selector';
 
 // ----- Color a pixel or a group of pixels -----
 

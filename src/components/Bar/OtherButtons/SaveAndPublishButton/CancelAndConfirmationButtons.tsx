@@ -3,10 +3,10 @@ import {
   useIsLogged,
   usePixelArtName,
   useUser,
-} from '../../../../store/selector';
+} from '../../../../store/selectors/selector';
 import useStore from '../../../../store/store';
 import useSavePublishPreview from '../../../../hooks/useSavePublishPreview';
-import { resetDescriptionFields } from '../../../../store/storeActions';
+import { resetDescriptionFields } from '../../../../store/actions/storeActions';
 
 function CancelAndConfirmationButtons() {
   const user = useUser();

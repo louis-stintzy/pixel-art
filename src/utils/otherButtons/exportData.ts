@@ -7,7 +7,7 @@ import {
   getImageUrl,
   getDescriptionFields,
   getGridOptionSelected,
-} from '../../store/selector';
+} from '../../store/selectors/selector';
 import useStore from '../../store/store';
 
 const exportData = () => {

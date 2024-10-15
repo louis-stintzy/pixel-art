@@ -3,7 +3,7 @@ import {
   getUser,
   getIsLogged,
   getDescriptionFields,
-} from '../../store/selector';
+} from '../../store/selectors/selector';
 
 const checkBeforeSavingPublishPreview = () => {
   const user = getUser();

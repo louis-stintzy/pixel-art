@@ -10,7 +10,7 @@ import {
   useIsReadyToDraw,
   useIsImageHidden,
   useIsColorReplacementLoading,
-} from '../../store/selector';
+} from '../../store/selectors/selector';
 
 function GridContainer() {
   const isReadyToDraw = useIsReadyToDraw(); // État pour savoir si l'utilisateur est en train de colorier (etat global)

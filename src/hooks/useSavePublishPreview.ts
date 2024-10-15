@@ -1,7 +1,10 @@
 import { errorMessages, successMessages } from '../constants/messages';
-import { useIsPreviewModalOpen, usePreviewUrl } from '../store/selector';
+import {
+  useIsPreviewModalOpen,
+  usePreviewUrl,
+} from '../store/selectors/selector';
 import useStore from '../store/store';
-import { setPreviewUrl } from '../store/storeActions';
+import { setPreviewUrl } from '../store/actions/storeActions';
 import checkBeforeSavingPublishPreview from '../utils/otherButtons/checkBeforeSavingPublishPreview';
 import exportData from '../utils/otherButtons/exportData';
 import exportToSVG from '../utils/otherButtons/exportToSVG';

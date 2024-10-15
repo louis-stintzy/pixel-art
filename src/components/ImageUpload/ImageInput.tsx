@@ -2,7 +2,7 @@ import { useDropzone } from 'react-dropzone';
 import ImageModal from './ImageModal';
 import useStore from '../../store/store';
 import { handleCancel } from '../../utils/imageHandlers';
-import { useImageUrl } from '../../store/selector';
+import { useImageUrl } from '../../store/selectors/selector';
 
 function ImageInput() {
   const previousImageUrl = useImageUrl();

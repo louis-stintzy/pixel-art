@@ -5,7 +5,7 @@ import {
   useSelectedPalette,
   useRecentColors,
   useFavoriteColors,
-} from '../../../store/selector';
+} from '../../../store/selectors/selector';
 
 function ColorPicker() {
   const selectedPalette = useSelectedPalette();

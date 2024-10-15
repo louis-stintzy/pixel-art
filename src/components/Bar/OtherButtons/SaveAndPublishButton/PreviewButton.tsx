@@ -3,7 +3,7 @@ import {
   useIsLogged,
   usePixelArtName,
   useUser,
-} from '../../../../store/selector';
+} from '../../../../store/selectors/selector';
 
 function PreviewButton() {
   const user = useUser();

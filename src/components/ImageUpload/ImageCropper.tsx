@@ -6,7 +6,7 @@ import ImageFormatSetting from './ImageFormatSetting';
 import { handleCancel, handleCropOrCancel } from '../../utils/imageHandlers';
 import resizeImage from '../../utils/resizeImage';
 import configureGridSize from '../../utils/configureGridSize';
-import { useAspectRatio, useFileUrl } from '../../store/selector';
+import { useAspectRatio, useFileUrl } from '../../store/selectors/selector';
 
 /**
  * The ImageCropper component manages image cropping.

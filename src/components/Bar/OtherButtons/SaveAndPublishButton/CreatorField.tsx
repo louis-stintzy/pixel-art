@@ -1,4 +1,4 @@
-import { useUser } from '../../../../store/selector';
+import { useUser } from '../../../../store/selectors/selector';
 
 import './DescriptionModalContent.scss';
 

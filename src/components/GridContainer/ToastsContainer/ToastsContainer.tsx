@@ -7,7 +7,7 @@ import {
   useIsClearCanvasToastVisible,
   useIsSavingPublishingPreviewingToastVisible,
   useIsContactToastVisible,
-} from '../../../store/selector';
+} from '../../../store/selectors/selector';
 
 function ToastsContainer() {
   const isColorReplacementToastVisible = useIsColorReplacementToastVisible();

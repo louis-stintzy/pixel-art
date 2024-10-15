@@ -1,6 +1,6 @@
 import useStore from '../../store/store';
 import Toast from '../common/Toast';
-import { useSavedPixelColorsBeforeColorReplacement } from '../../store/selector';
+import { useSavedPixelColorsBeforeColorReplacement } from '../../store/selectors/selector';
 import { infoMessages } from '../../constants/messages';
 
 function ColorReplacementToast() {

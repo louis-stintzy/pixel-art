@@ -9,7 +9,7 @@ import DescriptionModal from './OtherButtons/SaveAndPublishButton/DescriptionMod
 import {
   useIsDescriptionModalOpen,
   useIsPreviewModalOpen,
-} from '../../store/selector';
+} from '../../store/selectors/selector';
 import PreviewModal from './OtherButtons/SaveAndPublishButton/PreviewModal/PreviewModal';
 
 function Bar() {

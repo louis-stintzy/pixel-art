@@ -1,4 +1,4 @@
-import { useIsSavingPublishingPreviewingToastVisible } from '../../store/selector';
+import { useIsSavingPublishingPreviewingToastVisible } from '../../store/selectors/selector';
 import useStore from '../../store/store';
 import Toast from '../common/Toast';
 

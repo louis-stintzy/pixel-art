@@ -1,9 +1,9 @@
 import useStore from '../store/store';
 import contactMail from './contactMail';
 import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
-import { getUser, getIsLogged } from '../store/selector';
+import { getUser, getIsLogged } from '../store/selectors/selector';
 import { errorMessages } from './messages';
-import { setClickedButton } from '../store/storeActions';
+import { setClickedButton } from '../store/actions/storeActions';
 
 const buttonStyle = {};
 const isLogged = getIsLogged();

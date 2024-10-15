@@ -1,16 +1,16 @@
 import { create } from 'zustand';
-import createUserSlice, { UserSlice } from './userSlice';
-import createGridSlice, { GridSlice } from './gridSlice';
-import createImageSlice, { ImageSlice } from './imageSlice';
-import createPaletteSlice, { PaletteSlice } from './paletteSlice';
+import createUserSlice, { UserSlice } from './slices/userSlice';
+import createGridSlice, { GridSlice } from './slices/gridSlice';
+import createImageSlice, { ImageSlice } from './slices/imageSlice';
+import createPaletteSlice, { PaletteSlice } from './slices/paletteSlice';
 import createActionButtonsSlice, {
   ActionButtonsSlice,
-} from './actionButtonsSlice';
+} from './slices/actionButtonsSlice';
 import createOtherButtonsSlice, {
   OtherButtonsSlice,
-} from './otherButtonsSlice';
-import createModalSlice, { ModalSlice } from './modalSlice';
-import createToastSlice, { ToastSlice } from './toastSlice';
+} from './slices/otherButtonsSlice';
+import createModalSlice, { ModalSlice } from './slices/modalSlice';
+import createToastSlice, { ToastSlice } from './slices/toastSlice';
 
 type StoreState = UserSlice &
   GridSlice &

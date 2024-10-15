@@ -1,7 +1,7 @@
 import { PaletteNameCamelCase } from '../../../@types/colorPalette';
 import colorPalettes from '../../../constants/colors';
 import useStore from '../../../store/store';
-import { useSelectedPalette } from '../../../store/selector';
+import { useSelectedPalette } from '../../../store/selectors/selector';
 
 function ColorPaletteSelector() {
   const selectedPalette = useSelectedPalette();

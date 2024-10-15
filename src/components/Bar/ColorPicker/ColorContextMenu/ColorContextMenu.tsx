@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { Color } from '../../../../@types/colorPalette';
 import useStore from '../../../../store/store';
-import { useGridColor, useFavoriteColors } from '../../../../store/selector';
+import {
+  useGridColor,
+  useFavoriteColors,
+} from '../../../../store/selectors/selector';
 
 interface ContextMenuProps {
   x: number;

@@ -1,4 +1,4 @@
-import useStore from './store';
+import useStore from '../store';
 
 // ----- User Data (hooks) -----
 export const useUser = () => useStore((state) => state.user);

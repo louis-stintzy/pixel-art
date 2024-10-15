@@ -1,6 +1,6 @@
 import { resetAspectRatio } from '../constants/aspectRatio';
 import useStore from '../store/store';
-import { getFileUrl } from '../store/selector';
+import { getFileUrl } from '../store/selectors/selector';
 
 export const handleCropOrCancel = () => {
   const fileUrl = getFileUrl();
