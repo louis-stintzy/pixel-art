@@ -3,13 +3,13 @@ import {
   useGridSize,
   useIsPreviewModalOpen,
 } from '../../../../../store/selectors/selector';
-import useStore from '../../../../../store/store';
 import Modal from '../../../../common/Modal';
 import useDragAndDrop from '../../../../../hooks/useDragAndDrop';
 import GridOption from '../../../../common/GridOption';
 import ZoomControls from './ZoomControls';
 import CloseButton from './CloseButton';
 import Preview from './Preview';
+import { setIsPreviewModalOpen } from '../../../../../store/actions/storeActions';
 
 function PreviewModal() {
   const previewContainerRef = useRef<HTMLDivElement | null>(null);
@@ -21,7 +21,7 @@ function PreviewModal() {
   const [initialZ, setInitialZ] = useState(1);
 
   const handleClose = () => {
-    useStore.getState().setIsPreviewModalOpen(false);
+    setIsPreviewModalOpen(false);
   };
 
   const previewModalStyle: React.CSSProperties = {

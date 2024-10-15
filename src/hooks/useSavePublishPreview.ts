@@ -3,8 +3,10 @@ import {
   useIsPreviewModalOpen,
   usePreviewUrl,
 } from '../store/selectors/selector';
-import useStore from '../store/store';
 import {
+  closeAllToasts,
+  setIsDescriptionModalOpen,
+  setIsPreviewModalOpen,
   setIsSavingPublishingPreviewingToastVisible,
   setPreviewUrl,
 } from '../store/actions/storeActions';
@@ -15,7 +17,6 @@ import exportToSVG from '../utils/otherButtons/exportToSVG';
 function useSavePublishPreview() {
   const previewUrl = usePreviewUrl();
   const isPreviewModalOpen = useIsPreviewModalOpen();
-  const { setIsPreviewModalOpen } = useStore((state) => state);
 
   const revokePreviewUrl = () => {
     if (previewUrl) {
@@ -52,13 +53,13 @@ function useSavePublishPreview() {
 
       if (action === 'save' || action === 'publish') {
         // Pour finir, on affiche un message de succès (toast) et ferme la modal
-        useStore.getState().closeAllToasts();
+        closeAllToasts();
         setIsSavingPublishingPreviewingToastVisible({
           success: true,
           error: false,
           message: successMessages[`${action}Success`],
         });
-        useStore.getState().setIsDescriptionModalOpen(false);
+        setIsDescriptionModalOpen(false);
       }
     } catch (error) {
       // En cas d'erreur, on affiche un message d'erreur dans la console + toast et ferme la modal
@@ -67,13 +68,13 @@ function useSavePublishPreview() {
           ? `${errorMessages[`${action}Error`]} ${error.message}`
           : errorMessages.unexpectedError;
       console.error(errorMessage);
-      useStore.getState().closeAllToasts();
+      closeAllToasts();
       setIsSavingPublishingPreviewingToastVisible({
         success: false,
         error: true,
         message: errorMessage,
       });
-      useStore.getState().setIsDescriptionModalOpen(false);
+      setIsDescriptionModalOpen(false);
     }
   };
 

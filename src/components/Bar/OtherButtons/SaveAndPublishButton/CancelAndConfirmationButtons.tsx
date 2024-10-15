@@ -4,9 +4,11 @@ import {
   usePixelArtName,
   useUser,
 } from '../../../../store/selectors/selector';
-import useStore from '../../../../store/store';
 import useSavePublishPreview from '../../../../hooks/useSavePublishPreview';
-import { resetDescriptionFields } from '../../../../store/actions/storeActions';
+import {
+  resetDescriptionFields,
+  setIsDescriptionModalOpen,
+} from '../../../../store/actions/storeActions';
 
 function CancelAndConfirmationButtons() {
   const user = useUser();
@@ -23,7 +25,7 @@ function CancelAndConfirmationButtons() {
 
   const handleCancel = () => {
     resetDescriptionFields();
-    useStore.getState().setIsDescriptionModalOpen(false);
+    setIsDescriptionModalOpen(false);
   };
 
   const handleSavePublish = (action: 'save' | 'publish') => () => {

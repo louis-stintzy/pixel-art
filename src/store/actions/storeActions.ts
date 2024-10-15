@@ -30,3 +30,9 @@ export const setIsSavingPublishingPreviewingToastVisible = (isVisible: {
 export const closeAllToasts = () => useStore.getState().closeAllToasts();
 
 // ----- Modals Opening -----
+export const setIsCroppingModalOpen = (isOpen: boolean) =>
+  useStore.getState().setIsCroppingModalOpen(isOpen);
+export const setIsDescriptionModalOpen = (isOpen: boolean) =>
+  useStore.getState().setIsDescriptionModalOpen(isOpen);
+export const setIsPreviewModalOpen = (isOpen: boolean) =>
+  useStore.getState().setIsPreviewModalOpen(isOpen);

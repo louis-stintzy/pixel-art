@@ -1,12 +1,13 @@
-import useStore from '../store/store';
 import contactMail from './contactMail';
 import { trashIcon, saveIcon, publishIcon, contactIcon } from './icons';
 import { getUser, getIsLogged } from '../store/selectors/selector';
 import { errorMessages } from './messages';
 import {
+  closeAllToasts,
   setClickedButton,
   setIsClearCanvasToastVisible,
   setIsContactToastVisible,
+  setIsDescriptionModalOpen,
   setIsSavingPublishingPreviewingToastVisible,
 } from '../store/actions/storeActions';
 
@@ -14,7 +15,7 @@ const buttonStyle = {};
 const isLogged = getIsLogged();
 
 const handleClickClearButton = () => {
-  useStore.getState().closeAllToasts();
+  closeAllToasts();
   setIsClearCanvasToastVisible(true);
 };
 
@@ -25,7 +26,7 @@ const handleClickSaveOrPublishButton = (buttonRole: 'save' | 'publish') => {
       throw new Error(errorMessages.mustBeLoggedIn);
     }
     setClickedButton(buttonRole);
-    useStore.getState().setIsDescriptionModalOpen(true);
+    setIsDescriptionModalOpen(true);
   } catch (error) {
     console.error(
       buttonRole === 'save'
@@ -33,7 +34,7 @@ const handleClickSaveOrPublishButton = (buttonRole: 'save' | 'publish') => {
         : errorMessages.publishingModalOpeningError,
       error
     );
-    useStore.getState().closeAllToasts();
+    closeAllToasts();
     setIsSavingPublishingPreviewingToastVisible({
       success: false,
       error: true,
@@ -46,7 +47,7 @@ const handleClickSaveOrPublishButton = (buttonRole: 'save' | 'publish') => {
 const handleClickContactButton = async () => {
   try {
     await navigator.clipboard.writeText(contactMail);
-    useStore.getState().closeAllToasts();
+    closeAllToasts();
     setIsContactToastVisible(true);
   } catch (error) {
     console.error(errorMessages.emailCopyError, error);
