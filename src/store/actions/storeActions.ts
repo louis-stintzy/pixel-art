@@ -1,8 +1,5 @@
 import useStore from '../store';
 
-// note: `useStore` directement dans les composants ou les hooks qui nécessitent d'être abonnés aux changements d'état. Cela permet à React de re-render automatiquement les composants lorsque l'état change.
-// note: `storeActions.ts` pour centraliser les actions qui ne nécessitent pas un abonnement au store ou qui sont utilisées dans des fichiers externes, comme dans le dossier `utils` où l'on ne peut pas utiliser directement `useStore`.
-
 // ----- Other Buttons -----
 export const setClickedButton = (button: 'save' | 'publish' | null) =>
   useStore.getState().setClickedButton(button);
@@ -16,3 +13,20 @@ export const setGridOptionSelected = (gridOption: 'none' | 'pixel' | 'full') =>
   useStore.getState().setGridOptionSelected(gridOption);
 export const setPreviewUrl = (url: string) =>
   useStore.getState().setPreviewUrl(url);
+
+// ----- Toasts Visibility -----
+export const setIsColorReplacementToastVisible = (isVisible: boolean) =>
+  useStore.getState().setIsColorReplacementToastVisible(isVisible);
+export const setIsClearCanvasToastVisible = (isVisible: boolean) =>
+  useStore.getState().setIsClearCanvasToastVisible(isVisible);
+export const setIsContactToastVisible = (isVisible: boolean) =>
+  useStore.getState().setIsContactToastVisible(isVisible);
+export const setIsSavingPublishingPreviewingToastVisible = (isVisible: {
+  success: boolean;
+  error: boolean;
+  message: string;
+}) =>
+  useStore.getState().setIsSavingPublishingPreviewingToastVisible(isVisible);
+export const closeAllToasts = () => useStore.getState().closeAllToasts();
+
+// ----- Modals Opening -----

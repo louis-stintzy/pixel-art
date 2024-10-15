@@ -1,6 +1,7 @@
 import useStore from '../store/store';
 
 import { getGridSize, getGridColor } from '../store/selectors/selector';
+import { setIsColorReplacementToastVisible } from '../store/actions/storeActions';
 
 // ----- Color a pixel or a group of pixels -----
 
@@ -93,5 +94,5 @@ export const replaceColor2 = async (oldColor: string, newColor: string) => {
 
   // Arrêt du chargement et affichage du toast
   useStore.getState().setColorReplacement({ isLoading: false });
-  useStore.getState().setIsColorReplacementToastVisible(true);
+  setIsColorReplacementToastVisible(true);
 };

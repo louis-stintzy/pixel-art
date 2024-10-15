@@ -4,7 +4,10 @@ import {
   usePreviewUrl,
 } from '../store/selectors/selector';
 import useStore from '../store/store';
-import { setPreviewUrl } from '../store/actions/storeActions';
+import {
+  setIsSavingPublishingPreviewingToastVisible,
+  setPreviewUrl,
+} from '../store/actions/storeActions';
 import checkBeforeSavingPublishPreview from '../utils/otherButtons/checkBeforeSavingPublishPreview';
 import exportData from '../utils/otherButtons/exportData';
 import exportToSVG from '../utils/otherButtons/exportToSVG';
@@ -50,7 +53,7 @@ function useSavePublishPreview() {
       if (action === 'save' || action === 'publish') {
         // Pour finir, on affiche un message de succès (toast) et ferme la modal
         useStore.getState().closeAllToasts();
-        useStore.getState().setIsSavingPublishingPreviewingToastVisible({
+        setIsSavingPublishingPreviewingToastVisible({
           success: true,
           error: false,
           message: successMessages[`${action}Success`],
@@ -65,7 +68,7 @@ function useSavePublishPreview() {
           : errorMessages.unexpectedError;
       console.error(errorMessage);
       useStore.getState().closeAllToasts();
-      useStore.getState().setIsSavingPublishingPreviewingToastVisible({
+      setIsSavingPublishingPreviewingToastVisible({
         success: false,
         error: true,
         message: errorMessage,

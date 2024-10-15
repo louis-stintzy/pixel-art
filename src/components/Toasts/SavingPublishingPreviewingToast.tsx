@@ -1,11 +1,8 @@
+import { setIsSavingPublishingPreviewingToastVisible } from '../../store/actions/storeActions';
 import { useIsSavingPublishingPreviewingToastVisible } from '../../store/selectors/selector';
-import useStore from '../../store/store';
 import Toast from '../common/Toast';
 
 function SavingPublishingPreviewingToast() {
-  const { setIsSavingPublishingPreviewingToastVisible } = useStore(
-    (state) => state
-  );
   const isSavingPublishingPreviewingToastVisible =
     useIsSavingPublishingPreviewingToastVisible();
   if (
