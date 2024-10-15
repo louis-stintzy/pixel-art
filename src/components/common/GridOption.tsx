@@ -1,7 +1,6 @@
-import useSavePublishPreview from '../../../../hooks/useSavePublishPreview';
-import { useGridOptionSelected } from '../../../../store/selector';
-import useStore from '../../../../store/store';
-import './DescriptionModalContent.scss';
+import useSavePublishPreview from '../../hooks/useSavePublishPreview';
+import { useGridOptionSelected } from '../../store/selector';
+import useStore from '../../store/store';
 
 interface GridOptionProps {
   display: 'radio' | 'button';
@@ -31,7 +30,10 @@ function GridOption({ display }: GridOptionProps) {
 
   if (display === 'radio') {
     return (
-      <div className="description-fields__grid-option flexAndColumnDirectionStyle">
+      <div
+        className="description-fields__grid-option"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
         {Object.entries(gridOption).map(([key, value]) => (
           <label key={key}>
             <input

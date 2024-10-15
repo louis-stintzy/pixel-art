@@ -1,6 +1,6 @@
 import CreatorField from './CreatorField';
 import NameAndDescriptionField from './NameAndDescriptionFields';
-import GridOption from './GridOption';
+import GridOption from '../../../common/GridOption';
 import PreviewButton from './PreviewButton';
 
 import './DescriptionModalContent.scss';
