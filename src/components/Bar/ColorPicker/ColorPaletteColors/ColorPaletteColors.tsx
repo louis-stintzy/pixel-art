@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { Color } from '../../../../@types/colorPalette';
-import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
-import ColorButton from '../ColorButton/ColorButton';
+import ColorContextMenu from './ColorContextMenu';
+import ColorButton from './ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
 import useActionFollowingMove from '../../../../hooks/useActionFollowingMove';
 import { useFavoriteColors } from '../../../../store/selectors/selector';
