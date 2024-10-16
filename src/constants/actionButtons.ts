@@ -1,5 +1,3 @@
-import useStore from '../store/store';
-
 import {
   getImageUrl,
   getIsReadyToDraw,

@@ -40,7 +40,7 @@ function ActionButton({
   ); // si deactivate est fourni, on initialise isDisabled avec le résultat de shouldDeactivate(), sinon isDisabled est initialisé à false
   const [isFadingOut, setIsFadingOut] = useState(false);
   const timeoutId = useRef<number | null>(null);
-  const isInMode2State = useStore(isInMode2);
+  const isInMode2State = isInMode2();
 
   const handleClick = () => {
     if (isDisabled) return;

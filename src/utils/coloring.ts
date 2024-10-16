@@ -1,6 +1,8 @@
-import useStore from '../store/store';
-
-import { getGridSize, getGridColor } from '../store/selectors/selector';
+import {
+  getGridSize,
+  getGridColor,
+  getPixelColors,
+} from '../store/selectors/selector';
 import {
   setColorReplacement,
   setIsColorReplacementToastVisible,
@@ -35,7 +37,7 @@ export const coloring = (pixelIds: string[], color: string) => {
 
 export const replaceColor2 = async (oldColor: string, newColor: string) => {
   const gridColor = getGridColor();
-  const { pixelColors } = useStore.getState();
+  const pixelColors = getPixelColors();
 
   // Démarage du chargement
   setColorReplacement({

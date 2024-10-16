@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import useStore from '../../../store/store';
 import { coloring, replaceColor2 } from '../../../utils/coloring';
 import getNeighboringPixels from '../../../utils/getNeighboringPixels';
 import { pipetteIcon } from '../../../constants/icons';

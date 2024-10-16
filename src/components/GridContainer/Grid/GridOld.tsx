@@ -1,5 +1,4 @@
 import { useCallback, useRef } from 'react';
-import useStore from '../../../store/store';
 import useDragAndDrop from '../../../hooks/useDragAndDropOld';
 import {
   useGridSize,

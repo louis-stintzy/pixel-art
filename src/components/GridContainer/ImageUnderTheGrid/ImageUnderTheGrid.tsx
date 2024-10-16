@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import useStore from '../../../store/store';
 import { useFormat, useImageUrl } from '../../../store/selectors/selector';
 
 function ImageUnderTheGrid() {

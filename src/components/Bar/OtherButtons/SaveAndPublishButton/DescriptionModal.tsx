@@ -1,4 +1,3 @@
-import useStore from '../../../../store/store';
 import Modal from '../../../common/Modal';
 import DescriptionModalContent from './DescriptionModalContent';
 import { useIsDescriptionModalOpen } from '../../../../store/selectors/selector';
