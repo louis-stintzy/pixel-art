@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import useStore from '../../store/store';
 import useDragAndDrop from '../../hooks/useDragAndDrop';
 import Grid from './Grid/Grid';
 import ImageUnderTheGrid from './ImageUnderTheGrid/ImageUnderTheGrid';
@@ -11,6 +10,7 @@ import {
   useIsImageHidden,
   useIsColorReplacementLoading,
 } from '../../store/selectors/selector';
+import { setUserDragsGrid } from '../../store/actions/storeActions';
 
 function GridContainer() {
   const isReadyToDraw = useIsReadyToDraw(); // État pour savoir si l'utilisateur est en train de colorier (etat global)
@@ -23,11 +23,10 @@ function GridContainer() {
   // C'est particulièrement utile pour suivre l'état d'interactions utilisateur comme le drag-and-drop.
   const gridRef = useRef<HTMLDivElement | null>(null); // Référence pour le conteneur de la grille
   const { position, isDragging } = useDragAndDrop(gridRef, !isReadyToDraw); // Position de la grille et état de glissement (custom hook)
-  const setUserDragsGrid = useStore((state) => state.setUserDragsGrid); // Fonction pour définir si l'utilisateur fait glisser la grille (etat global)
 
   useEffect(() => {
     setUserDragsGrid(isDragging);
-  }, [isDragging, setUserDragsGrid]);
+  }, [isDragging]);
 
   // Observe un décalage entre les premiers executeMouseLogic dans useDAD et le premier déplacement de la grille (voir MIN_DRAG_DISTANCE ?)
   // useEffect(() => {

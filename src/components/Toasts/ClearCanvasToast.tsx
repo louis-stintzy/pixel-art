@@ -1,12 +1,14 @@
 import { warningMessages } from '../../constants/messages';
-import { setIsClearCanvasToastVisible } from '../../store/actions/storeActions';
-import useStore from '../../store/store';
+import {
+  resetPixelColors,
+  setIsClearCanvasToastVisible,
+} from '../../store/actions/storeActions';
 import Toast from '../common/Toast';
 
 function ClearCanvasToast() {
   const clearCanvas = () => {
     setIsClearCanvasToastVisible(false);
-    useStore.getState().resetPixelColors();
+    resetPixelColors();
   };
 
   return (

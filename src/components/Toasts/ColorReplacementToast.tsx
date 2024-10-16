@@ -1,14 +1,15 @@
-import useStore from '../../store/store';
 import Toast from '../common/Toast';
 import { useSavedPixelColorsBeforeColorReplacement } from '../../store/selectors/selector';
 import { infoMessages } from '../../constants/messages';
-import { setIsColorReplacementToastVisible } from '../../store/actions/storeActions';
+import {
+  setIsColorReplacementToastVisible,
+  setPixelColorsBackup,
+} from '../../store/actions/storeActions';
 
 function ColorReplacementToast() {
   const savedPixelColors = useSavedPixelColorsBeforeColorReplacement();
   const undoColorReplacement = () => {
-    if (savedPixelColors)
-      useStore.getState().setPixelColorsBackup(savedPixelColors);
+    if (savedPixelColors) setPixelColorsBackup(savedPixelColors);
     setIsColorReplacementToastVisible(false);
   };
   return (

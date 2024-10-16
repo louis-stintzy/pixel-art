@@ -4,6 +4,7 @@ import { getGridSize, getGridColor } from '../store/selectors/selector';
 import {
   setColorReplacement,
   setIsColorReplacementToastVisible,
+  setPixelColors,
 } from '../store/actions/storeActions';
 
 // ----- Color a pixel or a group of pixels -----
@@ -20,7 +21,7 @@ export const coloring = (pixelIds: string[], color: string) => {
   pixelIds.forEach((id) => {
     newPixelColors[id] = color;
   });
-  useStore.getState().setPixelColors(newPixelColors);
+  setPixelColors(newPixelColors);
 };
 
 // ----- Replace a color with another color -----
@@ -85,7 +86,7 @@ export const replaceColor2 = async (oldColor: string, newColor: string) => {
     batch.forEach((id) => {
       batchUpdate[id] = newPixelColors[id];
     });
-    useStore.getState().setPixelColors(batchUpdate);
+    setPixelColors(batchUpdate);
 
     // Wait for the UI to update
     // désactive la règle eslint car nous souhaitons spécifiquement une éxecution séquentielle

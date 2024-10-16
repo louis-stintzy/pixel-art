@@ -1,12 +1,11 @@
 import { FormEvent, useState } from 'react';
-import useStore from '../../../store/store';
 import ImageInput from '../../ImageUpload/ImageInput';
+import { setGridSize } from '../../../store/actions/storeActions';
 
 function GridSizeSelector() {
   const sizeAvailable = [8, 16, 24, 32, 40, 48];
   const dimensions = ['width', 'height'];
 
-  const setGridSize = useStore((state) => state.setGridSize);
   const [gridSizeSelection, setGridSizeSelection] = useState({
     width: 8,
     height: 8,

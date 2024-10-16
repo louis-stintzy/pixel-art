@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import useStore from '../../../store/store';
 import ImageInput from '../../ImageUpload/ImageInput';
 import { Format } from '../../../@types/aspectRatio';
 import resizeImage from '../../../utils/resizeImage';
@@ -9,7 +8,11 @@ import {
   useFormat,
   useImageUrl,
 } from '../../../store/selectors/selector';
-import { setImageUrl } from '../../../store/actions/storeActions';
+import {
+  setFormat,
+  setGridSize,
+  setImageUrl,
+} from '../../../store/actions/storeActions';
 
 /**
  * GridSizeSelector2 component manages the grid format and pixel size.
@@ -21,8 +24,6 @@ function GridSizeSelector2() {
   const aspectRatio = useAspectRatio();
   const format = useFormat();
   const imageUrl = useImageUrl();
-  const setFormat = useStore((state) => state.setFormat);
-  const setGridSize = useStore((state) => state.setGridSize);
 
   const [selectedPixelSize, setSelectedPixelSize] = useState<number>(
     aspectRatio.formats[0].pixelSize[2]
@@ -51,7 +52,6 @@ function GridSizeSelector2() {
         const newFormat = aspectRatio.formats.find((f) => f.display === value);
         if (newFormat) {
           if (imageUrl) await updateImageUrl(newFormat);
-          setFormat(newFormat);
           setFormat(newFormat);
           setSelectedPixelSize(newFormat.pixelSize[2]);
           setGridSize(configureGridSize(newFormat, newFormat.pixelSize[2]));

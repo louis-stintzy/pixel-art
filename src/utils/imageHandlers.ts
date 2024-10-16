@@ -1,7 +1,7 @@
 import { resetAspectRatio } from '../constants/aspectRatio';
-import useStore from '../store/store';
 import { getFileUrl } from '../store/selectors/selector';
 import {
+  setAspectRatio,
   setFileUrl,
   setIsCroppingModalOpen,
 } from '../store/actions/storeActions';
@@ -17,7 +17,6 @@ export const handleCropOrCancel = () => {
 };
 
 export const handleCancel = () => {
-  const { setAspectRatio } = useStore.getState();
   handleCropOrCancel();
   setAspectRatio(resetAspectRatio);
 };

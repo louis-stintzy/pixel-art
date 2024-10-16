@@ -1,4 +1,5 @@
 import version from '../../constants/version';
+import { cleanPixelColors } from '../../store/actions/storeActions';
 import {
   getUser,
   getGridSize,
@@ -8,11 +9,10 @@ import {
   getDescriptionFields,
   getGridOptionSelected,
 } from '../../store/selectors/selector';
-import useStore from '../../store/store';
 
 const exportData = () => {
-  // Est ce qu'on peut placer useStore.getState().cleanPixelColors() direct ici et récupérer pixelColors "cleané" ?
-  useStore.getState().cleanPixelColors(); // Oui (normalement), car useStore.getState().cleanPixelColors() est synchrone
+  // Est ce qu'on peut placer cleanPixelColors() direct ici et récupérer pixelColors "cleané" ?
+  cleanPixelColors(); // Oui (normalement), car useStore.getState().cleanPixelColors() est synchrone
 
   const user = getUser();
   if (!user) throw new Error('User not found'); // En amont, checkBeforeSavingPublishPreview a déjà vérifié que l'utilisateur était connecté. Cette erreur ne devrait donc jamais se produire. Cette ligne évite des erreurs dans le code.

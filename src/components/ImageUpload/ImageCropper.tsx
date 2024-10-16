@@ -1,13 +1,16 @@
 import Cropper, { Area } from 'react-easy-crop';
 import { useCallback, useState } from 'react';
-import useStore from '../../store/store';
 import getCroppedImg from '../../utils/cropImage';
 import ImageFormatSetting from './ImageFormatSetting';
 import { handleCancel, handleCropOrCancel } from '../../utils/imageHandlers';
 import resizeImage from '../../utils/resizeImage';
 import configureGridSize from '../../utils/configureGridSize';
 import { useAspectRatio, useFileUrl } from '../../store/selectors/selector';
-import { setImageUrl } from '../../store/actions/storeActions';
+import {
+  setFormat,
+  setGridSize,
+  setImageUrl,
+} from '../../store/actions/storeActions';
 
 /**
  * The ImageCropper component manages image cropping.
@@ -20,8 +23,6 @@ import { setImageUrl } from '../../store/actions/storeActions';
 function ImageCropper() {
   const aspectRatio = useAspectRatio();
   const fileUrl = useFileUrl();
-  const setFormat = useStore((state) => state.setFormat);
-  const setGridSize = useStore((state) => state.setGridSize);
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -65,7 +66,7 @@ function ImageCropper() {
     } catch (error) {
       console.error('Error cropping image : ', error);
     }
-  }, [aspectRatio.formats, croppedAreaPixels, fileUrl, setFormat, setGridSize]);
+  }, [aspectRatio.formats, croppedAreaPixels, fileUrl]);
 
   const cropperContainerStyle: React.CSSProperties = {
     width: '350px',

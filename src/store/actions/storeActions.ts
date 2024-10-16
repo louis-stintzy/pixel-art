@@ -1,5 +1,27 @@
+import { AspectRatio, Format } from '../../@types/aspectRatio';
 import { Color, PaletteNameCamelCase } from '../../@types/colorPalette';
 import useStore from '../store';
+
+// ----- Grid Data -----
+export const setUserDragsGrid = (userDragsGrid: boolean) =>
+  useStore.getState().setUserDragsGrid(userDragsGrid);
+export const setAspectRatio = (aspectRatio: AspectRatio) =>
+  useStore.getState().setAspectRatio(aspectRatio);
+export const setFormat = (format: Format) =>
+  useStore.getState().setFormat(format);
+export const setGridSize = (gridSize: {
+  width: number;
+  height: number;
+  pixelSize: number;
+}) => useStore.getState().setGridSize(gridSize);
+export const setGridColor = (gridColor: { background: string; line: string }) =>
+  useStore.getState().setGridColor(gridColor);
+export const setPixelColors = (newPixelColors: Record<string, string>) =>
+  useStore.getState().setPixelColors(newPixelColors);
+export const setPixelColorsBackup = (newPixelColors: Record<string, string>) =>
+  useStore.getState().setPixelColorsBackup(newPixelColors);
+export const cleanPixelColors = () => useStore.getState().cleanPixelColors();
+export const resetPixelColors = () => useStore.getState().resetPixelColors();
 
 // ----- Palette & Color Data -----
 export const setSelectedPalette = (palette: PaletteNameCamelCase) =>

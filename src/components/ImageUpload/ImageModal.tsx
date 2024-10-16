@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import ImageCropper from './ImageCropper';
-import useStore from '../../store/store';
 import { handleCancel } from '../../utils/imageHandlers';
 import Modal from '../common/Modal';
 import {
