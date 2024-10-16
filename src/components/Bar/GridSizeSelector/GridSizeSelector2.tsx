@@ -9,6 +9,7 @@ import {
   useFormat,
   useImageUrl,
 } from '../../../store/selectors/selector';
+import { setImageUrl } from '../../../store/actions/storeActions';
 
 /**
  * GridSizeSelector2 component manages the grid format and pixel size.
@@ -22,7 +23,6 @@ function GridSizeSelector2() {
   const imageUrl = useImageUrl();
   const setFormat = useStore((state) => state.setFormat);
   const setGridSize = useStore((state) => state.setGridSize);
-  const setImageUrl = useStore((state) => state.setImageUrl);
 
   const [selectedPixelSize, setSelectedPixelSize] = useState<number>(
     aspectRatio.formats[0].pixelSize[2]
@@ -42,7 +42,7 @@ function GridSizeSelector2() {
         console.error('Error resizing image : ', error);
       }
     },
-    [imageUrl, setImageUrl]
+    [imageUrl]
   );
 
   const handleChangeGridSize =

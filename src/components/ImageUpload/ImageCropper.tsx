@@ -7,6 +7,7 @@ import { handleCancel, handleCropOrCancel } from '../../utils/imageHandlers';
 import resizeImage from '../../utils/resizeImage';
 import configureGridSize from '../../utils/configureGridSize';
 import { useAspectRatio, useFileUrl } from '../../store/selectors/selector';
+import { setImageUrl } from '../../store/actions/storeActions';
 
 /**
  * The ImageCropper component manages image cropping.
@@ -19,7 +20,6 @@ import { useAspectRatio, useFileUrl } from '../../store/selectors/selector';
 function ImageCropper() {
   const aspectRatio = useAspectRatio();
   const fileUrl = useFileUrl();
-  const setImageUrl = useStore((state) => state.setImageUrl);
   const setFormat = useStore((state) => state.setFormat);
   const setGridSize = useStore((state) => state.setGridSize);
 
@@ -65,14 +65,7 @@ function ImageCropper() {
     } catch (error) {
       console.error('Error cropping image : ', error);
     }
-  }, [
-    aspectRatio.formats,
-    croppedAreaPixels,
-    fileUrl,
-    setFormat,
-    setGridSize,
-    setImageUrl,
-  ]);
+  }, [aspectRatio.formats, croppedAreaPixels, fileUrl, setFormat, setGridSize]);
 
   const cropperContainerStyle: React.CSSProperties = {
     width: '350px',

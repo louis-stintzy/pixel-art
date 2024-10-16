@@ -1,5 +1,11 @@
 import useStore from '../store';
 
+// ----- Image Urls (hooks)-----
+export const setFileUrl = (fileUrl: string | undefined) =>
+  useStore.getState().setFileUrl(fileUrl);
+export const setImageUrl = (imageUrl: string | undefined) =>
+  useStore.getState().setImageUrl(imageUrl);
+
 // ----- Action Buttons -----
 export const setIsReadyToDraw = (isReady: boolean) =>
   useStore.getState().setIsReadyToDraw(isReady);
