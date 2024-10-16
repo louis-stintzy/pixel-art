@@ -1,6 +1,13 @@
 import { AspectRatio, Format } from '../../@types/aspectRatio';
 import { Color, PaletteNameCamelCase } from '../../@types/colorPalette';
+import { UserSlice } from '../slices/userSlice';
 import useStore from '../store';
+
+// ----- User Data -----
+export const setUser = (user: UserSlice['user']) =>
+  useStore.getState().setUser(user);
+export const setIsLogged = (isLogged: boolean) =>
+  useStore.getState().setIsLogged(isLogged);
 
 // ----- Grid Data -----
 export const setUserDragsGrid = (userDragsGrid: boolean) =>
