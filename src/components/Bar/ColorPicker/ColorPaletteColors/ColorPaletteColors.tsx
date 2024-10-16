@@ -3,9 +3,9 @@ import { Color } from '../../../../@types/colorPalette';
 import ColorContextMenu from '../ColorContextMenu/ColorContextMenu';
 import ColorButton from '../ColorButton/ColorButton';
 import useDragAndDrop from '../../../../hooks/useDragAndDrop';
-import useStore from '../../../../store/store';
 import useActionFollowingMove from '../../../../hooks/useActionFollowingMove';
 import { useFavoriteColors } from '../../../../store/selectors/selector';
+import { setFavoriteColors } from '../../../../store/actions/storeActions';
 
 interface ColorPaletteColorsProps {
   palette: { name: string; colors: Color[] };
@@ -54,7 +54,6 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
     // changedTouches contient les informations sur les touches qui ont changé, c'est-à-dire celles qui ont été levées (les dernières touches en interaction avant la fin du toucher)
 
     // Pour Drag and Drop
-    const { setFavoriteColors } = useStore.getState();
     const buttonToBeInterchanged = document.elementFromPoint(
       e.changedTouches[0].clientX,
       e.changedTouches[0].clientY
@@ -133,7 +132,6 @@ function ColorPaletteColors({ palette }: ColorPaletteColorsProps) {
   };
 
   const handleMouseDragStop = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { setFavoriteColors } = useStore.getState();
     const buttonToBeInterchanged = document.elementFromPoint(
       event.clientX,
       event.clientY

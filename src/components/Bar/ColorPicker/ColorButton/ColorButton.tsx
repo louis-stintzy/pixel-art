@@ -1,5 +1,8 @@
 import { Color } from '../../../../@types/colorPalette';
-import useStore from '../../../../store/store';
+import {
+  addRecentColor,
+  setSelectedColor,
+} from '../../../../store/actions/storeActions';
 
 interface ColorButtonProps {
   color: Color;
@@ -29,7 +32,6 @@ function ColorButton({
   translateY,
 }: ColorButtonProps) {
   const handleClick = (clickedColor: Color) => {
-    const { setSelectedColor, addRecentColor } = useStore.getState();
     setSelectedColor(clickedColor);
     addRecentColor(clickedColor);
   };

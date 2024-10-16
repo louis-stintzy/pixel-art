@@ -1,10 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { Color } from '../../../../@types/colorPalette';
-import useStore from '../../../../store/store';
 import {
   useGridColor,
   useFavoriteColors,
 } from '../../../../store/selectors/selector';
+import {
+  addFavoriteColor,
+  removeFavoriteColor,
+} from '../../../../store/actions/storeActions';
 
 interface ContextMenuProps {
   x: number;
@@ -23,7 +26,6 @@ function ColorContextMenu({ x, y, color, onClose }: ContextMenuProps) {
   const isFavorite = favoriteColors.some((c) => c.code === color.code);
 
   const handleClick = () => {
-    const { addFavoriteColor, removeFavoriteColor } = useStore.getState();
     if (!isFavorite && validFavoriteColors.length >= 20) {
       onClose();
     } else if (isFavorite) {

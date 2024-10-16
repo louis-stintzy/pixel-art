@@ -1,6 +1,21 @@
+import { Color, PaletteNameCamelCase } from '../../@types/colorPalette';
 import useStore from '../store';
 
-// ----- Image Urls (hooks)-----
+// ----- Palette & Color Data -----
+export const setSelectedPalette = (palette: PaletteNameCamelCase) =>
+  useStore.getState().setSelectedPalette(palette);
+export const setSelectedColor = (selectedColor: Color) =>
+  useStore.getState().setSelectedColor(selectedColor);
+export const setFavoriteColors = (updatedFavoriteColors: Color[]) =>
+  useStore.getState().setFavoriteColors(updatedFavoriteColors);
+export const addRecentColor = (color: Color) =>
+  useStore.getState().addRecentColor(color);
+export const addFavoriteColor = (color: Color) =>
+  useStore.getState().addFavoriteColor(color);
+export const removeFavoriteColor = (color: Color) =>
+  useStore.getState().removeFavoriteColor(color);
+
+// ----- Image Urls -----
 export const setFileUrl = (fileUrl: string | undefined) =>
   useStore.getState().setFileUrl(fileUrl);
 export const setImageUrl = (imageUrl: string | undefined) =>
