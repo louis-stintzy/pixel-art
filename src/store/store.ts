@@ -1,47 +1,35 @@
 import { create } from 'zustand';
-import colorPalettes, { PaletteName } from '../constants/colors';
+import createUserSlice, { UserSlice } from './slices/userSlice';
+import createGridSlice, { GridSlice } from './slices/gridSlice';
+import createImageSlice, { ImageSlice } from './slices/imageSlice';
+import createPaletteSlice, { PaletteSlice } from './slices/paletteSlice';
+import createActionButtonsSlice, {
+  ActionButtonsSlice,
+} from './slices/actionButtonsSlice';
+import createOtherButtonsSlice, {
+  OtherButtonsSlice,
+} from './slices/otherButtonsSlice';
+import createModalSlice, { ModalSlice } from './slices/modalSlice';
+import createToastSlice, { ToastSlice } from './slices/toastSlice';
 
-type State = {
-  userDragsGrid: boolean;
-  gridSize: { width: number; height: number; pixelSize: number };
-  selectedPalette: { name: PaletteName; colors: string[] };
-  selectedColor: string;
-  pixelColors: Record<string, string>; // Record<Keys, Type>, Constructs an object type whose property keys are Keys and whose property values are Type.
-  setUserDragsGrid: (userDragsGrid: boolean) => void;
-  setGridSize: (gridSize: {
-    width: number;
-    height: number;
-    pixelSize: number;
-  }) => void;
-  setSelectedPalette: (paletteName: PaletteName) => void;
-  setSelectedColor: (selectedColor: string) => void;
-  setPixelColors: (id: string, color: string) => void;
-};
+type StoreState = UserSlice &
+  GridSlice &
+  ImageSlice &
+  PaletteSlice &
+  ActionButtonsSlice &
+  OtherButtonsSlice &
+  ModalSlice &
+  ToastSlice;
 
-const useStore = create<State>()((set) => ({
-  userDragsGrid: false,
-  gridSize: { width: 8, height: 8, pixelSize: 70 },
-  selectedPalette: {
-    name: 'materialDesign' as PaletteName,
-    colors: colorPalettes.materialDesign,
-  },
-  selectedColor: colorPalettes.materialDesign[0],
-  pixelColors: {},
-  setUserDragsGrid: (userDragsGrid) => set({ userDragsGrid }),
-  setGridSize: (gridSize) => set({ gridSize }),
-  setSelectedPalette: (paletteName) =>
-    set({
-      selectedPalette: {
-        name: paletteName,
-        colors: colorPalettes[paletteName],
-      },
-      selectedColor: colorPalettes[paletteName][0],
-    }),
-  setSelectedColor: (selectedColor) => set({ selectedColor }),
-  setPixelColors: (id, color) =>
-    set((state) => ({
-      pixelColors: { ...state.pixelColors, [id]: color },
-    })),
+const useStore = create<StoreState>()((...a) => ({
+  ...createUserSlice(...a),
+  ...createGridSlice(...a),
+  ...createImageSlice(...a),
+  ...createPaletteSlice(...a),
+  ...createActionButtonsSlice(...a),
+  ...createOtherButtonsSlice(...a),
+  ...createModalSlice(...a),
+  ...createToastSlice(...a),
 }));
 
 export default useStore;

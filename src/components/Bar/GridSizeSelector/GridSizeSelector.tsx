@@ -1,11 +1,11 @@
 import { FormEvent, useState } from 'react';
-import useStore from '../../../store/store';
+import ImageInput from '../../ImageUpload/ImageInput';
+import { setGridSize } from '../../../store/actions/storeActions';
 
 function GridSizeSelector() {
   const sizeAvailable = [8, 16, 24, 32, 40, 48];
   const dimensions = ['width', 'height'];
 
-  const setGridSize = useStore((state) => state.setGridSize);
   const [gridSizeSelection, setGridSizeSelection] = useState({
     width: 8,
     height: 8,
@@ -27,6 +27,11 @@ function GridSizeSelector() {
 
   const pixelSizeInputStyle = {
     width: '50px',
+  };
+
+  const gridSizeSelectorActionsStyle = {
+    display: 'flex',
+    gap: '1rem',
   };
 
   return (
@@ -64,7 +69,10 @@ function GridSizeSelector() {
           />
         </label>
       </div>
-      <button type="submit">Set Grid Size</button>
+      <div id="grid-size-selector-actions" style={gridSizeSelectorActionsStyle}>
+        <button type="submit">Set Grid Size</button>
+        <ImageInput />
+      </div>
     </form>
   );
 }
