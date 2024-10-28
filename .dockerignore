@@ -1,0 +1,15 @@
+docs
+node_modules
+dist
+
+README.md
+Dockerfile
+docker-compose.yml
+
+.eslint*
+.prettier*
+
+.dockerignore
+.vscode
+.gitignore
+.env
