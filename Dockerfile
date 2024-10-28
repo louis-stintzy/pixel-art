@@ -7,13 +7,17 @@ FROM node:20-alpine AS build
 LABEL version="0.2"
 LABEL app="Pixel Art Maker"
 
+# Activate Corepack to manage the Yarn version
+RUN corepack enable
+
 # Create app directory (Docker container working directory)
 WORKDIR /app
 
 # Copy package.json and yarn.lock files to the working directory
 COPY package.json yarn.lock ./
 
-# Install dependencies (defined in yarn.lock, without attempting to update or modify this file)
+# Install dependencies with the correct yarn version (defined in yarn.lock, without attempting to update or modify this file)
+RUN corepack prepare yarn@4.5.1 --activate
 RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application code to the working directory
