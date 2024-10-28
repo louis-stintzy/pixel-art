@@ -14,11 +14,10 @@ RUN corepack enable
 WORKDIR /app
 
 # Copy package.json and yarn.lock files to the working directory
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarn .yarnrc.yml ./
 
 # Install dependencies with the correct yarn version (defined in yarn.lock, without attempting to update or modify this file)
-RUN corepack prepare yarn@4.5.1 --activate
-RUN yarn install --frozen-lockfile
+RUN corepack prepare yarn@4.5.1 --activate && yarn install
 
 # Copy the rest of the application code to the working directory
 COPY . .
