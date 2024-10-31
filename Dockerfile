@@ -1,5 +1,3 @@
-# ----- Build stage -----
-
 # Define the base image (Node in this case - alpine is a lightweight Linux distribution)
 FROM node:20-alpine AS build
 
@@ -9,6 +7,12 @@ LABEL app="Pixel Art Maker"
 
 # Activate Corepack to manage the Yarn version
 RUN corepack enable
+
+# Create a dedicated non-root user within the container
+RUN addgroup -g 1598 pixelartgroup && adduser -D -u 1599 -G pixelartgroup pixelartuser
+
+# Change the user to the one created above
+USER pixelartuser
 
 # Create app directory (Docker container working directory)
 WORKDIR /app
@@ -25,17 +29,8 @@ COPY . .
 # Build the application
 RUN yarn build
 
+# Declares on which port the application “should” run (not “must” run).
+EXPOSE 3100
 
-# ----- Production stage -----
-
-# Fetch the production-ready Nginx image from Docker Hub
-FROM nginx:alpine
-
-# Copy the build output from the previous stage to the Nginx server
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the application
+CMD ["yarn", "preview", "--port", "3100", "--host"]
