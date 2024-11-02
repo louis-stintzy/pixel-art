@@ -54,6 +54,7 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh -o "StrictHostKeyChecking=no" ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          cd /home/${{ secrets.SSH_USER }}/pixelartproject/pixelartmaker
           docker-compose stop pixelartmaker || true
           docker-compose rm -f pixelartmaker || true
           docker rmi ${{ secrets.DOCKER_USERNAME }}/pixelartmaker:latest || true
