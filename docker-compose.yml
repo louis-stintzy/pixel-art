@@ -6,8 +6,8 @@ services:
     ports:
       - '3100:3100'
     networks:
-      - pixelartmaker-networks
+      - pixelartmaker-network
 
 networks:
-  pixelartmaker-networks:
+  pixelartmaker-network:
     external: true
